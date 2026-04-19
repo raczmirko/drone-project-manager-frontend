@@ -37,9 +37,9 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
         (import.meta as unknown as { env: Record<string, string> }).env
             ?.VITE_API_BASE_URL || "http://localhost:8080";
 
-    const [username, setUsername] = useState(() => localStorage.getItem("username") || "");
+    const [accountNumber, setAccountNumber] = useState(() => localStorage.getItem("accountNumber") || "");
     const [password, setPassword] = useState("");
-    const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem("username"));
+    const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem("accountNumber"));
     const { showNotification } = useNotification();
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -61,7 +61,7 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
         event.preventDefault();
 
         const credentials = {
-            username,
+            accountNumber,
             password,
         };
 
@@ -77,7 +77,7 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
                 if (authorizationHeader) {
                     const token = authorizationHeader.split(" ")[1];
                     localStorage.setItem("token", token);
-                    localStorage.setItem("username", username);
+                    localStorage.setItem("accountNumber", accountNumber);
                 }
 
                 if (!response.ok) {
@@ -148,8 +148,8 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
                             autoComplete="username"
                             required
                             autoFocus={true}
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={accountNumber}
+                            onChange={(e) => setAccountNumber(e.target.value)}
                         />
                         <TextField
                             fullWidth

@@ -75,7 +75,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/register`, {
+            const response = await fetch(`${API_BASE_URL}/user/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
