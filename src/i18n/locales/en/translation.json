@@ -1,0 +1,65 @@
+{
+  "general": {
+    "operations": {
+      "create": "Create",
+      "update": "Update",
+      "delete": "Delete",
+      "copy": "Copy",
+      "download": "Download"
+    },
+    "feedback" : {
+      "copiedToClipboard": "Successfully copied to clipboard."
+    },
+    "errors": {
+      "unexpected": "An unexpected error occurred. Please try again later.",
+      "notFound": "Resource not found.",
+      "unauthorized": "You are not authorized to perform this action.",
+      "invalidRequest": "Invalid request.",
+      "conflict": "Conflict occurred. Please try again.",
+      "notImplemented": "This feature is not implemented yet.",
+      "serviceUnavailable": "Service is currently unavailable. Please try again later."
+    }
+  },
+  "signIn": {
+    "title": "Sign In",
+    "username": "Username",
+    "accountNumber": "Account number",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "Remember me",
+    "submit": "Sign In",
+    "noAccount": "Don't have an account? Sign up",
+    "successLogin": "SUCCESS: You have been logged in.",
+    "networkError": "Network error. The server might be down.",
+    "loginFailed": "Login failed",
+    "errors": {
+      "invalidCredentials": "Invalid username or password.",
+      "forbidden": "You do not have permission to access this resource.",
+      "notFound": "Authentication service not found.",
+      "unexpected": "An unexpected error occurred. Please try again later."
+    }
+  },
+  "signUp": {
+    "title": "Sign Up",
+    "accountNumber": "Account number",
+    "accountNumberInfo": "Your account number is the only identifier you need to use our service. For security and privacy reasons we cannot show it again after login. ",
+    "accountNumberInfoHeader": "Account number info",
+    "generateAccountNumber": "Generate account number",
+    "accountNumberGenerationError": "There was an error generating your account number. Please try again.",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Sign Up",
+    "submitting": "Submitting...",
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "accountNumberRequired": "Account number is required",
+    "success": "Registration successful!",
+    "error": "Registration failed. Please try again.",
+    "dialog": {
+      "title": "Registration confirmation",
+      "content": "Please make sure you have saved your account number, as it will not be shown again. If you lose your account number, you will not be able to access your account anymore.",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
+  }
+}

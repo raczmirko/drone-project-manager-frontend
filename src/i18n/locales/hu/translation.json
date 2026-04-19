@@ -1,0 +1,65 @@
+{
+  "general": {
+    "operations": {
+      "create": "Létrehozás",
+      "update": "Frissítés",
+      "delete": "Törlés",
+      "copy": "Másolás",
+      "download": "Letöltés"
+    },
+    "feedback" : {
+      "copiedToClipboard": "Sikeresen másolva a vágólapra."
+    },
+    "errors": {
+      "unexpected": "Váratlan hiba történt. Kérjük, próbálja meg később újra.",
+      "notFound": "Az erőforrás nem található.",
+      "unauthorized": "Nincs jogosultsága a művelet végrehajtásához.",
+      "invalidRequest": "Érvénytelen kérés.",
+      "conflict": "Ütközés történt. Kérjük, próbálja meg újra.",
+      "notImplemented": "Ez a funkció még nincs megvalósítva.",
+      "serviceUnavailable": "A szolgáltatás jelenleg nem elérhető. Kérjük, próbálja meg később újra."
+    }
+  },
+  "signIn": {
+    "title": "Bejelentkezés",
+    "username": "Felhasználónév",
+    "accountNumber": "Fiókazonosító",
+    "password": "Jelszó",
+    "passwordPlaceholder": "••••••••",
+    "rememberMe": "Emlékezz rám",
+    "submit": "Bejelentkezés",
+    "noAccount": "Nincs még fiókja? Regisztráljon",
+    "successLogin": "SIKERES: Bejelentkezett.",
+    "networkError": "Hálózati hiba. Lehet, hogy a szerver nem elérhető.",
+    "loginFailed": "Sikertelen bejelentkezés",
+    "errors": {
+      "invalidCredentials": "Érvénytelen felhasználónév vagy jelszó.",
+      "forbidden": "Nincs jogosultsága az erőforrás eléréséhez.",
+      "notFound": "Hitelesítési szolgáltatás nem található.",
+      "unexpected": "Váratlan hiba történt. Kérjük, próbálja újra később."
+    }
+  },
+  "signUp": {
+    "title": "Regisztráció",
+    "accountNumber": "Fiókazonosító",
+    "accountNumberInfo": "A fiókazonosító az ön egyedi azonosítója a belépéshez. Biztonsági és adatvédelmi okokból belépés után nem mutatjuk az azonosítót.",
+    "accountNumberInfoHeader": "Fiókazonosító információ",
+    "generateAccountNumber": "Fiókazonosító generálása",
+    "accountNumberGenerationError": "Hiba történt a fiókazonosító generálása közben. Kérjük próbálja újra később!",
+    "password": "Jelszó",
+    "confirmPassword": "Jelszó megerősítése",
+    "submit": "Regisztráció",
+    "submitting": "Regisztráció...",
+    "alreadyHaveAccount": "Már van fiókja? Jelentkezzen be",
+    "passwordsDoNotMatch": "A jelszavak nem egyeznek",
+    "accountNumberRequired": "Fiókazonosító megadása kötelező",
+    "success": "Sikeres regisztráció!",
+    "error": "Sikertelen regisztráció. Kérjük, próbálja újra.",
+    "dialog": {
+      "title": "Regisztráció megerősítése",
+      "content": "Kérjük, győződjön meg róla, hogy elmentette a fiókazonosítóját, mert a regisztrációt követően az azonosító többet nem megjeleníthető.",
+      "cancel": "Mégse",
+      "confirm": "Megerősítés"
+    }
+  }
+}
