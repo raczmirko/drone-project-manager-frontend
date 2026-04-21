@@ -1,12 +1,10 @@
-import {useState} from 'react';
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
-import './App.css';
-import SignInSide from './pages/SignIn.tsx';
-import SignUp from './pages/SignUp.tsx';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import SignInSide from './pages/SignIn';
+import SignUp from './pages/SignUp';
 
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => !!localStorage.getItem('token'));
-    const [isRegistered, setIsRegistered] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
 
     const handleLogin = () => {
         setIsLoggedIn(true);
@@ -17,46 +15,31 @@ function App() {
         setIsLoggedIn(false);
     };
 
-    const handleRegister = () => {
-        setIsRegistered(true);
-    };
+    const router = createBrowserRouter([
+        // Public routes
+        { path: '/login', element: <SignInSide isLoggedIn={isLoggedIn} onLogin={handleLogin} /> },
+        { path: '/register', element: <SignUp isRegistered={false} onRegister={() => {}} /> },
 
-    return (
-        <Router>
-            <Routes>
-                <Route
-                    path="/login"
-                    element={<SignInSide isLoggedIn={isLoggedIn} onLogin={handleLogin}/>}
-                />
-                <Route
-                    path="/register"
-                    element={<SignUp isRegistered={isRegistered} onRegister={handleRegister}/>}
-                />
-                <Route
-                    path="/dashboard"
-                    element={
-                        isLoggedIn ? (
-                            <div style={{padding: '2rem', textAlign: 'center'}}>
-                                <h1>Dashboard</h1>
-                                <p>Welcome! You are logged in.</p>
-                                <button onClick={handleLogout}>Logout</button>
-                            </div>
-                        ) : (
-                            <Navigate to="/login"/>
-                        )
-                    }
-                />
-                <Route
-                    path="/"
-                    element={isLoggedIn !== null ? <Navigate to={isLoggedIn ? "/projects" : "/login"}/> : null}
-                />
-                <Route
-                    path="*"
-                    element={<Navigate to="/"/>}
-                />
-            </Routes>
-        </Router>
-    );
+        // Protected routes
+        {
+            path: '/projects',
+            element: isLoggedIn ? (
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                    <h1>Dashboard</h1>
+                    <p>Welcome! You are logged in.</p>
+                    <button onClick={handleLogout}>Logout</button>
+                </div>
+            ) : (
+                <Navigate to="/login" replace /> // replaces the current entry in the history stack
+            ),
+        },
+
+        // Default redirects
+        { path: '/', element: <Navigate to={isLoggedIn ? '/projects' : '/login'} replace /> },
+        { path: '*', element: <Navigate to="/" replace /> },
+    ]);
+
+    return <RouterProvider router={router} />;
 }
 
 export default App;
