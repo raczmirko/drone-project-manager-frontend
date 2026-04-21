@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {useTranslation} from "react-i18next";
-import {Navigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -41,6 +41,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
     const API_BASE_URL =
         (import.meta as unknown as { env: Record<string, string> }).env
             ?.VITE_API_BASE_URL || "http://localhost:8080";
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     const [accountNumber, setAccountNumber] = useState("");
     const [password, setPassword] = useState("");
@@ -94,6 +95,9 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
 
             showNotification("success", t("signUp.success"));
             onRegister();
+
+            // Redirect to login page on successful registration
+            navigate('/login'); // Redirects to login
         } catch (error) {
             console.error("Registration error:", error);
             showNotification("error", t("signUp.error"));
@@ -201,9 +205,6 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
                         onSubmit={handleSubmit}
                         sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                     >
-                        {/*<Typography component="p" sx={{ mb: 3, color: "black", textAlign: "left" }}>*/}
-                        {/*    {t("signUp.accountNumberInfo")}*/}
-                        {/*</Typography>*/}
                         <Alert
                             severity="info" // Info-specific styling
                             icon={<InfoOutlinedIcon />}
