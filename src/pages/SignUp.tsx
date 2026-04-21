@@ -14,7 +14,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import {createTheme, ThemeProvider} from "@mui/material/styles";
+import {ThemeProvider} from "@mui/material/styles";
 import {useTranslation} from "react-i18next";
 import {Navigate, useNavigate} from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -28,8 +28,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-
-const defaultTheme = createTheme();
+import TransparentBackgroundTheme from "../theme/TransparentBackgroundTheme.ts";
 
 interface SignUpProps {
     onRegister: () => void;
@@ -165,17 +164,13 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
     }
 
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={TransparentBackgroundTheme}>
             <Grid
                 container
                 component="main"
                 sx={{
                     minHeight: "100vh",
                     width: "100%",
-                    backgroundImage: "url(https://picsum.photos/2000/2000)",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backdropFilter: "blur(8px)",
                 }}
             >
                 <CssBaseline />

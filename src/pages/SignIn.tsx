@@ -16,15 +16,14 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { Navigate } from "react-router-dom";
+import {ThemeProvider} from "@mui/material/styles";
+import React, {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {Navigate} from "react-router-dom";
 import CopyrightTypography from "../components/CopyrightTypography";
-import { useNotification } from "../hooks/useNotification";
-import { getLoginErrorByStatus } from "../util/stringUtil";
-
-const defaultTheme = createTheme();
+import {useNotification} from "../hooks/useNotification";
+import {getLoginErrorByStatus} from "../util/stringUtil";
+import TransparentBackgroundTheme from "../theme/TransparentBackgroundTheme.ts";
 
 interface SignInProps {
     onLogin: () => void;
@@ -100,17 +99,13 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
+        <ThemeProvider theme={TransparentBackgroundTheme}>
             <Grid
                 container
                 component="main"
                 sx={{
                     minHeight: "100vh",
                     width: "100%",
-                    backgroundImage: "url(https://picsum.photos/2000/2000)", // Random image as background
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backdropFilter: "blur(8px)",
                 }}
             >
                 <CssBaseline />
