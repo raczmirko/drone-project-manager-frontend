@@ -22,13 +22,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CopyrightTypography from "../components/CopyrightTypography";
 import {useNotification} from "../hooks/useNotification";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TransparentBackgroundTheme from "../theme/TransparentBackgroundTheme.ts";
+import ConfirmationDialog from "../components/dialogs/ConfirmationDialog.tsx";
 
 interface SignUpProps {
     onRegister: () => void;
@@ -337,21 +333,15 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
                 </Grid>
             </Grid>
 
-            {/* Confirmation Dialog */}
-            <Dialog open={isDialogOpen} onClose={handleDialogCancel}>
-                <DialogTitle>{t("signUp.dialog.title")}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        {t("signUp.dialog.content")}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button variant={'contained'} color={'error'} onClick={handleDialogCancel}>{t("signUp.dialog.cancel")}</Button>
-                    <Button color={'success'} onClick={handleDialogConfirm} autoFocus>
-                        {t("signUp.dialog.confirm")}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmationDialog
+                open={isDialogOpen}
+                title={t("signUp.dialog.title")}
+                message={t("signUp.dialog.content")}
+                onConfirm={handleDialogConfirm}
+                onCancel={() => handleDialogCancel}
+                confirmLabel={t("signUp.dialog.confirm")}
+                cancelLabel={t("signUp.dialog.cancel")}
+            />
         </ThemeProvider>
     );
 };
