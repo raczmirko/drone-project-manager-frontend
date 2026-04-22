@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Box, Paper, Typography, Alert } from '@mui/material';
-import {
-    DataGrid,
-    type GridColDef,
-    type GridPaginationModel,
-} from '@mui/x-data-grid';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import {Alert, Box, Button, IconButton, Paper, Stack, Tooltip, Typography,} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-grid';
+import CreateProjectDialog, {type CreateProjectRequest} from '../components/dialogs/CreateProjectDialog';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { useNavigate } from 'react-router-dom';
 
 type Project = {
     id: string;
@@ -25,7 +25,19 @@ type ProjectPageResponse = {
     number?: number;
 };
 
+const emptyForm: CreateProjectRequest = {
+    code: '',
+    name: '',
+    status: '',
+    description: '',
+    objective: '',
+    startDate: null,
+    endDate: null,
+};
+
 export default function Projects() {
+    const navigate = useNavigate();
+
     const [rows, setRows] = useState<Project[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -36,6 +48,10 @@ export default function Projects() {
     });
 
     const [rowCount, setRowCount] = useState(0);
+
+    const [openCreateDialog, setOpenCreateDialog] = useState(false);
+    const [createLoading, setCreateLoading] = useState(false);
+    const [formData, setFormData] = useState<CreateProjectRequest>(emptyForm);
 
     const columns = useMemo<GridColDef<Project>[]>(
         () => [
@@ -72,46 +88,125 @@ export default function Projects() {
                 minWidth: 130,
                 valueGetter: (value) => value ?? '-',
             },
+            {
+                field: 'actions',
+                headerName: '',
+                sortable: false,
+                filterable: false,
+                width: 80,
+                align: 'center',
+                headerAlign: 'center',
+                renderCell: (params) => (
+                    <Tooltip title="Open project">
+                        <IconButton
+                            size="small"
+                            aria-label="Open project"
+                            onClick={() => navigate(`/projects/${params.row.code}`)}
+                        >
+                            <VisibilityOutlinedIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                ),
+            },
         ],
-        []
+        [navigate]
     );
 
-    useEffect(() => {
-        const fetchProjects = async () => {
-            setLoading(true);
-            setError(null);
+    const fetchProjects = useCallback(async () => {
+        setLoading(true);
+        setError(null);
 
-            try {
-                const token = localStorage.getItem("token");
+        try {
+            const token = localStorage.getItem('token');
 
-                const response = await fetch(
-                    `http://localhost:8080/projects?page=${paginationModel.page}&size=${paginationModel.pageSize}`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                        },
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch projects: ${response.status}`);
+            const response = await fetch(
+                `http://localhost:8080/projects?page=${paginationModel.page}&size=${paginationModel.pageSize}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
+            );
 
-                const data: ProjectPageResponse = await response.json();
-
-                setRows(data.content ?? []);
-                setRowCount(data.totalElements ?? 0);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Unknown error');
-            } finally {
-                setLoading(false);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch projects: ${response.status}`);
             }
-        };
 
-        fetchProjects();
+            const data: ProjectPageResponse = await response.json();
+
+            setRows(data.content ?? []);
+            setRowCount(data.totalElements ?? 0);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error');
+        } finally {
+            setLoading(false);
+        }
     }, [paginationModel]);
+
+    useEffect(() => {
+        fetchProjects();
+    }, [fetchProjects]);
+
+    const handleOpenCreateDialog = () => {
+        setFormData(emptyForm);
+        setOpenCreateDialog(true);
+    };
+
+    const handleCloseCreateDialog = () => {
+        if (!createLoading) {
+            setOpenCreateDialog(false);
+        }
+    };
+
+    const handleChange =
+        (field: keyof CreateProjectRequest) =>
+            (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+                setFormData((prev) => ({
+                    ...prev,
+                    [field]: event.target.value || null,
+                }));
+            };
+
+    const handleSubmitCreate = async () => {
+        setCreateLoading(true);
+        setError(null);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            const payload = {
+                ...formData,
+                status: formData.status || null,
+                description: formData.description || null,
+                objective: formData.objective || null,
+                startDate: formData.startDate || null,
+                endDate: formData.endDate || null,
+            };
+
+            const response = await fetch('http://localhost:8080/projects', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to create project: ${response.status}`);
+            }
+
+            setOpenCreateDialog(false);
+            setFormData(emptyForm);
+            await fetchProjects();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error');
+        } finally {
+            setCreateLoading(false);
+        }
+    };
 
     return (
         <Box
@@ -128,9 +223,27 @@ export default function Projects() {
                     maxWidth: '60%',
                 }}
             >
-                <Typography variant="h4" component="h4" sx={{ mb: 2 }}>
-                    Projects
-                </Typography>
+                <Stack
+                    direction="row"
+                    sx={{
+                        mb: 2,
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <Typography variant="h4" component="h4">
+                        Projects
+                    </Typography>
+
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={handleOpenCreateDialog}
+                        sx={{ ml: 'auto' }}
+                    >
+                        Add project
+                    </Button>
+                </Stack>
 
                 {error && (
                     <Alert severity="error" sx={{ mb: 2 }}>
@@ -167,6 +280,15 @@ export default function Projects() {
                         }}
                     />
                 </Paper>
+
+                <CreateProjectDialog
+                    open={openCreateDialog}
+                    formData={formData}
+                    createLoading={createLoading}
+                    onClose={handleCloseCreateDialog}
+                    onSubmit={handleSubmitCreate}
+                    onChange={handleChange}
+                />
             </Box>
         </Box>
     );
