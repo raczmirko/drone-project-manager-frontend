@@ -9,12 +9,12 @@ import Projects from "./pages/Projects.tsx";
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
     const [expiryTime, setExpiryTime] = useState<number>(() => {
-        const storedExpiry = localStorage.getItem('sessionExpiresAt');
+        const storedExpiry = sessionStorage.getItem('sessionExpiresAt');
         return storedExpiry ? Number(storedExpiry) : 0;
     });
 
     const handleLogin = () => {
-        const storedExpiry = localStorage.getItem('sessionExpiresAt');
+        const storedExpiry = sessionStorage.getItem('sessionExpiresAt');
         setExpiryTime(storedExpiry ? Number(storedExpiry) : 0);
         setIsLoggedIn(true);
     };
