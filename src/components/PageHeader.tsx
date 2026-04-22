@@ -1,12 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    Button,
-    Box,
-} from "@mui/material";
+import React, {useEffect, useMemo, useState} from "react";
+import {AppBar, Box, Breadcrumbs, Button, Link, Toolbar, Typography} from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import {Link as RouterLink, useLocation} from "react-router-dom";
 
 interface PageHeaderProps {
     onLogout: () => void;
@@ -38,6 +33,21 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     }, [timeLeft]);
 
+    // Breadcrumbs logic
+    const location = useLocation();
+
+    const breadcrumbs = useMemo(() => {
+        const pathnames = location.pathname.split('/').filter(Boolean);
+
+        return [
+            { label: 'Projects', to: '/projects' },
+            ...pathnames.slice(1).map((segment, index) => {
+                const to = `/${pathnames.slice(0, index + 2).join('/')}`;
+                return { label: segment, to };
+            }),
+        ];
+    }, [location.pathname]);
+
     return (
         <AppBar position="static" sx={{ backgroundColor: "primary.main" }}>
             <Toolbar sx={{ display: "flex", alignItems: "center" }}>
@@ -56,7 +66,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
                     </Typography>
                 </Box>
 
-                {/* Center: title */}
+                {/* Center: title & breadcrumbs*/}
                 <Typography
                     variant="h6"
                     component="div"
@@ -68,6 +78,27 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
                 >
                     Drone Project Manager
                 </Typography>
+
+                <Box sx={{ flexGrow: 1, textAlign: "center" }}>
+                    <Breadcrumbs
+                        aria-label="breadcrumb"
+                        separator="›"
+                        sx={{ justifyContent: "center", display: "flex" }}
+                    >
+                        {breadcrumbs.map((crumb, idx) => (
+                            <Link
+                                key={crumb.to}
+                                component={RouterLink}
+                                to={crumb.to}
+                                color={idx === breadcrumbs.length - 1 ? "white" : "inherit"}
+                                underline={idx === breadcrumbs.length - 1 ? "none" : "hover"}
+                                sx={{ fontWeight: idx === breadcrumbs.length - 1 ? "bold" : "normal" }}
+                            >
+                                {crumb.label}
+                            </Link>
+                        ))}
+                    </Breadcrumbs>
+                </Box>
 
                 {/* Right: logout */}
                 <Box sx={{ minWidth: 140, display: "flex", justifyContent: "flex-end" }}>

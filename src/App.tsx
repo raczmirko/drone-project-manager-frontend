@@ -5,6 +5,7 @@ import SignUp from './pages/SignUp';
 import ProtectedLayout from './theme/ProtectedLayout.tsx';
 import PublicLayout from "./theme/PublicLayout.tsx";
 import Projects from "./pages/Projects.tsx";
+import ProjectDetails from "./pages/ProjectDetails.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
@@ -52,7 +53,18 @@ function App() {
                 <Navigate to="/login" replace/>
             ),
             children: [
-                {index: true, element: <Projects/>}, // Correct default child route
+                {index: true, element: <Projects/>},
+            ],
+        },
+        {
+            path: '/projects/:id',
+            element: isLoggedIn ? (
+                <ProtectedLayout isLoggedIn={isLoggedIn} expiryTime={expiryTime} logOut={handleLogout}/>
+            ) : (
+                <Navigate to="/login" replace/>
+            ),
+            children: [
+                {index: true, element: <ProjectDetails/>},
             ],
         },
     ]);
