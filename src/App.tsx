@@ -1,45 +1,63 @@
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { useState } from 'react';
+import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
+import {useState} from 'react';
 import SignInSide from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import ProtectedLayout from './theme/ProtectedLayout.tsx';
+import PublicLayout from "./theme/PublicLayout.tsx";
+import Projects from "./pages/Projects.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
+    const [expiryTime, setExpiryTime] = useState<number>(() => {
+        const storedExpiry = localStorage.getItem('sessionExpiresAt');
+        return storedExpiry ? Number(storedExpiry) : 0;
+    });
 
     const handleLogin = () => {
+        const storedExpiry = localStorage.getItem('sessionExpiresAt');
+        setExpiryTime(storedExpiry ? Number(storedExpiry) : 0);
         setIsLoggedIn(true);
     };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        sessionStorage.removeItem('sessionExpiresAt');
+        if(sessionStorage.getItem('rememberMe') === 'false') {
+            localStorage.removeItem('accountNumber');
+        }
+        setExpiryTime(0);
         setIsLoggedIn(false);
     };
 
     const router = createBrowserRouter([
         // Public routes
-        { path: '/login', element: <SignInSide isLoggedIn={isLoggedIn} onLogin={handleLogin} /> },
-        { path: '/register', element: <SignUp isRegistered={false} onRegister={() => {}} /> },
-
+        {
+            path: '/',
+            element: <PublicLayout/>, // Minimal layout
+            children: [
+                {path: 'login', element: <SignInSide isLoggedIn={isLoggedIn} onLogin={handleLogin}/>},
+                {
+                    path: 'register', element: <SignUp onRegister={() => {
+                    }} isRegistered={false}/>
+                },
+                {path: '*', element: <Navigate to={isLoggedIn ? '/projects' : '/login'} replace/>},
+            ],
+        },
         // Protected routes
         {
             path: '/projects',
             element: isLoggedIn ? (
-                <div style={{ padding: '2rem', textAlign: 'center' }}>
-                    <h1>Dashboard</h1>
-                    <p>Welcome! You are logged in.</p>
-                    <button onClick={handleLogout}>Logout</button>
-                </div>
+                <ProtectedLayout isLoggedIn={isLoggedIn} expiryTime={expiryTime} logOut={handleLogout}/>
             ) : (
-                <Navigate to="/login" replace /> // replaces the current entry in the history stack
+                <Navigate to="/login" replace/>
             ),
+            children: [
+                {index: true, element: <Projects/>}, // Correct default child route
+            ],
         },
-
-        // Default redirects
-        { path: '/', element: <Navigate to={isLoggedIn ? '/projects' : '/login'} replace /> },
-        { path: '*', element: <Navigate to="/" replace /> },
     ]);
 
-    return <RouterProvider router={router} />;
+    return <RouterProvider router={router}/>;
 }
 
 export default App;

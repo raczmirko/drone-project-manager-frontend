@@ -1,8 +1,7 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/Sidebar.tsx';
-import { NotificationProvider } from '../services/NotificationProvider.tsx';
-import ParticleBackground from '../components/ParticleBackground.tsx';
+import {Outlet} from 'react-router-dom';
+import {NotificationProvider} from '../services/NotificationProvider.tsx';
+import PageHeader from "../components/PageHeader.tsx";
 
 interface LayoutProps {
     isLoggedIn: boolean;
@@ -10,19 +9,21 @@ interface LayoutProps {
     logOut: () => void;
 }
 
-const ProtectedLayout: React.FC<LayoutProps> = ({ logOut }) => {
+const ProtectedLayout: React.FC<LayoutProps> = ({ logOut, expiryTime }) => {
     return (
         <NotificationProvider>
-            <div
-                style={{
-                    position: "relative", // Ensure sibling components respect z-index layering
-                    zIndex: 0 // Move other elements on proper layers without hiding particles
-                }}
-            >
-                <ParticleBackground />
-            </div>
+            {/* Particle background */}
+            {/*<div style={{*/}
+            {/*        position: "relative", // Ensure sibling components respect z-index layering*/}
+            {/*        zIndex: 0 // Move other elements on proper layers without hiding particles*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <ParticleBackground />*/}
+            {/*</div>*/}
+            {/* PageHeader with Logout */}
+            <PageHeader onLogout={logOut} expiryTime={expiryTime}/>
+            {/* Main content */}
             <div style={{ display: 'flex' }}>
-                <Sidebar logOut={logOut} />
                 <main style={{ flexGrow: 1, padding: '64px 20px 20px 20px' }}>
                     <Outlet />
                 </main>

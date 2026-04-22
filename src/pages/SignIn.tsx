@@ -52,6 +52,24 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
         return <Navigate to="/projects" />;
     }
 
+    type JwtPayload = {
+        exp?: number;
+    };
+
+    const getTokenExpiryTime = (token: string): number | null => {
+        try {
+            const base64Url = token.split(".")[1];
+            const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+            const jsonPayload = atob(base64);
+            const decoded: JwtPayload = JSON.parse(jsonPayload);
+
+            return decoded.exp ? decoded.exp * 1000 : null;
+        } catch (error) {
+            console.error("Failed to decode token:", error);
+            return null;
+        }
+    };
+
     function toggleRememberMe() {
         setRememberMe((prev) => !prev);
     }
@@ -72,17 +90,23 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
             body: JSON.stringify(credentials),
         })
             .then((response) => {
-                const authorizationHeader = response.headers.get("Authorization");
-                if (authorizationHeader) {
-                    const token = authorizationHeader.split(" ")[1];
-                    localStorage.setItem("token", token);
-                    localStorage.setItem("accountNumber", accountNumber);
-                }
-
                 if (!response.ok) {
                     showNotification("error", getLoginErrorByStatus(response.status));
                     throw new Error(t("signIn.loginFailed"));
                 }
+
+                const authorizationHeader = response.headers.get("Authorization");
+                if (authorizationHeader) {
+                    const token = authorizationHeader.split(" ")[1];
+                    const expiryTime = getTokenExpiryTime(token);
+
+                    localStorage.setItem("token", token);
+                    localStorage.setItem("accountNumber", accountNumber);
+                    if (expiryTime) {
+                        sessionStorage.setItem("sessionExpiresAt", String(expiryTime));
+                    }
+                }
+
                 onLogin();
                 showNotification("success", t("signIn.successLogin"));
                 return;
