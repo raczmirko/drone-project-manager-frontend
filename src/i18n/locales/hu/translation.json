@@ -29,7 +29,7 @@
     "rememberMe": "Emlékezz rám",
     "submit": "Bejelentkezés",
     "noAccount": "Nincs még fiókja? Regisztráljon",
-    "successLogin": "SIKERES: Bejelentkezett.",
+    "successLogin": "Sikeresen bejelentkezett.",
     "networkError": "Hálózati hiba. Lehet, hogy a szerver nem elérhető.",
     "loginFailed": "Sikertelen bejelentkezés",
     "errors": {

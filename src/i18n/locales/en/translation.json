@@ -29,7 +29,7 @@
     "rememberMe": "Remember me",
     "submit": "Sign In",
     "noAccount": "Don't have an account? Sign up",
-    "successLogin": "SUCCESS: You have been logged in.",
+    "successLogin": "You have been logged in successfully.",
     "networkError": "Network error. The server might be down.",
     "loginFailed": "Login failed",
     "errors": {
