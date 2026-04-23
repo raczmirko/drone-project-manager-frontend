@@ -40,7 +40,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
         const pathnames = location.pathname.split('/').filter(Boolean);
 
         return [
-            { label: 'Projects', to: '/projects' },
+            { label: 'ProjectsPage', to: '/projects' },
             ...pathnames.slice(1).map((segment, index) => {
                 const to = `/${pathnames.slice(0, index + 2).join('/')}`;
                 return { label: segment, to };

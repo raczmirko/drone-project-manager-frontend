@@ -4,7 +4,7 @@ import SignInSide from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ProtectedLayout from './layouts/ProtectedLayout.tsx';
 import PublicLayout from "./layouts/PublicLayout.tsx";
-import Projects from "./pages/Projects.tsx";
+import ProjectsPage from "./pages/ProjectsPage.tsx";
 import ProjectDetails from "./pages/ProjectDetailsPage.tsx";
 
 function App() {
@@ -53,7 +53,7 @@ function App() {
                 <Navigate to="/login" replace/>
             ),
             children: [
-                {index: true, element: <Projects/>},
+                {index: true, element: <ProjectsPage/>},
             ],
         },
         {

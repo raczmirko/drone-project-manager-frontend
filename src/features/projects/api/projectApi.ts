@@ -1,5 +1,5 @@
 import type {
-    CreateOperationRequest,
+    CreateOperationRequest, CreateProjectRequest,
     DroneOperation,
     PageResponse,
     Project,
@@ -42,6 +42,17 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const projectApi = {
+    getProjects(page: number, size: number) {
+        return apiFetch<PageResponse<Project>>(`/projects?page=${page}&size=${size}`);
+    },
+
+    createProject(payload: CreateProjectRequest) {
+        return apiFetch<void>('/projects', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
     getByCode(code: string) {
         return apiFetch<Project>(`/projects/${code}`);
     },

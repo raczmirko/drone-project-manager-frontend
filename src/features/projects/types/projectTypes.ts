@@ -47,3 +47,23 @@ export type CreateOperationFormValues = {
     status: string;
     date: string;
 };
+
+export type CreateProjectRequest = {
+    code: string;
+    name: string;
+    status: string | null;
+    description: string | null;
+    objective: string | null;
+    startDate: string | null;
+    endDate: string | null;
+};
+
+export type CreateProjectFormValues = {
+    code: string;
+    name: string;
+    status: string;
+    description: string;
+    objective: string;
+    startDate: string;
+    endDate: string;
+};
