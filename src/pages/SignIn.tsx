@@ -22,8 +22,8 @@ import {useTranslation} from "react-i18next";
 import {Navigate} from "react-router-dom";
 import CopyrightTypography from "../components/CopyrightTypography";
 import {useNotification} from "../hooks/useNotification";
-import {getLoginErrorByStatus} from "../util/stringUtil";
-import TransparentBackgroundTheme from "../theme/TransparentBackgroundTheme.ts";
+import {getLoginErrorByStatus} from "../utils/stringUtil";
+import TransparentBackgroundTheme from "../layouts/TransparentBackgroundTheme.ts";
 
 interface SignInProps {
     onLogin: () => void;

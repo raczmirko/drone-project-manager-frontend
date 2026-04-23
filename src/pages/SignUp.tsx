@@ -23,7 +23,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import CopyrightTypography from "../components/CopyrightTypography";
 import {useNotification} from "../hooks/useNotification";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import TransparentBackgroundTheme from "../theme/TransparentBackgroundTheme.ts";
+import TransparentBackgroundTheme from "../layouts/TransparentBackgroundTheme.ts";
 import ConfirmationDialog from "../components/dialogs/ConfirmationDialog.tsx";
 
 interface SignUpProps {

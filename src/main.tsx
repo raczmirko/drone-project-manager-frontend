@@ -4,7 +4,7 @@ import './index.css'
 import './i18n/config'
 import App from './App.tsx'
 
-import { NotificationProvider } from './services/NotificationProvider.tsx'
+import { NotificationProvider } from './providers/NotificationProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

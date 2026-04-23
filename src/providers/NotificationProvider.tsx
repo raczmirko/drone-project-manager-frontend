@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState } from "react";
 import type { ReactNode } from "react";
-import AlertSnackBar from "../components/AlertSnackBar";
-import { NotificationContext } from "./NotificationContext";
+import AlertSnackBar from "../components/AlertSnackBar.tsx";
+import { NotificationContext } from "../contexts/NotificationContext.ts";
 
 type AlertType = 'success' | 'info' | 'warning' | 'error' | '';
 

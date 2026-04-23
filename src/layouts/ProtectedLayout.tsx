@@ -1,6 +1,6 @@
 import React from 'react';
 import {Outlet} from 'react-router-dom';
-import {NotificationProvider} from '../services/NotificationProvider.tsx';
+import {NotificationProvider} from '../providers/NotificationProvider.tsx';
 import PageHeader from "../components/PageHeader.tsx";
 
 interface LayoutProps {

@@ -2,10 +2,10 @@ import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {useState} from 'react';
 import SignInSide from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import ProtectedLayout from './theme/ProtectedLayout.tsx';
-import PublicLayout from "./theme/PublicLayout.tsx";
+import ProtectedLayout from './layouts/ProtectedLayout.tsx';
+import PublicLayout from "./layouts/PublicLayout.tsx";
 import Projects from "./pages/Projects.tsx";
-import ProjectDetails from "./pages/ProjectDetails.tsx";
+import ProjectDetails from "./pages/ProjectDetailsPage.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
