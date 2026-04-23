@@ -1,4 +1,5 @@
 import { Alert, Stack, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ReadOnlyField from './ReadOnlyField';
 import SectionCard from './SectionCard';
 import type { Project } from '../types/projectTypes';
@@ -15,36 +16,37 @@ export default function ProjectSummaryCard({
                                                loading,
                                                error,
                                            }: ProjectSummaryCardProps) {
+    const { t } = useTranslation();
     return (
-        <SectionCard title="Project details">
+        <SectionCard title={t('projects.details.title')}>
             {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
 
             {loading ? (
-                <Typography color="text.secondary">Loading project...</Typography>
+                <Typography color="text.secondary">{t('projects.details.loading')}</Typography>
             ) : !project ? (
-                <Typography color="text.secondary">Project not found.</Typography>
+                <Typography color="text.secondary">{t('projects.details.notFound')}</Typography>
             ) : (
                 <Stack spacing={2}>
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <ReadOnlyField label="Code" value={project.code} />
-                        <ReadOnlyField label="Name" value={project.name} />
-                        <ReadOnlyField label="Status" value={project.status} />
+                        <ReadOnlyField label={t('projects.fields.code')} value={project.code} />
+                        <ReadOnlyField label={t('projects.fields.name')} value={project.name} />
+                        <ReadOnlyField label={t('projects.fields.status')} value={project.status} />
                     </Stack>
 
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                        <ReadOnlyField label="Start date" value={formatDate(project.startDate)} />
-                        <ReadOnlyField label="End date" value={formatDate(project.endDate)} />
+                        <ReadOnlyField label={t('projects.fields.startDate')} value={formatDate(project.startDate)} />
+                        <ReadOnlyField label={t('projects.fields.endDate')} value={formatDate(project.endDate)} />
                     </Stack>
 
                     <ReadOnlyField
-                        label="Description"
+                        label={t('projects.fields.description')}
                         value={project.description}
                         multiline
                         minRows={3}
                     />
 
                     <ReadOnlyField
-                        label="Objective"
+                        label={t('projects.fields.objective')}
                         value={project.objective}
                         multiline
                         minRows={3}

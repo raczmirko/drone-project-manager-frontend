@@ -1,14 +1,22 @@
 {
   "general": {
-    "operations": {
+    "actions": {
       "create": "Create",
       "update": "Update",
       "delete": "Delete",
       "copy": "Copy",
-      "download": "Download"
+      "download": "Download",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "open": "Open",
+      "add": "Add",
+      "upload": "Upload",
+      "submitting": "Submitting...",
+      "deleting": "Deleting..."
     },
-    "feedback" : {
-      "copiedToClipboard": "Successfully copied to clipboard."
+    "feedback": {
+      "copiedToClipboard": "Successfully copied to clipboard.",
+      "loading": "Loading..."
     },
     "errors": {
       "unexpected": "An unexpected error occurred. Please try again later.",
@@ -17,7 +25,8 @@
       "invalidRequest": "Invalid request.",
       "conflict": "Conflict occurred. Please try again.",
       "notImplemented": "This feature is not implemented yet.",
-      "serviceUnavailable": "Service is currently unavailable. Please try again later."
+      "serviceUnavailable": "Service is currently unavailable. Please try again later.",
+      "unknown": "Unknown error"
     }
   },
   "signIn": {
@@ -60,6 +69,57 @@
       "content": "Please make sure you have saved your account number, as it will not be shown again. If you lose your account number, you will not be able to access your account anymore.",
       "cancel": "Cancel",
       "confirm": "Confirm"
+    }
+  },
+  "projects": {
+    "list": {
+      "title": "Projects",
+      "addProject": "Add project",
+      "openProject": "Open project"
+    },
+    "details": {
+      "title": "Project details",
+      "loading": "Loading project...",
+      "notFound": "Project not found.",
+      "deleteTitle": "Delete Project",
+      "deleteMessage": "Are you sure you want to delete this project? This action cannot be undone."
+    },
+    "create": {
+      "title": "Add new project"
+    },
+    "fields": {
+      "code": "Code",
+      "name": "Name",
+      "status": "Status",
+      "description": "Description",
+      "objective": "Objective",
+      "startDate": "Start date",
+      "endDate": "End date"
+    }
+  },
+  "operations": {
+    "title": "Drone operations",
+    "addOperation": "Add operation",
+    "openOperation": "Open operation",
+    "create": {
+      "title": "Add new operation"
+    },
+    "fields": {
+      "name": "Name",
+      "type": "Type",
+      "status": "Status",
+      "date": "Date"
+    }
+  },
+  "documents": {
+    "title": "Project documents",
+    "uploadFile": "Upload file",
+    "downloadFile": "Download file",
+    "fields": {
+      "fileName": "File name",
+      "type": "Type",
+      "uploadedAt": "Uploaded at",
+      "size": "Size"
     }
   }
 }

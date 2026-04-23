@@ -8,6 +8,7 @@ import {
     Stack,
     TextField,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 export type CreateProjectRequest = {
     code: string;
@@ -38,14 +39,15 @@ export default function CreateProjectDialog({
                                                onSubmit,
                                                onChange,
                                            }: CreateProjectDialogProps) {
+    const { t } = useTranslation();
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-            <DialogTitle sx={{color: 'text.primary'}}>Add new project</DialogTitle>
+            <DialogTitle sx={{color: 'text.primary'}}>{t('projects.create.title')}</DialogTitle>
 
             <DialogContent>
                 <Stack spacing={2} sx={{mt: 1}}>
                     <TextField
-                        label="Code"
+                        label={t('projects.fields.code')}
                         value={formData.code}
                         onChange={onChange('code')}
                         fullWidth
@@ -53,7 +55,7 @@ export default function CreateProjectDialog({
                     />
 
                     <TextField
-                        label="Name"
+                        label={t('projects.fields.name')}
                         value={formData.name}
                         onChange={onChange('name')}
                         fullWidth
@@ -61,14 +63,14 @@ export default function CreateProjectDialog({
                     />
 
                     <TextField
-                        label="Status"
+                        label={t('projects.fields.status')}
                         value={formData.status}
                         onChange={onChange('status')}
                         fullWidth
                     />
 
                     <TextField
-                        label="Description"
+                        label={t('projects.fields.description')}
                         value={formData.description}
                         onChange={onChange('description')}
                         fullWidth
@@ -77,7 +79,7 @@ export default function CreateProjectDialog({
                     />
 
                     <TextField
-                        label="Objective"
+                        label={t('projects.fields.objective')}
                         value={formData.objective}
                         onChange={onChange('objective')}
                         fullWidth
@@ -87,7 +89,7 @@ export default function CreateProjectDialog({
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
                         <TextField
-                            label="Start date"
+                            label={t('projects.fields.startDate')}
                             type="date"
                             value={formData.startDate ?? ''}
                             onChange={onChange('startDate')}
@@ -98,7 +100,7 @@ export default function CreateProjectDialog({
                         />
 
                         <TextField
-                            label="End date"
+                            label={t('projects.fields.endDate')}
                             type="date"
                             value={formData.endDate ?? ''}
                             onChange={onChange('endDate')}
@@ -113,14 +115,14 @@ export default function CreateProjectDialog({
 
             <DialogActions>
                 <Button onClick={onClose} disabled={createLoading}>
-                    Cancel
+                    {t('general.actions.cancel')}
                 </Button>
                 <Button
                     onClick={onSubmit}
                     variant="contained"
                     disabled={createLoading || !formData.code || !formData.name}
                 >
-                    Create
+                    {t('general.actions.create')}
                 </Button>
             </DialogActions>
         </Dialog>

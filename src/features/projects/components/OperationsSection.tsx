@@ -8,6 +8,7 @@ import {
     type GridPaginationModel,
 } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import SectionCard from './SectionCard';
 import CreateOperationDialog from './CreateOperationDialog';
 import type {
@@ -44,33 +45,34 @@ export default function OperationsSection({
                                               onResetCreateError,
                                           }: OperationsSectionProps) {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const columns = useMemo<GridColDef<DroneOperation>[]>(
         () => [
             {
                 field: 'name',
-                headerName: 'Name',
+                headerName: t('operations.fields.name'),
                 flex: 1.4,
                 minWidth: 180,
             },
             {
                 field: 'type',
-                headerName: 'Type',
+                headerName: t('operations.fields.type'),
                 flex: 1,
                 minWidth: 140,
                 valueGetter: (_value, row) => displayValue(row.type),
             },
             {
                 field: 'status',
-                headerName: 'Status',
+                headerName: t('operations.fields.status'),
                 flex: 1,
                 minWidth: 130,
                 valueGetter: (_value, row) => displayValue(row.status),
             },
             {
                 field: 'date',
-                headerName: 'Date',
+                headerName: t('operations.fields.date'),
                 flex: 1,
                 minWidth: 130,
                 valueGetter: (_value, row) => formatDate(row.date),
@@ -84,10 +86,10 @@ export default function OperationsSection({
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params) => (
-                    <Tooltip title="Open operation">
+                    <Tooltip title={t('operations.openOperation')}>
                         <IconButton
                             size="small"
-                            aria-label="Open operation"
+                            aria-label={t('operations.openOperation')}
                             onClick={(event) => {
                                 event.stopPropagation();
                                 navigate(`/projects/${projectCode}/operations/${params.row.id}`);
@@ -99,13 +101,13 @@ export default function OperationsSection({
                 ),
             },
         ],
-        [navigate, projectCode],
+        [navigate, projectCode, t],
     );
 
     return (
         <>
             <SectionCard
-                title="Drone operations"
+                title={t('operations.title')}
                 action={
                     <Button
                         variant="contained"
@@ -113,7 +115,7 @@ export default function OperationsSection({
                         onClick={() => setDialogOpen(true)}
                         sx={{ ml: 'auto' }}
                     >
-                        Add operation
+                        {t('operations.addOperation')}
                     </Button>
                 }
             >

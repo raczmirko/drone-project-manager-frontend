@@ -7,6 +7,7 @@ import {
     Button,
     Typography,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 type ConfirmationDialogProps = {
     open: boolean;
@@ -20,13 +21,20 @@ type ConfirmationDialogProps = {
 
 export default function ConfirmationDialog({
                                                open,
-                                               title = 'Confirm',
-                                               message = 'Are you sure you want to proceed?',
+                                               title,
+                                               message,
                                                onConfirm,
                                                onCancel,
-                                               confirmLabel = 'Confirm',
-                                               cancelLabel = 'Cancel',
+                                               confirmLabel,
+                                               cancelLabel,
                                            }: ConfirmationDialogProps) {
+    const { t } = useTranslation();
+
+    const displayTitle = title ?? t('general.actions.confirm');
+    const displayMessage = message ?? t('general.actions.confirm');
+    const displayConfirmLabel = confirmLabel ?? t('general.actions.confirm');
+    const displayCancelLabel = cancelLabel ?? t('general.actions.cancel');
+
     return (
         <Dialog
             open={open}
@@ -34,26 +42,26 @@ export default function ConfirmationDialog({
             maxWidth="xs"
             fullWidth
         >
-            {title && (
+            {displayTitle && (
                 <DialogTitle sx={{color: 'text.primary'}}>
-                    {title}
+                    {displayTitle}
                 </DialogTitle>
             )}
             <DialogContent>
                 <Typography>
-                    {message}
+                    {displayMessage}
                 </Typography>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onCancel}>
-                    {cancelLabel}
+                    {displayCancelLabel}
                 </Button>
                 <Button
                     onClick={onConfirm}
                     variant="contained"
                     color="primary"
                 >
-                    {confirmLabel}
+                    {displayConfirmLabel}
                 </Button>
             </DialogActions>
         </Dialog>

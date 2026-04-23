@@ -7,6 +7,7 @@ import {
     type GridColDef,
     type GridPaginationModel,
 } from '@mui/x-data-grid';
+import { useTranslation } from 'react-i18next';
 import SectionCard from './SectionCard';
 import type { ProjectDocument } from '../types/projectTypes';
 import { displayValue, formatDate } from '../utils/projectFormatters';
@@ -40,31 +41,32 @@ export default function DocumentsSection({
                                              uploadError,
                                              onResetUploadError,
                                          }: DocumentsSectionProps) {
+    const { t } = useTranslation();
     const columns = useMemo<GridColDef<ProjectDocument>[]>(
         () => [
             {
                 field: 'fileName',
-                headerName: 'File name',
+                headerName: t('documents.fields.fileName'),
                 flex: 1.6,
                 minWidth: 220,
             },
             {
                 field: 'type',
-                headerName: 'Type',
+                headerName: t('documents.fields.type'),
                 flex: 1,
                 minWidth: 140,
                 valueGetter: (_value, row) => displayValue(row.type),
             },
             {
                 field: 'uploadedAt',
-                headerName: 'Uploaded at',
+                headerName: t('documents.fields.uploadedAt'),
                 flex: 1,
                 minWidth: 160,
                 valueGetter: (_value, row) => formatDate(row.uploadedAt),
             },
             {
                 field: 'size',
-                headerName: 'Size',
+                headerName: t('documents.fields.size'),
                 flex: 0.8,
                 minWidth: 120,
                 valueGetter: (_value, row) => displayValue(row.size),
@@ -78,10 +80,10 @@ export default function DocumentsSection({
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params) => (
-                    <Tooltip title="Download file">
+                    <Tooltip title={t('documents.downloadFile')}>
                         <IconButton
                             size="small"
-                            aria-label="Download file"
+                            aria-label={t('documents.downloadFile')}
                             onClick={(event) => {
                                 event.stopPropagation();
                                 window.open(
@@ -97,7 +99,7 @@ export default function DocumentsSection({
                 ),
             },
         ],
-        [projectCode],
+        [projectCode, t],
     );
 
     const handleFileChange = async (
@@ -116,7 +118,7 @@ export default function DocumentsSection({
 
     return (
         <SectionCard
-            title="Project documents"
+            title={t('documents.title')}
             action={
                 <Button
                     component="label"
@@ -125,7 +127,7 @@ export default function DocumentsSection({
                     sx={{ ml: 'auto' }}
                     disabled={uploadLoading}
                 >
-                    Upload file
+                    {t('documents.uploadFile')}
                     <input type="file" hidden onChange={handleFileChange} />
                 </Button>
             }

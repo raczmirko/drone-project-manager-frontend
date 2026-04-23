@@ -9,6 +9,7 @@ import {
     Stack,
     TextField,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import type { CreateOperationFormValues } from '../types/projectTypes';
 import { EMPTY_OPERATION_FORM } from '../hooks/useProjectOperations';
 
@@ -29,6 +30,7 @@ export default function CreateOperationDialog({
                                                   onSubmit,
                                                   onResetError,
                                               }: CreateOperationDialogProps) {
+    const { t } = useTranslation();
     const [form, setForm] = useState<CreateOperationFormValues>(EMPTY_OPERATION_FORM);
 
     useEffect(() => {
@@ -58,14 +60,14 @@ export default function CreateOperationDialog({
 
     return (
         <Dialog open={open} onClose={loading ? undefined : onClose} fullWidth maxWidth="sm">
-            <DialogTitle>Add new operation</DialogTitle>
+            <DialogTitle>{t('operations.create.title')}</DialogTitle>
 
             <DialogContent>
                 <Stack spacing={2} sx={{ mt: 1 }}>
                     {error ? <Alert severity="error">{error}</Alert> : null}
 
                     <TextField
-                        label="Name"
+                        label={t('operations.fields.name')}
                         value={form.name}
                         onChange={handleChange('name')}
                         fullWidth
@@ -73,21 +75,21 @@ export default function CreateOperationDialog({
                     />
 
                     <TextField
-                        label="Type"
+                        label={t('operations.fields.type')}
                         value={form.type}
                         onChange={handleChange('type')}
                         fullWidth
                     />
 
                     <TextField
-                        label="Status"
+                        label={t('operations.fields.status')}
                         value={form.status}
                         onChange={handleChange('status')}
                         fullWidth
                     />
 
                     <TextField
-                        label="Date"
+                        label={t('operations.fields.date')}
                         type="date"
                         value={form.date}
                         onChange={handleChange('date')}
@@ -101,14 +103,14 @@ export default function CreateOperationDialog({
 
             <DialogActions>
                 <Button onClick={onClose} disabled={loading}>
-                    Cancel
+                    {t('general.actions.cancel')}
                 </Button>
                 <Button
                     onClick={handleSubmit}
                     variant="contained"
                     disabled={loading || !form.name.trim()}
                 >
-                    Create
+                    {t('general.actions.create')}
                 </Button>
             </DialogActions>
         </Dialog>

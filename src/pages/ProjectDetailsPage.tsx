@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Alert, Box, Stack } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ConfirmationDialog from '../components/dialogs/ConfirmationDialog.tsx';
 import { projectApi } from '../features/projects/api/projectApi';
 import DocumentsSection from '../features/projects/components/DocumentsSection';
@@ -14,6 +15,7 @@ import { useProjectOperations } from '../features/projects/hooks/useProjectOpera
 export default function ProjectDetailsPage() {
     const { id: code = '' } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const project = useProjectDetails(code);
     const operations = useProjectOperations(code);
@@ -35,7 +37,7 @@ export default function ProjectDetailsPage() {
             await projectApi.deleteByCode(code);
             navigate('/projects');
         } catch (err) {
-            setDeleteError(err instanceof Error ? err.message : 'Unknown error');
+            setDeleteError(err instanceof Error ? err.message : t('general.errors.unknown'));
         } finally {
             setDeleteLoading(false);
             setOpenConfirmDialog(false);
@@ -100,12 +102,12 @@ export default function ProjectDetailsPage() {
 
                 <ConfirmationDialog
                     open={openConfirmDialog}
-                    title="Delete Project"
-                    message="Are you sure you want to delete this project? This action cannot be undone."
+                    title={t('projects.details.deleteTitle')}
+                    message={t('projects.details.deleteMessage')}
                     onConfirm={handleDeleteProject}
                     onCancel={() => setOpenConfirmDialog(false)}
-                    confirmLabel={deleteLoading ? 'Deleting...' : 'Delete'}
-                    cancelLabel="Cancel"
+                    confirmLabel={deleteLoading ? t('general.actions.deleting') : t('general.actions.delete')}
+                    cancelLabel={t('general.actions.cancel')}
                 />
             </Box>
         </Box>

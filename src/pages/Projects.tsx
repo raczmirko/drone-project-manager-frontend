@@ -2,6 +2,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {Alert, Box, Button, IconButton, Paper, Stack, Tooltip, Typography,} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-grid';
+import { useTranslation } from 'react-i18next';
 import CreateProjectDialog, {type CreateProjectRequest} from '../components/dialogs/CreateProjectDialog';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { useNavigate } from 'react-router-dom';
@@ -37,6 +38,7 @@ const emptyForm: CreateProjectRequest = {
 
 export default function Projects() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [rows, setRows] = useState<Project[]>([]);
     const [loading, setLoading] = useState(false);
@@ -57,33 +59,33 @@ export default function Projects() {
         () => [
             {
                 field: 'code',
-                headerName: 'Code',
+                headerName: t('projects.fields.code'),
                 flex: 1,
                 minWidth: 130,
             },
             {
                 field: 'name',
-                headerName: 'Name',
+                headerName: t('projects.fields.name'),
                 flex: 1.4,
                 minWidth: 180,
             },
             {
                 field: 'status',
-                headerName: 'Status',
+                headerName: t('projects.fields.status'),
                 flex: 1,
                 minWidth: 130,
                 valueGetter: (value) => value ?? '-',
             },
             {
                 field: 'startDate',
-                headerName: 'Start date',
+                headerName: t('projects.fields.startDate'),
                 flex: 1,
                 minWidth: 130,
                 valueGetter: (value) => value ?? '-',
             },
             {
                 field: 'endDate',
-                headerName: 'End date',
+                headerName: t('projects.fields.endDate'),
                 flex: 1,
                 minWidth: 130,
                 valueGetter: (value) => value ?? '-',
@@ -97,10 +99,10 @@ export default function Projects() {
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params) => (
-                    <Tooltip title="Open project">
+                    <Tooltip title={t('projects.list.openProject')}>
                         <IconButton
                             size="small"
-                            aria-label="Open project"
+                            aria-label={t('projects.list.openProject')}
                             onClick={() => navigate(`/projects/${params.row.code}`)}
                         >
                             <VisibilityOutlinedIcon fontSize="small" />
@@ -109,7 +111,7 @@ export default function Projects() {
                 ),
             },
         ],
-        [navigate]
+        [navigate, t]
     );
 
     const fetchProjects = useCallback(async () => {
@@ -139,7 +141,7 @@ export default function Projects() {
             setRows(data.content ?? []);
             setRowCount(data.totalElements ?? 0);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error');
+            setError(err instanceof Error ? err.message : t('general.errors.unknown'));
         } finally {
             setLoading(false);
         }
@@ -202,7 +204,7 @@ export default function Projects() {
             setFormData(emptyForm);
             await fetchProjects();
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error');
+            setError(err instanceof Error ? err.message : t('general.errors.unknown'));
         } finally {
             setCreateLoading(false);
         }
@@ -232,7 +234,7 @@ export default function Projects() {
                     }}
                 >
                     <Typography variant="h4" component="h4">
-                        Projects
+                        {t('projects.list.title')}
                     </Typography>
 
                     <Button
@@ -241,7 +243,7 @@ export default function Projects() {
                         onClick={handleOpenCreateDialog}
                         sx={{ ml: 'auto' }}
                     >
-                        Add project
+                        {t('projects.list.addProject')}
                     </Button>
                 </Stack>
 

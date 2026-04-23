@@ -92,7 +92,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
             onRegister();
 
             // Redirect to login page on successful registration
-            navigate('/login'); // Redirects to login
+            navigate('/login');
         } catch (error) {
             console.error("Registration error:", error);
             showNotification("error", t("signUp.error"));
@@ -247,7 +247,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
                                 onClick={handleCopyToClipboard}
                                 sx={{ py: 1.5 }}
                             >
-                                {t("general.operations.copy")}
+                                {t("general.actions.copy")}
                             </Button>
                         )}
                         {/* DOWNLOAD ACCOUNT NUMBER BUTTON*/}
@@ -262,7 +262,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
                                 onClick={handleDownload}
                                 sx={{ py: 1.5 }}
                             >
-                                {t("general.operations.download")}
+                                {t("general.actions.download")}
                             </Button>
                         )}
                         {/* PASSWORD BUTTON*/}

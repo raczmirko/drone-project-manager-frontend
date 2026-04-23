@@ -1,14 +1,22 @@
 {
   "general": {
-    "operations": {
+    "actions": {
       "create": "Létrehozás",
       "update": "Frissítés",
       "delete": "Törlés",
       "copy": "Másolás",
-      "download": "Letöltés"
+      "download": "Letöltés",
+      "cancel": "Mégse",
+      "confirm": "Megerősítés",
+      "open": "Megnyitás",
+      "add": "Hozzáadás",
+      "upload": "Feltöltés",
+      "submitting": "Küldés...",
+      "deleting": "Törlés..."
     },
-    "feedback" : {
-      "copiedToClipboard": "Sikeresen másolva a vágólapra."
+    "feedback": {
+      "copiedToClipboard": "Sikeresen másolva a vágólapra.",
+      "loading": "Betöltés..."
     },
     "errors": {
       "unexpected": "Váratlan hiba történt. Kérjük, próbálja meg később újra.",
@@ -17,7 +25,8 @@
       "invalidRequest": "Érvénytelen kérés.",
       "conflict": "Ütközés történt. Kérjük, próbálja meg újra.",
       "notImplemented": "Ez a funkció még nincs megvalósítva.",
-      "serviceUnavailable": "A szolgáltatás jelenleg nem elérhető. Kérjük, próbálja meg később újra."
+      "serviceUnavailable": "A szolgáltatás jelenleg nem elérhető. Kérjük, próbálja meg később újra.",
+      "unknown": "Ismeretlen hiba"
     }
   },
   "signIn": {
@@ -60,6 +69,57 @@
       "content": "Kérjük, győződjön meg róla, hogy elmentette a fiókazonosítóját, mert a regisztrációt követően az azonosító többet nem megjeleníthető.",
       "cancel": "Mégse",
       "confirm": "Megerősítés"
+    }
+  },
+  "projects": {
+    "list": {
+      "title": "Projektek",
+      "addProject": "Projekt hozzáadása",
+      "openProject": "Projekt megnyitása"
+    },
+    "details": {
+      "title": "Projekt részletei",
+      "loading": "Projekt betöltése...",
+      "notFound": "Projekt nem található.",
+      "deleteTitle": "Projekt törlése",
+      "deleteMessage": "Biztosan törölni szeretné ezt a projektet? Ez a művelet nem vonható vissza."
+    },
+    "create": {
+      "title": "Új projekt hozzáadása"
+    },
+    "fields": {
+      "code": "Kód",
+      "name": "Név",
+      "status": "Státusz",
+      "description": "Leírás",
+      "objective": "Célkitűzés",
+      "startDate": "Kezdési dátum",
+      "endDate": "Befejezési dátum"
+    }
+  },
+  "operations": {
+    "title": "Drón műveletek",
+    "addOperation": "Művelet hozzáadása",
+    "openOperation": "Művelet megnyitása",
+    "create": {
+      "title": "Új művelet hozzáadása"
+    },
+    "fields": {
+      "name": "Név",
+      "type": "Típus",
+      "status": "Státusz",
+      "date": "Dátum"
+    }
+  },
+  "documents": {
+    "title": "Projekt dokumentumok",
+    "uploadFile": "Fájl feltöltése",
+    "downloadFile": "Fájl letöltése",
+    "fields": {
+      "fileName": "Fájlnév",
+      "type": "Típus",
+      "uploadedAt": "Feltöltve",
+      "size": "Méret"
     }
   }
 }
