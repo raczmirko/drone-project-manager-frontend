@@ -38,7 +38,25 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
         return undefined as T;
     }
 
-    return response.json() as Promise<T>;
+    return await response.json() as Promise<T>;
+}
+
+async function apiFetchBlob(path: string, init?: RequestInit): Promise<Blob> {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+        ...init,
+        headers: {
+            Authorization: `Bearer ${token}`,
+            ...init?.headers,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(await parseError(response));
+    }
+
+    return response.blob();
 }
 
 export const projectApi = {
@@ -91,4 +109,10 @@ export const projectApi = {
             body: formData,
         });
     },
+
+    downloadProjectFile(documentId: string) {
+        return apiFetchBlob(`/projects/files/${documentId}/download`, {
+            method: 'GET',
+        });
+    }
 };

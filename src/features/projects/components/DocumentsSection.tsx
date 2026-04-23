@@ -1,18 +1,13 @@
-import { useMemo } from 'react';
-import { Alert, Box, Button, CircularProgress, IconButton, Tooltip } from '@mui/material';
+import React, {useMemo} from 'react';
+import {Alert, Box, Button, CircularProgress, IconButton, Tooltip} from '@mui/material';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
-import {
-    DataGrid,
-    type GridColDef,
-    type GridPaginationModel,
-} from '@mui/x-data-grid';
-import { useTranslation } from 'react-i18next';
+import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-grid';
+import {useTranslation} from 'react-i18next';
 import SectionCard from './SectionCard';
-import type { ProjectDocument } from '../types/projectTypes';
-import { displayValue, formatDate } from '../utils/projectFormatters';
-
-const API_BASE_URL = 'http://localhost:8080';
+import type {ProjectDocument} from '../types/projectTypes';
+import {formatDate, formatFileSize} from '../utils/projectFormatters';
+import {useProjectFileDownload} from "../hooks/useProjectFileDownload.ts";
 
 type DocumentsSectionProps = {
     projectCode: string;
@@ -42,34 +37,35 @@ export default function DocumentsSection({
                                              onResetUploadError,
                                          }: DocumentsSectionProps) {
     const { t } = useTranslation();
+
+    const {
+        downloadFile,
+        downloadLoading,
+        downloadError,
+        resetDownloadError,
+    } = useProjectFileDownload();
+
     const columns = useMemo<GridColDef<ProjectDocument>[]>(
         () => [
             {
-                field: 'fileName',
+                field: 'filename',
                 headerName: t('documents.fields.fileName'),
                 flex: 1.6,
                 minWidth: 220,
             },
             {
-                field: 'type',
-                headerName: t('documents.fields.type'),
-                flex: 1,
-                minWidth: 140,
-                valueGetter: (_value, row) => displayValue(row.type),
-            },
-            {
-                field: 'uploadedAt',
+                field: 'uploadDate',
                 headerName: t('documents.fields.uploadedAt'),
                 flex: 1,
                 minWidth: 160,
-                valueGetter: (_value, row) => formatDate(row.uploadedAt),
+                valueGetter: (_value, row) => formatDate(row.uploadDate),
             },
             {
                 field: 'size',
                 headerName: t('documents.fields.size'),
                 flex: 0.8,
                 minWidth: 120,
-                valueGetter: (_value, row) => displayValue(row.size),
+                valueGetter: (_value, row) => formatFileSize(row.sizeBytes),
             },
             {
                 field: 'actions',
@@ -84,20 +80,21 @@ export default function DocumentsSection({
                         <IconButton
                             size="small"
                             aria-label={t('documents.downloadFile')}
+                            disabled={downloadLoading}
                             onClick={(event) => {
                                 event.stopPropagation();
-                                window.open(
-                                    `${API_BASE_URL}/projects/${projectCode}/files/${params.row.id}/download`,
-                                    '_blank',
-                                    'noopener,noreferrer',
-                                );
+                                void downloadFile({
+                                    projectCode,
+                                    documentId: params.row.id,
+                                    fileName: params.row.filename,
+                                });
                             }}
                         >
                             <DownloadOutlinedIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
                 ),
-            },
+            }
         ],
         [projectCode, t],
     );
@@ -134,6 +131,12 @@ export default function DocumentsSection({
         >
             {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
             {uploadError ? <Alert severity="error" sx={{ mb: 2 }}>{uploadError}</Alert> : null}
+            {downloadError ? (
+                <Alert severity="error" sx={{ mb: 2 }} onClose={resetDownloadError}>
+                    {downloadError}
+                </Alert>
+            ) : null}
+
 
             <Box sx={{ height: 420, width: '100%' }}>
                 <DataGrid

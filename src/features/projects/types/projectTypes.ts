@@ -20,10 +20,9 @@ export type DroneOperation = {
 
 export type ProjectDocument = {
     id: string;
-    fileName: string;
-    type: string | null;
-    uploadedAt: string | null;
-    size: string | null;
+    filename: string;
+    uploadDate: string | null;
+    sizeBytes: number | null;
 };
 
 export type PageResponse<T> = {
