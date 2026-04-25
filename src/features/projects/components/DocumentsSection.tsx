@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Alert, Box, Button, CircularProgress, IconButton, Tooltip} from '@mui/material';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
@@ -9,6 +9,7 @@ import SectionCard from './SectionCard';
 import type {ProjectDocument} from '../types/projectTypes';
 import {formatDate, formatFileSize} from '../utils/projectFormatters';
 import {useProjectFileDownload} from "../hooks/useProjectFileDownload.ts";
+import ConfirmationDialog from "../../../components/dialogs/ConfirmationDialog.tsx";
 
 type DocumentsSectionProps = {
     projectCode: string;
@@ -42,6 +43,8 @@ export default function DocumentsSection({
                                              deleteLoading,
                                          }: DocumentsSectionProps) {
     const { t } = useTranslation();
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [documentToDelete, setDocumentToDelete] = useState<ProjectDocument | null>(null);
 
     const {
         downloadFile,
@@ -49,6 +52,24 @@ export default function DocumentsSection({
         downloadError,
         resetDownloadError,
     } = useProjectFileDownload();
+
+    const handleDeleteDialogCancel = () => {
+        setIsDeleteDialogOpen(false);
+        setDocumentToDelete(null);
+    };
+
+    const handleDeleteDialogConfirm = async () => {
+        if (!documentToDelete) {
+            return;
+        }
+
+        const success = await onDeleteDocument(documentToDelete.id);
+
+        if (success) {
+            setIsDeleteDialogOpen(false);
+            setDocumentToDelete(null);
+        }
+    };
 
     const columns = useMemo<GridColDef<ProjectDocument>[]>(
         () => [
@@ -117,7 +138,8 @@ export default function DocumentsSection({
                                 disabled={deleteLoading || downloadLoading}
                                 onClick={(event) => {
                                     event.stopPropagation();
-                                    void onDeleteDocument(params.row.id);
+                                    setDocumentToDelete(params.row);
+                                    setIsDeleteDialogOpen(true);
                                 }}
                             >
                                 <DeleteOutlineIcon fontSize="small" />
@@ -145,51 +167,71 @@ export default function DocumentsSection({
     };
 
     return (
-        <SectionCard
-            title={t('documents.title')}
-            action={
-                <Button
-                    component="label"
-                    variant="contained"
-                    startIcon={uploadLoading ? <CircularProgress color="inherit" size={18} /> : <UploadFileOutlinedIcon />}
-                    sx={{ ml: 'auto' }}
-                    disabled={uploadLoading}
-                >
-                    {t('documents.uploadFile')}
-                    <input type="file" hidden onChange={handleFileChange} />
-                </Button>
-            }
-        >
-            {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
-            {uploadError ? <Alert severity="error" sx={{ mb: 2 }}>{uploadError}</Alert> : null}
-            {downloadError ? (
-                <Alert severity="error" sx={{ mb: 2 }} onClose={resetDownloadError}>
-                    {downloadError}
-                </Alert>
-            ) : null}
+        <>
+            {/*DOCUMENTS SECTION*/}
+            <SectionCard
+                title={t('documents.title')}
+                action={
+                    <Button
+                        component="label"
+                        variant="contained"
+                        startIcon={uploadLoading ? <CircularProgress color="inherit" size={18} /> : <UploadFileOutlinedIcon />}
+                        sx={{ ml: 'auto' }}
+                        disabled={uploadLoading}
+                    >
+                        {t('documents.uploadFile')}
+                        <input type="file" hidden onChange={handleFileChange} />
+                    </Button>
+                }
+            >
+                {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
+                {uploadError ? <Alert severity="error" sx={{ mb: 2 }}>{uploadError}</Alert> : null}
+                {downloadError ? (
+                    <Alert severity="error" sx={{ mb: 2 }} onClose={resetDownloadError}>
+                        {downloadError}
+                    </Alert>
+                ) : null}
 
 
-            <Box sx={{ height: 420, width: '100%' }}>
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    getRowId={(row) => row.id}
-                    loading={loading}
-                    pagination
-                    paginationMode="server"
-                    rowCount={rowCount}
-                    pageSizeOptions={[5, 10, 20]}
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={onPaginationModelChange}
-                    disableRowSelectionOnClick
-                    sx={{
-                        border: 0,
-                        '& .MuiDataGrid-columnHeaders': {
-                            backgroundColor: 'grey.100',
-                        },
-                    }}
-                />
-            </Box>
-        </SectionCard>
+                <Box sx={{ height: 420, width: '100%' }}>
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        getRowId={(row) => row.id}
+                        loading={loading}
+                        pagination
+                        paginationMode="server"
+                        rowCount={rowCount}
+                        pageSizeOptions={[5, 10, 20]}
+                        paginationModel={paginationModel}
+                        onPaginationModelChange={onPaginationModelChange}
+                        disableRowSelectionOnClick
+                        sx={{
+                            border: 0,
+                            '& .MuiDataGrid-columnHeaders': {
+                                backgroundColor: 'grey.100',
+                            },
+                        }}
+                    />
+                </Box>
+            </SectionCard>
+
+            {/*DELETE DOCUMENT DIALOG*/}
+            <ConfirmationDialog
+                open={isDeleteDialogOpen}
+                title={t('general.actions.confirm')}
+                message={
+                    documentToDelete
+                        ? t('documents.confirmDelete', {
+                            filename: documentToDelete.filename,
+                        })
+                        : ''
+                }
+                onConfirm={handleDeleteDialogConfirm}
+                onCancel={handleDeleteDialogCancel}
+                confirmLabel={t('general.actions.delete')}
+                cancelLabel={t('general.actions.cancel')}
+            />
+        </>
     );
 }
