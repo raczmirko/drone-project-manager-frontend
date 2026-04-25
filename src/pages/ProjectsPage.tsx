@@ -1,25 +1,13 @@
-import { useMemo, useState } from 'react';
-import {
-    Alert,
-    Box,
-    Button,
-    IconButton,
-    Paper,
-    Stack,
-    Tooltip,
-    Typography,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import {useMemo, useState} from 'react';
+import {Alert, Box, IconButton, Paper, Tooltip,} from '@mui/material';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import {
-    DataGrid,
-    type GridColDef,
-} from '@mui/x-data-grid';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import {DataGrid, type GridColDef,} from '@mui/x-data-grid';
+import {useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
 import CreateProjectDialog from '../components/dialogs/CreateProjectDialog';
-import { useProjects, EMPTY_PROJECT_FORM } from '../features/projects/hooks/useProjects';
-import type { Project, CreateProjectFormValues } from '../features/projects/types/projectTypes';
+import {EMPTY_PROJECT_FORM, useProjects} from '../features/projects/hooks/useProjects';
+import type {CreateProjectFormValues, Project} from '../features/projects/types/projectTypes';
+import ProjectsPageHeader from "../features/projects/components/ProjectsPageHeader.tsx";
 
 export default function ProjectsPage() {
     const navigate = useNavigate();
@@ -73,10 +61,10 @@ export default function ProjectsPage() {
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params) => (
-                    <Tooltip title={t('projects.list.openProject')}>
+                    <Tooltip title={t('general.actions.seeDetails')}>
                         <IconButton
                             size="small"
-                            aria-label={t('projects.list.openProject')}
+                            aria-label={t('general.actions.seeDetails')}
                             onClick={() => navigate(`/projects/${params.row.code}`)}
                         >
                             <VisibilityOutlinedIcon fontSize="small" />
@@ -120,23 +108,7 @@ export default function ProjectsPage() {
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', py: 4 }}>
             <Box sx={{ width: '100%', maxWidth: 1200, px: { xs: 2, md: 0 } }}>
-                <Stack
-                    direction="row"
-                    sx={{ mb: 2, alignItems: 'center', justifyContent: 'space-between' }}
-                >
-                    <Typography variant="h4" component="h1">
-                        {t('projects.list.title')}
-                    </Typography>
-
-                    <Button
-                        variant="contained"
-                        startIcon={<AddIcon />}
-                        onClick={handleOpenCreateDialog}
-                        sx={{ ml: 'auto' }}
-                    >
-                        {t('projects.list.addProject')}
-                    </Button>
-                </Stack>
+                <ProjectsPageHeader onAdd={() => handleOpenCreateDialog()} />
 
                 {projects.error ? (
                     <Alert severity="error" sx={{ mb: 2 }}>
