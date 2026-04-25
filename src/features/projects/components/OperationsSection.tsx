@@ -1,23 +1,19 @@
-import { useMemo, useState } from 'react';
-import { Alert, Box, Button, IconButton, Tooltip } from '@mui/material';
+import {useMemo, useState} from 'react';
+import {Alert, Box, Button, IconButton, Tooltip} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import {
-    DataGrid,
-    type GridColDef,
-    type GridPaginationModel,
-} from '@mui/x-data-grid';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-grid';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import SectionCard from './SectionCard';
 import CreateOperationStepperDialog from './CreateOperationStepperDialog';
-import type { CreateDroneOperationRequest, DroneOperation } from '../types/projectTypes';
+import type {CreateDroneOperationRequest, DroneOperation} from '../types/projectTypes';
 import type {
     CreateLocationFormValues,
     CreateOperationWizardSubmitValues,
     LocationOption,
 } from '../types/operationWizardTypes';
-import { displayValue, formatDate } from '../utils/projectFormatters';
+import {formatDate} from '../utils/projectFormatters';
 
 type OperationsSectionProps = {
     projectCode: string;
@@ -89,24 +85,16 @@ export default function OperationsSection({
     const columns = useMemo<GridColDef<DroneOperation>[]>(
         () => [
             {
-                field: 'name',
-                headerName: t('operations.fields.name'),
+                field: 'code',
+                headerName: t('operations.fields.code'),
                 flex: 1.4,
                 minWidth: 180,
             },
             {
-                field: 'type',
-                headerName: t('operations.fields.type'),
-                flex: 1,
-                minWidth: 140,
-                valueGetter: (_value, row) => displayValue(row.type),
-            },
-            {
-                field: 'status',
-                headerName: t('operations.fields.status'),
-                flex: 1,
-                minWidth: 130,
-                valueGetter: (_value, row) => displayValue(row.status),
+                field: 'name',
+                headerName: t('operations.fields.name'),
+                flex: 1.4,
+                minWidth: 180,
             },
             {
                 field: 'date',
