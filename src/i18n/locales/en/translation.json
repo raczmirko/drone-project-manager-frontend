@@ -12,7 +12,10 @@
       "add": "Add",
       "upload": "Upload",
       "submitting": "Submitting...",
-      "deleting": "Deleting..."
+      "deleting": "Deleting...",
+      "loading": "Loading...",
+      "selected": "Selected",
+      "seeDetails": "See details"
     },
     "feedback": {
       "copiedToClipboard": "Successfully copied to clipboard.",
@@ -72,20 +75,19 @@
     }
   },
   "projects": {
-    "list": {
-      "title": "Projects",
-      "addProject": "Add project",
-      "openProject": "Open project"
+    "title": "Projects",
+    "crud": {
+      "add": "Add project",
+      "edit": "Edit project",
+      "delete": "Delete project",
+      "open": "Open project",
+      "create": "Create new project"
     },
     "details": {
       "title": "Project details",
       "loading": "Loading project...",
       "notFound": "Project not found.",
-      "deleteTitle": "Delete Project",
       "deleteMessage": "Are you sure you want to delete this project? This action cannot be undone."
-    },
-    "create": {
-      "title": "Add new project"
     },
     "fields": {
       "code": "Code",
@@ -99,10 +101,18 @@
   },
   "operations": {
     "title": "Drone operations",
-    "addOperation": "Add operation",
-    "openOperation": "Open operation",
-    "create": {
-      "title": "Add new operation"
+    "details": "Drone operation details",
+    "location": {
+      "chooseSource": "Choose location source",
+      "existing": "Existing location",
+      "select": "Select an existing location"
+    },
+    "crud": {
+      "add": "Add operation",
+      "edit": "Edit operation",
+      "delete": "Delete operation",
+      "open": "Open operation",
+      "create": "Create new operation"
     },
     "fields": {
       "name": "Name",
@@ -120,6 +130,26 @@
       "type": "Type",
       "uploadedAt": "Uploaded at",
       "size": "Size"
+    }
+  },
+  "locations": {
+    "plural": "Locations",
+    "singular": "Location",
+    "preview": "Location preview",
+    "mapPreview": "Google Maps preview",
+    "noOptions": "No existing locations found",
+    "search": "Search location by name",
+    "crud": {
+      "add": "Add location",
+      "edit": "Edit location",
+      "delete": "Delete location",
+      "open": "Open location",
+      "create": "Create new location"
+    },
+    "fields": {
+      "name": "Location ame",
+      "latitude": "Latitude",
+      "longitude": "Longitude"
     }
   }
 }
