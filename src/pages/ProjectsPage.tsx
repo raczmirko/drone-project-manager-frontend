@@ -4,7 +4,7 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import {DataGrid, type GridColDef,} from '@mui/x-data-grid';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
-import CreateProjectDialog from '../components/dialogs/CreateProjectDialog';
+import CreateProjectDialog from '../features/projects/components/CreateProjectDialog.tsx';
 import {EMPTY_PROJECT_FORM, useProjects} from '../features/projects/hooks/useProjects';
 import type {CreateProjectFormValues, Project} from '../features/projects/types/projectTypes';
 import ProjectsPageHeader from "../features/projects/components/ProjectsPageHeader.tsx";
