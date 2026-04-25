@@ -1,3 +1,10 @@
+export type Location = {
+    id: string;
+    name: string;
+    longitude: string;
+    latitude: string;
+};
+
 export type DroneOperation = {
     id: string;
     name: string;
@@ -6,8 +13,7 @@ export type DroneOperation = {
     objective: string | null;
     operationDate: string | null;
     description: string | null;
-    locationId: string;
-    locationName: string;
+    location: Location;
     drone: string | null;
     flightMode: string | null;
     weatherDescription: string | null;
