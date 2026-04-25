@@ -121,5 +121,19 @@
       "uploadedAt": "Feltöltve",
       "size": "Méret"
     }
+  },
+  "locations": {
+    "plural": "Helyszínek",
+    "singular": "Helyszín",
+    "addLocation": "Helyszín hozzáadása",
+    "openLocation": "Helyszín megnyitása",
+    "create": {
+      "title": "Új helyszín hozzáadása"
+    },
+    "fields": {
+      "name": "Név",
+      "latitude": "Szélesség",
+      "longitude": "Hosszúság"
+    }
   }
 }

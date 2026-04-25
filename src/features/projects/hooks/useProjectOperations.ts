@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
-import type { GridPaginationModel } from '@mui/x-data-grid';
-import { projectApi } from '../api/projectApi';
-import type { CreateDroneOperationRequest, DroneOperation } from '../types/projectTypes';
+import {useCallback, useEffect, useState} from 'react';
+import type {GridPaginationModel} from '@mui/x-data-grid';
+import {operationApi} from "../../operations/api/operationApi.ts";
+import type {CreateDroneOperationRequest, DroneOperation} from "../../operations/types/operationTypes.ts";
 
 const DEFAULT_PAGINATION_MODEL: GridPaginationModel = {
     page: 0,
@@ -30,7 +30,7 @@ export function useProjectOperations(code: string) {
         setError(null);
 
         try {
-            const response = await projectApi.getOperations(
+            const response = await operationApi.getAll(
                 code,
                 paginationModel.page,
                 paginationModel.pageSize,
@@ -60,7 +60,7 @@ export function useProjectOperations(code: string) {
             setCreateError(null);
 
             try {
-                await projectApi.createOperation(code, payload);
+                await operationApi.createOperation(code, payload);
                 await refetch();
                 return true;
             } catch (err) {

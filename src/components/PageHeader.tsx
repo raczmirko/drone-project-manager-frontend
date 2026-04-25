@@ -49,7 +49,23 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     }, [timeLeft]);
 
+    /**
+     * Generate breadcrumbs based on the current location.
+     */
     const breadcrumbs = useMemo(() => {
+        const matchOperationDetails = /^\/projects\/([^/]+)\/operations\/([^/]+)$/.exec(location.pathname);
+
+        if (matchOperationDetails) {
+            const projectCode = matchOperationDetails[1];
+            const operationCode = matchOperationDetails[2];
+
+            return [
+                { label: t('breadcrumbs.projects', 'Projects'), to: '/projects' },
+                { label: projectCode, to: `/projects/${projectCode}` },
+                { label: operationCode, to: `/projects/${projectCode}/operations/${operationCode}` },
+            ];
+        }
+
         const pathnames = location.pathname.split("/").filter(Boolean);
 
         return [

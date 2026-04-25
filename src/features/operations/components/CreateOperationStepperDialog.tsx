@@ -21,7 +21,7 @@ import {
     Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import LocationMapPreview from './LocationMapPreview';
+import LocationMapPreview from '../../projects/components/LocationMapPreview.tsx';
 import {
     EMPTY_LOCATION_FORM,
     EMPTY_OPERATION_DETAILS_FORM,
@@ -29,7 +29,7 @@ import {
     type CreateOperationWizardSubmitValues,
     type DroneOperationFormValues,
     type LocationOption,
-} from '../types/operationWizardTypes';
+} from '../types/operationWizardTypes.ts';
 
 type CreateOperationStepperDialogProps = {
     open: boolean;

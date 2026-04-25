@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { GridPaginationModel } from '@mui/x-data-grid';
-import { projectApi } from '../api/projectApi';
-import type { ProjectDocument } from '../types/projectTypes';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import type {GridPaginationModel} from '@mui/x-data-grid';
+import {operationApi} from '../api/operationApi';
+import type {OperationDocument} from '../types/operationTypes';
 
 const DEFAULT_PAGINATION_MODEL: GridPaginationModel = {
     page: 0,
     pageSize: 5,
 };
 
-export function useProjectDocuments(code: string) {
-    const [rows, setRows] = useState<ProjectDocument[]>([]);
+export function useOperationDocuments(projectCode: string, operationCode: string) {
+    const [rows, setRows] = useState<OperationDocument[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [rowCount, setRowCount] = useState(0);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>(
         DEFAULT_PAGINATION_MODEL,
     );
+
     const [uploadLoading, setUploadLoading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -23,7 +24,7 @@ export function useProjectDocuments(code: string) {
     const [deleteError, setDeleteError] = useState<string | null>(null);
 
     const refetch = useCallback(async () => {
-        if (!code) {
+        if (!projectCode || !operationCode) {
             setRows([]);
             setRowCount(0);
             return;
@@ -33,11 +34,12 @@ export function useProjectDocuments(code: string) {
         setError(null);
 
         try {
-            const response = await projectApi.getDocuments(
-                code,
+            const response = await operationApi.getDocuments(
+                operationCode,
                 paginationModel.page,
                 paginationModel.pageSize,
             );
+
             setRows(response.content ?? []);
             setRowCount(response.totalElements ?? 0);
         } catch (err) {
@@ -47,7 +49,7 @@ export function useProjectDocuments(code: string) {
         } finally {
             setLoading(false);
         }
-    }, [code, paginationModel.page, paginationModel.pageSize]);
+    }, [projectCode, operationCode, paginationModel.page, paginationModel.pageSize]);
 
     useEffect(() => {
         void refetch();
@@ -55,7 +57,7 @@ export function useProjectDocuments(code: string) {
 
     const uploadDocument = useCallback(
         async (file: File) => {
-            if (!code) {
+            if (!projectCode || !operationCode) {
                 return false;
             }
 
@@ -63,7 +65,7 @@ export function useProjectDocuments(code: string) {
             setUploadError(null);
 
             try {
-                await projectApi.uploadDocument(code, file);
+                await operationApi.uploadDocument(operationCode, file);
                 await refetch();
                 return true;
             } catch (err) {
@@ -73,17 +75,20 @@ export function useProjectDocuments(code: string) {
                 setUploadLoading(false);
             }
         },
-        [code, refetch],
+        [projectCode, operationCode, refetch],
     );
 
     const deleteDocument = useCallback(
         async (documentId: string) => {
+            if (!projectCode || !operationCode) {
+                return false;
+            }
 
             setDeleteLoading(true);
             setDeleteError(null);
 
             try {
-                await projectApi.deleteDocument(documentId);
+                await operationApi.deleteDocument(documentId);
                 await refetch();
                 return true;
             } catch (err) {
@@ -93,7 +98,7 @@ export function useProjectDocuments(code: string) {
                 setDeleteLoading(false);
             }
         },
-        [refetch],
+        [projectCode, operationCode, refetch],
     );
 
     const resetUploadError = useCallback(() => {

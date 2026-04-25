@@ -6,14 +6,14 @@ import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-
 import {useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import SectionCard from './SectionCard';
-import CreateOperationStepperDialog from './CreateOperationStepperDialog';
-import type {CreateDroneOperationRequest, DroneOperation} from '../types/projectTypes';
+import CreateOperationStepperDialog from '../../operations/components/CreateOperationStepperDialog.tsx';
 import type {
     CreateLocationFormValues,
     CreateOperationWizardSubmitValues,
     LocationOption,
-} from '../types/operationWizardTypes';
-import {formatDate} from '../utils/projectFormatters';
+} from '../../operations/types/operationWizardTypes.ts';
+import {formatDate} from '../../../utils/formatters.ts';
+import type {CreateDroneOperationRequest, DroneOperation} from "../../operations/types/operationTypes.ts";
 
 type OperationsSectionProps = {
     projectCode: string;
@@ -118,7 +118,7 @@ export default function OperationsSection({
                             aria-label={t('general.actions.seeDetails')}
                             onClick={(event) => {
                                 event.stopPropagation();
-                                navigate(`/projects/${projectCode}/operations/${params.row.id}`);
+                                navigate(`/projects/${projectCode}/operations/${params.row.code}`);
                             }}
                         >
                             <VisibilityOutlinedIcon fontSize="small" />

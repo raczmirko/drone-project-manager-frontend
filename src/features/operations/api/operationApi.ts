@@ -1,4 +1,10 @@
-import type {CreateProjectRequest, PageResponse, Project, ProjectDocument,} from '../types/projectTypes';
+import type {PageResponse, ProjectDocument} from "../../projects/types/projectTypes.ts";
+import type {CreateLocationFormValues, LocationOption} from "../types/operationWizardTypes.ts";
+import type {
+    CreateDroneOperationRequest,
+    DroneOperation,
+    UpdateDroneOperationRequest
+} from "../types/operationTypes.ts";
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -60,53 +66,75 @@ async function apiFetchBlob(path: string, init?: RequestInit): Promise<Blob> {
     return response.blob();
 }
 
-export const projectApi = {
-    getProjects(page: number, size: number) {
-        return apiFetch<PageResponse<Project>>(`/projects?page=${page}&size=${size}`);
+export const operationApi = {
+    getAll(projectCode: string, page: number, size: number) {
+        return apiFetch<PageResponse<DroneOperation>>(
+            `/projects/${projectCode}/operations?page=${page}&size=${size}`,
+        );
     },
 
-    createProject(payload: CreateProjectRequest) {
-        return apiFetch<void>('/projects', {
+    get(projectCode: string, operationCode: string) {
+        return apiFetch<DroneOperation>(
+            `/projects/${projectCode}/operations/${operationCode}`,
+        );
+    },
+
+    update(projectCode: string, payload: UpdateDroneOperationRequest) {
+        return apiFetch<DroneOperation>(`/projects/${projectCode}/operations`, {
             method: 'POST',
             body: JSON.stringify(payload),
         });
     },
 
-    getByCode(code: string) {
-        return apiFetch<Project>(`/projects/${code}`);
-    },
-
-    deleteByCode(code: string) {
-        return apiFetch<void>(`/projects/${code}`, {
+    deleteById(projectCode: string, operationCode: string) {
+        return apiFetchBlob(`/projects/${projectCode}/operations/${operationCode}`, {
             method: 'DELETE',
         });
     },
 
-    getDocuments(code: string, page: number, size: number) {
+    createOperation(projectCode: string, payload: CreateDroneOperationRequest) {
+        return apiFetch<void>(`/projects/${projectCode}/operations`, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    getDocuments(operationCode: string, page: number, size: number) {
         return apiFetch<PageResponse<ProjectDocument>>(
-            `/projects/${code}/files?page=${page}&size=${size}`,
+            `/operations/${operationCode}/files?page=${page}&size=${size}`,
         );
     },
 
-    uploadDocument(code: string, file: File) {
+    uploadDocument(operationCode: string, file: File) {
         const formData = new FormData();
         formData.append('file', file);
 
-        return apiFetch<void>(`/projects/${code}/files`, {
+        return apiFetch<void>(`/operations/${operationCode}/files`, {
             method: 'POST',
             body: formData,
         });
     },
 
     downloadDocument(documentId: string) {
-        return apiFetchBlob(`/projects/files/${documentId}/download`, {
+        return apiFetchBlob(`/operations/files/${documentId}/download`, {
             method: 'GET',
         });
     },
 
     deleteDocument(documentId: string) {
-        return apiFetchBlob(`/projects/files/${documentId}`, {
+        return apiFetchBlob(`/operations/files/${documentId}`, {
             method: 'DELETE',
+        });
+    },
+
+    getLocations(page = 0, size = 50) {
+        return apiFetch<PageResponse<LocationOption>>(`/locations?page=${page}&size=${size}`);
+    },
+
+    createLocation(payload: CreateLocationFormValues) {
+        return apiFetch<LocationOption>('/locations', {
+            method: 'POST',
+            body: JSON.stringify(payload),
         });
     },
 };

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { projectApi } from '../api/projectApi';
-import type { CreateLocationFormValues, LocationOption } from '../types/operationWizardTypes';
+import {useCallback, useEffect, useState} from 'react';
+import type {CreateLocationFormValues, LocationOption} from '../../operations/types/operationWizardTypes.ts';
+import {operationApi} from "../../operations/api/operationApi.ts";
 
 export function useLocations() {
     const [rows, setRows] = useState<LocationOption[]>([]);
@@ -14,7 +14,7 @@ export function useLocations() {
         setError(null);
 
         try {
-            const response = await projectApi.getLocations();
+            const response = await operationApi.getLocations();
             setRows(response.content ?? []);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Unknown error');
@@ -33,7 +33,7 @@ export function useLocations() {
         setCreateError(null);
 
         try {
-            const created = await projectApi.createLocation({
+            const created = await operationApi.createLocation({
                 name: values.name.trim(),
                 latitude: values.latitude.trim(),
                 longitude: values.longitude.trim(),

@@ -7,7 +7,7 @@ import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-
 import {useTranslation} from 'react-i18next';
 import SectionCard from './SectionCard';
 import type {ProjectDocument} from '../types/projectTypes';
-import {formatDate, formatFileSize} from '../utils/projectFormatters';
+import {formatDate, formatFileSize} from '../../../utils/formatters.ts';
 import {useProjectFileDownload} from "../hooks/useProjectFileDownload.ts";
 import ConfirmationDialog from "../../../components/dialogs/ConfirmationDialog.tsx";
 
@@ -149,7 +149,7 @@ export default function DocumentsSection({
                 ),
             }
         ],
-        [projectCode, t],
+        [deleteLoading, downloadFile, downloadLoading, projectCode, t],
     );
 
     const handleFileChange = async (

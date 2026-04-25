@@ -1,9 +1,9 @@
 import { Alert, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import ReadOnlyField from './ReadOnlyField';
+import ReadOnlyField from '../../../components/ReadOnlyField.tsx';
 import SectionCard from './SectionCard';
 import type { Project } from '../types/projectTypes';
-import { formatDate } from '../utils/projectFormatters';
+import { formatDate } from '../../../utils/formatters.ts';
 
 type ProjectSummaryCardProps = {
     project: Project | null;
