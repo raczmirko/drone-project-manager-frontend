@@ -1,6 +1,7 @@
 {
   "general": {
     "actions": {
+      "title": "Actions",
       "create": "Create",
       "update": "Update",
       "delete": "Delete",
@@ -125,6 +126,7 @@
     "title": "Project documents",
     "uploadFile": "Upload file",
     "downloadFile": "Download file",
+    "deleteFile": "Delete file",
     "fields": {
       "fileName": "File name",
       "type": "Type",

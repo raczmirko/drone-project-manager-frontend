@@ -106,6 +106,8 @@ export default function ProjectDetailsPage() {
                         uploadLoading={documents.uploadLoading}
                         uploadError={documents.uploadError}
                         onResetUploadError={documents.resetUploadError}
+                        onDeleteDocument={documents.deleteDocument}
+                        deleteLoading={documents.deleteLoading}
                     />
                 </Stack>
 

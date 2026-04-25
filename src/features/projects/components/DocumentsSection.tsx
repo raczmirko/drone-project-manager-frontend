@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {Alert, Box, Button, CircularProgress, IconButton, Tooltip} from '@mui/material';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-grid';
 import {useTranslation} from 'react-i18next';
@@ -21,6 +22,8 @@ type DocumentsSectionProps = {
     uploadLoading: boolean;
     uploadError: string | null;
     onResetUploadError: () => void;
+    onDeleteDocument: (documentId: string) => Promise<boolean>;
+    deleteLoading: boolean;
 };
 
 export default function DocumentsSection({
@@ -35,6 +38,8 @@ export default function DocumentsSection({
                                              uploadLoading,
                                              uploadError,
                                              onResetUploadError,
+                                             onDeleteDocument,
+                                             deleteLoading,
                                          }: DocumentsSectionProps) {
     const { t } = useTranslation();
 
@@ -69,30 +74,56 @@ export default function DocumentsSection({
             },
             {
                 field: 'actions',
-                headerName: '',
+                headerName: t('general.actions.title'),
                 sortable: false,
                 filterable: false,
                 width: 80,
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params) => (
-                    <Tooltip title={t('documents.downloadFile')}>
-                        <IconButton
-                            size="small"
-                            aria-label={t('documents.downloadFile')}
-                            disabled={downloadLoading}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                void downloadFile({
-                                    projectCode,
-                                    documentId: params.row.id,
-                                    fileName: params.row.filename,
-                                });
-                            }}
-                        >
-                            <DownloadOutlinedIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 0.5,
+                            width: '100%',
+                            height: '100%',
+                        }}
+                    >
+                        <Tooltip title={t('documents.downloadFile')}>
+                            <IconButton
+                                size="small"
+                                aria-label={t('documents.downloadFile')}
+                                disabled={deleteLoading || downloadLoading}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    void downloadFile({
+                                        projectCode,
+                                        documentId: params.row.id,
+                                        fileName: params.row.filename,
+                                    });
+                                }}
+                            >
+                                <DownloadOutlinedIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title={t('documents.deleteFile')}>
+                            <IconButton
+                                size="small"
+                                color="error"
+                                aria-label={t('documents.deleteFile')}
+                                disabled={deleteLoading || downloadLoading}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    void onDeleteDocument(params.row.id);
+                                }}
+                            >
+                                <DeleteOutlineIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                 ),
             }
         ],

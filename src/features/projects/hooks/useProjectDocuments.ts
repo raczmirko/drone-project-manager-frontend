@@ -19,6 +19,9 @@ export function useProjectDocuments(code: string) {
     const [uploadLoading, setUploadLoading] = useState(false);
     const [uploadError, setUploadError] = useState<string | null>(null);
 
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+
     const refetch = useCallback(async () => {
         if (!code) {
             setRows([]);
@@ -73,8 +76,32 @@ export function useProjectDocuments(code: string) {
         [code, refetch],
     );
 
+    const deleteDocument = useCallback(
+        async (documentId: string) => {
+
+            setDeleteLoading(true);
+            setDeleteError(null);
+
+            try {
+                await projectApi.deleteProjectDocument(documentId);
+                await refetch();
+                return true;
+            } catch (err) {
+                setDeleteError(err instanceof Error ? err.message : 'Unknown error');
+                return false;
+            } finally {
+                setDeleteLoading(false);
+            }
+        },
+        [refetch],
+    );
+
     const resetUploadError = useCallback(() => {
         setUploadError(null);
+    }, []);
+
+    const resetDeleteError = useCallback(() => {
+        setDeleteError(null);
     }, []);
 
     return useMemo(
@@ -90,6 +117,10 @@ export function useProjectDocuments(code: string) {
             uploadLoading,
             uploadError,
             resetUploadError,
+            deleteDocument,
+            deleteLoading,
+            deleteError,
+            resetDeleteError,
         }),
         [
             rows,
@@ -102,6 +133,10 @@ export function useProjectDocuments(code: string) {
             uploadLoading,
             uploadError,
             resetUploadError,
+            deleteDocument,
+            deleteLoading,
+            deleteError,
+            resetDeleteError,
         ],
     );
 }

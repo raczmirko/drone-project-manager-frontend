@@ -119,9 +119,15 @@ export const projectApi = {
         });
     },
 
-    downloadProjectFile(code: string, documentId: string) {
-        return apiFetchBlob(`/projects/${code}/files/${documentId}/download`, {
+    downloadProjectDocument(documentId: string) {
+        return apiFetchBlob(`/projects/files/${documentId}/download`, {
             method: 'GET',
+        });
+    },
+
+    deleteProjectDocument(documentId: string) {
+        return apiFetchBlob(`/projects/files/${documentId}`, {
+            method: 'DELETE',
         });
     },
 

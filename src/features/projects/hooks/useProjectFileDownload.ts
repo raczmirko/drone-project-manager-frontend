@@ -17,7 +17,7 @@ export function useProjectFileDownload() {
             setDownloadError(null);
 
             try {
-                const blob = await projectApi.downloadProjectFile(documentId);
+                const blob = await projectApi.downloadProjectDocument(documentId);
 
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
