@@ -6,10 +6,11 @@ import ConfirmationDialog from '../components/dialogs/ConfirmationDialog.tsx';
 import { projectApi } from '../features/projects/api/projectApi';
 import DocumentsSection from '../features/projects/components/DocumentsSection';
 import OperationsSection from '../features/projects/components/OperationsSection';
-import ProjectHeader from '../features/projects/components/ProjectHeader';
+import ProjectDetailsPageHeader from '../features/projects/components/ProjectDetailsPageHeader.tsx';
 import ProjectSummaryCard from '../features/projects/components/ProjectSummaryCard';
 import { useProjectDetails } from '../features/projects/hooks/useProjectDetails';
 import { useProjectDocuments } from '../features/projects/hooks/useProjectDocuments';
+import { useLocations } from '../features/projects/hooks/useLocations';
 import { useProjectOperations } from '../features/projects/hooks/useProjectOperations';
 
 export default function ProjectDetailsPage() {
@@ -20,6 +21,7 @@ export default function ProjectDetailsPage() {
     const project = useProjectDetails(code);
     const operations = useProjectOperations(code);
     const documents = useProjectDocuments(code);
+    const locations = useLocations();
 
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
@@ -61,7 +63,7 @@ export default function ProjectDetailsPage() {
                 }}
             >
                 <Stack spacing={3}>
-                    <ProjectHeader onDelete={() => setOpenConfirmDialog(true)} />
+                    <ProjectDetailsPageHeader onDelete={() => setOpenConfirmDialog(true)} />
 
                     {deleteError ? <Alert severity="error">{deleteError}</Alert> : null}
 
@@ -83,6 +85,13 @@ export default function ProjectDetailsPage() {
                         createLoading={operations.createLoading}
                         createError={operations.createError}
                         onResetCreateError={operations.resetCreateError}
+                        availableLocations={locations.rows}
+                        locationsLoading={locations.loading}
+                        locationsError={locations.error}
+                        onCreateLocation={locations.createLocation}
+                        locationCreateLoading={locations.createLoading}
+                        locationCreateError={locations.createError}
+                        onResetLocationCreateError={locations.resetCreateError}
                     />
 
                     <DocumentsSection
@@ -106,7 +115,9 @@ export default function ProjectDetailsPage() {
                     message={t('projects.details.deleteMessage')}
                     onConfirm={handleDeleteProject}
                     onCancel={() => setOpenConfirmDialog(false)}
-                    confirmLabel={deleteLoading ? t('general.actions.deleting') : t('general.actions.delete')}
+                    confirmLabel={
+                        deleteLoading ? t('general.actions.deleting') : t('general.actions.delete')
+                    }
                     cancelLabel={t('general.actions.cancel')}
                 />
             </Box>

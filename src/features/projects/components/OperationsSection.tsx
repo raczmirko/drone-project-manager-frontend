@@ -10,11 +10,13 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SectionCard from './SectionCard';
-import CreateOperationDialog from './CreateOperationDialog';
+import CreateOperationStepperDialog from './CreateOperationStepperDialog';
+import type { CreateDroneOperationRequest, DroneOperation } from '../types/projectTypes';
 import type {
-    CreateOperationFormValues,
-    DroneOperation,
-} from '../types/projectTypes';
+    CreateLocationFormValues,
+    CreateOperationWizardSubmitValues,
+    LocationOption,
+} from '../types/operationWizardTypes';
 import { displayValue, formatDate } from '../utils/projectFormatters';
 
 type OperationsSectionProps = {
@@ -25,11 +27,40 @@ type OperationsSectionProps = {
     rowCount: number;
     paginationModel: GridPaginationModel;
     onPaginationModelChange: (model: GridPaginationModel) => void;
-    onCreateOperation: (values: CreateOperationFormValues) => Promise<boolean>;
+    onCreateOperation: (payload: CreateDroneOperationRequest) => Promise<boolean>;
     createLoading: boolean;
     createError: string | null;
     onResetCreateError: () => void;
+    availableLocations: LocationOption[];
+    locationsLoading: boolean;
+    locationsError: string | null;
+    onCreateLocation: (values: CreateLocationFormValues) => Promise<LocationOption | null>;
+    locationCreateLoading: boolean;
+    locationCreateError: string | null;
+    onResetLocationCreateError: () => void;
 };
+
+function toCreateDroneOperationRequest(
+    values: CreateOperationWizardSubmitValues,
+    locationId: string,
+): CreateDroneOperationRequest {
+    return {
+        code: values.operation.code.trim(),
+        name: values.operation.name.trim(),
+        objective: values.operation.objective.trim() || null,
+        operationDate: values.operation.operationDate || null,
+        description: values.operation.description.trim() || null,
+        locationId,
+        drone: values.operation.drone.trim() || null,
+        flightMode: values.operation.flightMode.trim() || null,
+        weatherDescription: values.operation.weatherDescription.trim() || null,
+        kpIndex: values.operation.kpIndex ? Number(values.operation.kpIndex) : null,
+        takeoffTime: values.operation.takeoffTime || null,
+        landingTime: values.operation.landingTime || null,
+        flightLength: values.operation.flightLength ? Number(values.operation.flightLength) : null,
+        flightDuration: values.operation.flightDuration.trim() || null,
+    };
+}
 
 export default function OperationsSection({
                                               projectCode,
@@ -43,6 +74,13 @@ export default function OperationsSection({
                                               createLoading,
                                               createError,
                                               onResetCreateError,
+                                              availableLocations,
+                                              locationsLoading,
+                                              locationsError,
+                                              onCreateLocation,
+                                              locationCreateLoading,
+                                              locationCreateError,
+                                              onResetLocationCreateError,
                                           }: OperationsSectionProps) {
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -86,10 +124,10 @@ export default function OperationsSection({
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params) => (
-                    <Tooltip title={t('operations.openOperation')}>
+                    <Tooltip title={t('general.actions.seeDetails')}>
                         <IconButton
                             size="small"
-                            aria-label={t('operations.openOperation')}
+                            aria-label={t('general.actions.seeDetails')}
                             onClick={(event) => {
                                 event.stopPropagation();
                                 navigate(`/projects/${projectCode}/operations/${params.row.id}`);
@@ -104,6 +142,41 @@ export default function OperationsSection({
         [navigate, projectCode, t],
     );
 
+    const dialogError = createError ?? locationCreateError ?? locationsError ?? null;
+    const dialogLoading = createLoading || locationCreateLoading;
+
+    const handleResetDialogErrors = () => {
+        onResetCreateError();
+        onResetLocationCreateError();
+    };
+
+    const handleCreateFromWizard = async (
+        values: CreateOperationWizardSubmitValues,
+    ): Promise<boolean> => {
+        handleResetDialogErrors();
+
+        let locationId: string | null = null;
+
+        if (values.locationMode === 'existing') {
+            if ('id' in values.location) {
+                locationId = values.location.id;
+            }
+        } else {
+            const createdLocation = await onCreateLocation(values.location as CreateLocationFormValues);
+            if (!createdLocation) {
+                return false;
+            }
+            locationId = createdLocation.id;
+        }
+
+        if (!locationId) {
+            return false;
+        }
+
+        const payload = toCreateDroneOperationRequest(values, locationId);
+        return onCreateOperation(payload);
+    };
+
     return (
         <>
             <SectionCard
@@ -115,7 +188,7 @@ export default function OperationsSection({
                         onClick={() => setDialogOpen(true)}
                         sx={{ ml: 'auto' }}
                     >
-                        {t('operations.addOperation')}
+                        {t('operations.crud.add')}
                     </Button>
                 }
             >
@@ -144,13 +217,16 @@ export default function OperationsSection({
                 </Box>
             </SectionCard>
 
-            <CreateOperationDialog
+            <CreateOperationStepperDialog
                 open={dialogOpen}
-                loading={createLoading}
-                error={createError}
+                loading={dialogLoading}
+                error={dialogError}
+                availableLocations={availableLocations}
+                locationsLoading={locationsLoading}
+                locationsError={locationsError}
                 onClose={() => setDialogOpen(false)}
-                onSubmit={onCreateOperation}
-                onResetError={onResetCreateError}
+                onSubmit={handleCreateFromWizard}
+                onResetError={handleResetDialogErrors}
             />
         </>
     );

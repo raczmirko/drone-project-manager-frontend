@@ -6,7 +6,7 @@ type ProjectHeaderProps = {
     onDelete: () => void;
 };
 
-export default function ProjectHeader({ onDelete }: ProjectHeaderProps) {
+export default function ProjectDetailsPageHeader({ onDelete }: ProjectHeaderProps) {
     const { t } = useTranslation();
     return (
         <Stack
@@ -17,7 +17,7 @@ export default function ProjectHeader({ onDelete }: ProjectHeaderProps) {
                 justifyContent: 'space-between',
             }}
         >
-            <Typography variant="h4" component="h1">
+            <Typography variant="h4" component="h1" sx={{ color: 'white' }}>
                 {t('projects.details.title')}
             </Typography>
 

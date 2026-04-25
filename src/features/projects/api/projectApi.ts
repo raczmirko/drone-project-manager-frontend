@@ -1,10 +1,12 @@
 import type {
-    CreateOperationRequest, CreateProjectRequest,
+    CreateDroneOperationRequest,
+    CreateProjectRequest,
     DroneOperation,
     PageResponse,
     Project,
     ProjectDocument,
 } from '../types/projectTypes';
+import type { CreateLocationFormValues, LocationOption } from '../types/operationWizardTypes';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -20,11 +22,12 @@ async function parseError(response: Response): Promise<string> {
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
     const token = localStorage.getItem('token');
     const isFormData = init?.body instanceof FormData;
+    const hasBody = init?.body != null;
 
     const response = await fetch(`${API_BASE_URL}${path}`, {
         ...init,
         headers: {
-            ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+            ...(hasBody && !isFormData ? { 'Content-Type': 'application/json' } : {}),
             Authorization: `Bearer ${token}`,
             ...init?.headers,
         },
@@ -38,7 +41,13 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
         return undefined as T;
     }
 
-    return await response.json() as Promise<T>;
+    const text = await response.text();
+
+    if (!text.trim()) {
+        return undefined as T;
+    }
+
+    return JSON.parse(text) as T;
 }
 
 async function apiFetchBlob(path: string, init?: RequestInit): Promise<Blob> {
@@ -83,12 +92,12 @@ export const projectApi = {
 
     getOperations(code: string, page: number, size: number) {
         return apiFetch<PageResponse<DroneOperation>>(
-            `/projects/${code}/operations?page=${page}&size=${size}`,
+            `/projects/${code}/drone-operations?page=${page}&size=${size}`,
         );
     },
 
-    createOperation(code: string, payload: CreateOperationRequest) {
-        return apiFetch<void>(`/projects/${code}/operations`, {
+    createOperation(code: string, payload: CreateDroneOperationRequest) {
+        return apiFetch<void>(`/projects/${code}/drone-operations`, {
             method: 'POST',
             body: JSON.stringify(payload),
         });
@@ -110,9 +119,20 @@ export const projectApi = {
         });
     },
 
-    downloadProjectFile(documentId: string) {
-        return apiFetchBlob(`/projects/files/${documentId}/download`, {
+    downloadProjectFile(code: string, documentId: string) {
+        return apiFetchBlob(`/projects/${code}/files/${documentId}/download`, {
             method: 'GET',
         });
-    }
+    },
+
+    getLocations(page = 0, size = 50) {
+        return apiFetch<PageResponse<LocationOption>>(`/locations?page=${page}&size=${size}`);
+    },
+
+    createLocation(payload: CreateLocationFormValues) {
+        return apiFetch<LocationOption>('/locations', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
 };

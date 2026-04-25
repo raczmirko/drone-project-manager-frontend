@@ -1,34 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { GridPaginationModel } from '@mui/x-data-grid';
 import { projectApi } from '../api/projectApi';
-import type {
-    CreateOperationFormValues,
-    CreateOperationRequest,
-    DroneOperation,
-} from '../types/projectTypes';
+import type { CreateDroneOperationRequest, DroneOperation } from '../types/projectTypes';
 
 const DEFAULT_PAGINATION_MODEL: GridPaginationModel = {
     page: 0,
     pageSize: 5,
 };
-
-export const EMPTY_OPERATION_FORM: CreateOperationFormValues = {
-    name: '',
-    type: '',
-    status: '',
-    date: '',
-};
-
-function toCreateOperationRequest(
-    values: CreateOperationFormValues,
-): CreateOperationRequest {
-    return {
-        name: values.name.trim(),
-        type: values.type.trim() || null,
-        status: values.status.trim() || null,
-        date: values.date || null,
-    };
-}
 
 export function useProjectOperations(code: string) {
     const [rows, setRows] = useState<DroneOperation[]>([]);
@@ -73,7 +51,7 @@ export function useProjectOperations(code: string) {
     }, [refetch]);
 
     const createOperation = useCallback(
-        async (values: CreateOperationFormValues) => {
+        async (payload: CreateDroneOperationRequest) => {
             if (!code) {
                 return false;
             }
@@ -82,7 +60,7 @@ export function useProjectOperations(code: string) {
             setCreateError(null);
 
             try {
-                await projectApi.createOperation(code, toCreateOperationRequest(values));
+                await projectApi.createOperation(code, payload);
                 await refetch();
                 return true;
             } catch (err) {
@@ -99,31 +77,17 @@ export function useProjectOperations(code: string) {
         setCreateError(null);
     }, []);
 
-    return useMemo(
-        () => ({
-            rows,
-            loading,
-            error,
-            rowCount,
-            paginationModel,
-            setPaginationModel,
-            refetch,
-            createOperation,
-            createLoading,
-            createError,
-            resetCreateError,
-        }),
-        [
-            rows,
-            loading,
-            error,
-            rowCount,
-            paginationModel,
-            refetch,
-            createOperation,
-            createLoading,
-            createError,
-            resetCreateError,
-        ],
-    );
+    return {
+        rows,
+        loading,
+        error,
+        rowCount,
+        paginationModel,
+        setPaginationModel,
+        refetch,
+        createOperation,
+        createLoading,
+        createError,
+        resetCreateError,
+    };
 }
