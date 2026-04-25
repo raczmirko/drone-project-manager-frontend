@@ -6,6 +6,7 @@ import ProtectedLayout from './layouts/ProtectedLayout.tsx';
 import PublicLayout from "./layouts/PublicLayout.tsx";
 import ProjectsPage from "./pages/ProjectsPage.tsx";
 import ProjectDetails from "./pages/ProjectDetailsPage.tsx";
+import OperationDetails from "./pages/OperationDetailsPage.tsx";
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem('token'));
@@ -36,12 +37,22 @@ function App() {
             path: '/',
             element: <PublicLayout/>, // Minimal layout
             children: [
-                {path: 'login', element: <SignInSide isLoggedIn={isLoggedIn} onLogin={handleLogin}/>},
                 {
-                    path: 'register', element: <SignUp onRegister={() => {
-                    }} isRegistered={false}/>
+                    index: true,
+                    element: <Navigate to={isLoggedIn ? '/projects' : '/login'} replace />,
                 },
-                {path: '*', element: <Navigate to={isLoggedIn ? '/projects' : '/login'} replace/>},
+                {
+                    path: 'login',
+                    element: <SignInSide isLoggedIn={isLoggedIn} onLogin={handleLogin} />,
+                },
+                {
+                    path: 'register',
+                    element: <SignUp onRegister={() => {}} isRegistered={false} />,
+                },
+                {
+                    path: '*',
+                    element: <Navigate to={isLoggedIn ? '/projects' : '/login'} replace />,
+                },
             ],
         },
         // Protected routes
@@ -65,6 +76,17 @@ function App() {
             ),
             children: [
                 {index: true, element: <ProjectDetails/>},
+            ],
+        },
+        {
+            path: '/projects/:projectCode/operations/:operationCode',
+            element: isLoggedIn ? (
+                <ProtectedLayout isLoggedIn={isLoggedIn} expiryTime={expiryTime} logOut={handleLogout}/>
+            ) : (
+                <Navigate to="/login" replace/>
+            ),
+            children: [
+                {index: true, element: <OperationDetails/>},
             ],
         },
     ]);
