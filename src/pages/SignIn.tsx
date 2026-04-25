@@ -23,7 +23,7 @@ import {Navigate} from "react-router-dom";
 import CopyrightTypography from "../components/CopyrightTypography";
 import {useNotification} from "../hooks/useNotification";
 import {getLoginErrorByStatus} from "../utils/stringUtil";
-import TransparentBackgroundTheme from "../layouts/TransparentBackgroundTheme.ts";
+import TransparentBackgroundTheme from "../layouts/transparentBackgroundTheme.ts";
 
 interface SignInProps {
     onLogin: () => void;
