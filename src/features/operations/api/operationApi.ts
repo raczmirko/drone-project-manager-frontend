@@ -67,6 +67,9 @@ async function apiFetchBlob(path: string, init?: RequestInit): Promise<Blob> {
 }
 
 export const operationApi = {
+
+    // -------------- OPERATION CRUD -----------------
+
     getAll(projectCode: string, page: number, size: number) {
         return apiFetch<PageResponse<DroneOperation>>(
             `/projects/${projectCode}/operations?page=${page}&size=${size}`,
@@ -99,6 +102,8 @@ export const operationApi = {
         });
     },
 
+    // -------------- OPERATION DOCUMENTS -----------------
+
     getDocuments(operationCode: string, page: number, size: number) {
         return apiFetch<PageResponse<ProjectDocument>>(
             `/operations/${operationCode}/files?page=${page}&size=${size}`,
@@ -116,16 +121,18 @@ export const operationApi = {
     },
 
     downloadDocument(documentId: string) {
-        return apiFetchBlob(`/operations/files/${documentId}/download`, {
+        return apiFetchBlob(`/operation-files/${documentId}`, {
             method: 'GET',
         });
     },
 
     deleteDocument(documentId: string) {
-        return apiFetchBlob(`/operations/files/${documentId}`, {
+        return apiFetchBlob(`/operation-files/${documentId}`, {
             method: 'DELETE',
         });
     },
+
+    // -------------- LOCATIONS -----------------
 
     getLocations(page = 0, size = 50) {
         return apiFetch<PageResponse<LocationOption>>(`/locations?page=${page}&size=${size}`);

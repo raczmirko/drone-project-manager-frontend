@@ -82,30 +82,32 @@ export const projectApi = {
         });
     },
 
-    getDocuments(code: string, page: number, size: number) {
+    // -------------- PROJECT DOCUMENTS -----------------
+
+    getDocuments(projectCode: string, page: number, size: number) {
         return apiFetch<PageResponse<ProjectDocument>>(
-            `/projects/${code}/files?page=${page}&size=${size}`,
+            `/projects/${projectCode}/files?page=${page}&size=${size}`,
         );
     },
 
-    uploadDocument(code: string, file: File) {
+    uploadDocument(projectCode: string, file: File) {
         const formData = new FormData();
         formData.append('file', file);
 
-        return apiFetch<void>(`/projects/${code}/files`, {
+        return apiFetch<void>(`/projects/${projectCode}/files`, {
             method: 'POST',
             body: formData,
         });
     },
 
     downloadDocument(documentId: string) {
-        return apiFetchBlob(`/projects/files/${documentId}/download`, {
+        return apiFetchBlob(`/project-files/${documentId}`, {
             method: 'GET',
         });
     },
 
     deleteDocument(documentId: string) {
-        return apiFetchBlob(`/projects/files/${documentId}`, {
+        return apiFetchBlob(`/project-files/${documentId}`, {
             method: 'DELETE',
         });
     },
