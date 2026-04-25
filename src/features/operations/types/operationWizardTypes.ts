@@ -15,7 +15,7 @@ export type DroneOperationFormValues = {
     code: string;
     name: string;
     objective: string;
-    operationDate: string;
+    date: string;
     description: string;
     drone: string;
     flightMode: string;
@@ -24,7 +24,7 @@ export type DroneOperationFormValues = {
     takeoffTime: string;
     landingTime: string;
     flightLength: string;
-    flightDuration: string;
+    flightDurationSeconds: string;
 };
 
 export type CreateOperationWizardSubmitValues = {
@@ -43,7 +43,7 @@ export const EMPTY_OPERATION_DETAILS_FORM: DroneOperationFormValues = {
     code: '',
     name: '',
     objective: '',
-    operationDate: '',
+    date: '',
     description: '',
     drone: '',
     flightMode: '',
@@ -52,5 +52,5 @@ export const EMPTY_OPERATION_DETAILS_FORM: DroneOperationFormValues = {
     takeoffTime: '',
     landingTime: '',
     flightLength: '',
-    flightDuration: '',
+    flightDurationSeconds: '',
 };

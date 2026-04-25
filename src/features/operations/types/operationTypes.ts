@@ -11,7 +11,6 @@ export type DroneOperation = {
     code: string;
     date: string;
     objective: string | null;
-    operationDate: string | null;
     description: string | null;
     location: Location;
     drone: string | null;
@@ -21,14 +20,14 @@ export type DroneOperation = {
     takeoffTime: string | null;
     landingTime: string | null;
     flightLength: number | null;
-    flightDuration: string | null;
+    flightDurationSeconds: string | null;
 };
 
 export type CreateDroneOperationRequest = {
     code: string;
     name: string;
     objective: string | null;
-    operationDate: string | null;
+    date: string | null;
     description: string | null;
     locationId: string;
     drone: string | null;
@@ -38,13 +37,13 @@ export type CreateDroneOperationRequest = {
     takeoffTime: string | null;
     landingTime: string | null;
     flightLength: number | null;
-    flightDuration: string | null;
+    flightDurationSeconds: string | null;
 };
 
 export type UpdateDroneOperationRequest = {
     name: string;
     objective: string | null;
-    operationDate: string | null;
+    date: string | null;
     description: string | null;
     locationId: string;
     drone: string | null;
@@ -54,7 +53,7 @@ export type UpdateDroneOperationRequest = {
     takeoffTime: string | null;
     landingTime: string | null;
     flightLength: number | null;
-    flightDuration: string | null;
+    flightDurationSeconds: string | null;
 };
 
 export type OperationDocument = {

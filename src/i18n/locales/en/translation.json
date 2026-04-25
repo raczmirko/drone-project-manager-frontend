@@ -128,7 +128,6 @@
       "name": "Name",
       "code": "Code",
       "objective": "Objective",
-      "operationDate": "Operation date",
       "drone": "Drone",
       "flightMode": "Flight mode",
       "weatherDescription": "Weather description",

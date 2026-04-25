@@ -45,7 +45,7 @@ export default function OperationSummaryCard({
                             />
                             <ReadOnlyField
                                 label={t('operations.fields.date')}
-                                value={formatDate(operation.operationDate ?? operation.date)}
+                                value={formatDate(operation.date)}
                             />
                         </Stack>
 
@@ -75,7 +75,7 @@ export default function OperationSummaryCard({
                             />
                             <ReadOnlyField
                                 label={t('operations.fields.flightDuration')}
-                                value={operation.flightDuration}
+                                value={operation.flightDurationSeconds}
                             />
                         </Stack>
 

@@ -44,7 +44,7 @@ function toCreateDroneOperationRequest(
         code: values.operation.code.trim(),
         name: values.operation.name.trim(),
         objective: values.operation.objective.trim() || null,
-        operationDate: values.operation.operationDate || null,
+        date: values.operation.date || null,
         description: values.operation.description.trim() || null,
         locationId,
         drone: values.operation.drone.trim() || null,
@@ -54,7 +54,7 @@ function toCreateDroneOperationRequest(
         takeoffTime: values.operation.takeoffTime || null,
         landingTime: values.operation.landingTime || null,
         flightLength: values.operation.flightLength ? Number(values.operation.flightLength) : null,
-        flightDuration: values.operation.flightDuration.trim() || null,
+        flightDurationSeconds: values.operation.flightDurationSeconds.trim() || null,
     };
 }
 

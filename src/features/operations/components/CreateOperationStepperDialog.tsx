@@ -80,7 +80,7 @@ export default function CreateOperationStepperDialog({
     const [selectedLocation, setSelectedLocation] = useState<LocationOption | null>(null);
     const [newLocation, setNewLocation] = useState<CreateLocationFormValues>(EMPTY_LOCATION_FORM);
     const [operation, setOperation] = useState<DroneOperationFormValues>(EMPTY_OPERATION_DETAILS_FORM);
-    const steps = [t("locations.singular"), t("operations.details")];
+    const steps = [t("locations.singular"), t("operations.details.title")];
 
     useEffect(() => {
         if (!open) {
@@ -338,10 +338,10 @@ export default function CreateOperationStepperDialog({
                                 fullWidth
                             />
                             <TextField
-                                label={t('operations.fields.operationDate')}
+                                label={t('operations.fields.date')}
                                 type="date"
-                                value={operation.operationDate}
-                                onChange={handleOperationChange('operationDate')}
+                                value={operation.date}
+                                onChange={handleOperationChange('date')}
                                 fullWidth
                                 slotProps={{ inputLabel: { shrink: true } }}
                             />
@@ -397,8 +397,8 @@ export default function CreateOperationStepperDialog({
                             />
                             <TextField
                                 label={t('operations.fields.flightDuration')}
-                                value={operation.flightDuration}
-                                onChange={handleOperationChange('flightDuration')}
+                                value={operation.flightDurationSeconds}
+                                onChange={handleOperationChange('flightDurationSeconds')}
                                 fullWidth
                                 placeholder="PT35M"
                             />
