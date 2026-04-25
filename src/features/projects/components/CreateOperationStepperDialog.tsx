@@ -265,7 +265,7 @@ export default function CreateOperationStepperDialog({
 
                                             {selectedLocation ? (
                                                 <Alert severity="info">
-                                                    {t('general.selected')}: {selectedLocation.name} (
+                                                    {t('general.actions.selected')}: {selectedLocation.name} (
                                                     {selectedLocation.latitude}, {selectedLocation.longitude})
                                                 </Alert>
                                             ) : null}
