@@ -82,9 +82,9 @@ export const operationApi = {
         );
     },
 
-    update(projectCode: string, payload: UpdateDroneOperationRequest) {
-        return apiFetch<DroneOperation>(`/projects/${projectCode}/operations`, {
-            method: 'POST',
+    update(projectCode: string, operationCode: string, payload: UpdateDroneOperationRequest) {
+        return apiFetch<DroneOperation>(`/projects/${projectCode}/operations/${operationCode}`, {
+            method: 'PUT',
             body: JSON.stringify(payload),
         });
     },

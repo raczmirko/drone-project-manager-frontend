@@ -1,10 +1,10 @@
-import {useMemo, useState} from 'react';
-import {Alert, Box, Button, IconButton, Tooltip} from '@mui/material';
+import { useMemo, useState } from 'react';
+import { Alert, Box, Button, IconButton, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import {DataGrid, type GridColDef, type GridPaginationModel,} from '@mui/x-data-grid';
-import {useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { DataGrid, type GridColDef, type GridPaginationModel } from '@mui/x-data-grid';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import SectionCard from './SectionCard';
 import CreateOperationStepperDialog from '../../operations/components/CreateOperationStepperDialog.tsx';
 import type {
@@ -12,8 +12,9 @@ import type {
     CreateOperationWizardSubmitValues,
     LocationOption,
 } from '../../operations/types/operationWizardTypes.ts';
-import {formatDate} from '../../../utils/formatters.ts';
-import type {CreateDroneOperationRequest, DroneOperation} from "../../operations/types/operationTypes.ts";
+import { formatDate } from '../../../utils/formatters.ts';
+import type { CreateDroneOperationRequest, DroneOperation } from '../../operations/types/operationTypes.ts';
+import {resolveOperationLocationId, toCreateDroneOperationRequest} from "../../operations/utils/operationPayloadMappers.ts";
 
 type OperationsSectionProps = {
     projectCode: string;
@@ -35,28 +36,6 @@ type OperationsSectionProps = {
     locationCreateError: string | null;
     onResetLocationCreateError: () => void;
 };
-
-function toCreateDroneOperationRequest(
-    values: CreateOperationWizardSubmitValues,
-    locationId: string,
-): CreateDroneOperationRequest {
-    return {
-        code: values.operation.code.trim(),
-        name: values.operation.name.trim(),
-        objective: values.operation.objective.trim() || null,
-        date: values.operation.date || null,
-        description: values.operation.description.trim() || null,
-        locationId,
-        drone: values.operation.drone.trim() || null,
-        flightMode: values.operation.flightMode.trim() || null,
-        weatherDescription: values.operation.weatherDescription.trim() || null,
-        kpIndex: values.operation.kpIndex ? Number(values.operation.kpIndex) : null,
-        takeoffTime: values.operation.takeoffTime || null,
-        landingTime: values.operation.landingTime || null,
-        flightLength: values.operation.flightLength ? Number(values.operation.flightLength) : null,
-        flightDurationSeconds: values.operation.flightDurationSeconds.trim() || null,
-    };
-}
 
 export default function OperationsSection({
                                               projectCode,
@@ -143,20 +122,7 @@ export default function OperationsSection({
     ): Promise<boolean> => {
         handleResetDialogErrors();
 
-        let locationId: string | null = null;
-
-        if (values.locationMode === 'existing') {
-            if ('id' in values.location) {
-                locationId = values.location.id;
-            }
-        } else {
-            const createdLocation = await onCreateLocation(values.location as CreateLocationFormValues);
-            if (!createdLocation) {
-                return false;
-            }
-            locationId = createdLocation.id;
-        }
-
+        const locationId = await resolveOperationLocationId(values, onCreateLocation);
         if (!locationId) {
             return false;
         }
@@ -207,6 +173,7 @@ export default function OperationsSection({
 
             <CreateOperationStepperDialog
                 open={dialogOpen}
+                mode="create"
                 loading={dialogLoading}
                 error={dialogError}
                 availableLocations={availableLocations}

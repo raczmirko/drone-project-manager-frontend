@@ -1,7 +1,11 @@
 import {useCallback, useEffect, useState} from 'react';
 import type {GridPaginationModel} from '@mui/x-data-grid';
-import {operationApi} from "../../operations/api/operationApi.ts";
-import type {CreateDroneOperationRequest, DroneOperation} from "../../operations/types/operationTypes.ts";
+import {operationApi} from '../../operations/api/operationApi.ts';
+import type {
+    CreateDroneOperationRequest,
+    DroneOperation,
+    UpdateDroneOperationRequest,
+} from '../../operations/types/operationTypes.ts';
 
 const DEFAULT_PAGINATION_MODEL: GridPaginationModel = {
     page: 0,
@@ -16,8 +20,12 @@ export function useProjectOperations(code: string) {
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>(
         DEFAULT_PAGINATION_MODEL,
     );
+
     const [createLoading, setCreateLoading] = useState(false);
     const [createError, setCreateError] = useState<string | null>(null);
+
+    const [updateLoading, setUpdateLoading] = useState(false);
+    const [updateError, setUpdateError] = useState<string | null>(null);
 
     const refetch = useCallback(async () => {
         if (!code) {
@@ -73,8 +81,35 @@ export function useProjectOperations(code: string) {
         [code, refetch],
     );
 
+    const updateOperation = useCallback(
+        async (operationCode: string, payload: UpdateDroneOperationRequest) => {
+            if (!code || !operationCode) {
+                return false;
+            }
+
+            setUpdateLoading(true);
+            setUpdateError(null);
+
+            try {
+                await operationApi.update(code, operationCode, payload);
+                await refetch();
+                return true;
+            } catch (err) {
+                setUpdateError(err instanceof Error ? err.message : 'Unknown error');
+                return false;
+            } finally {
+                setUpdateLoading(false);
+            }
+        },
+        [code, refetch],
+    );
+
     const resetCreateError = useCallback(() => {
         setCreateError(null);
+    }, []);
+
+    const resetUpdateError = useCallback(() => {
+        setUpdateError(null);
     }, []);
 
     return {
@@ -89,5 +124,9 @@ export function useProjectOperations(code: string) {
         createLoading,
         createError,
         resetCreateError,
+        updateOperation,
+        updateLoading,
+        updateError,
+        resetUpdateError,
     };
 }

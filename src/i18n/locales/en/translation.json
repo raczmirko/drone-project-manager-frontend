@@ -20,7 +20,8 @@
       "selected": "Selected",
       "seeDetails": "See details",
       "save": "Save",
-      "reset": "Reset"
+      "reset": "Reset",
+      "edit": "Edit"
     },
     "feedback": {
       "copiedToClipboard": "Successfully copied to clipboard.",
@@ -171,7 +172,7 @@
       "create": "Create new location"
     },
     "fields": {
-      "name": "Location ame",
+      "name": "Location name",
       "latitude": "Latitude",
       "longitude": "Longitude"
     }

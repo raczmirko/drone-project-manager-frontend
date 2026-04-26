@@ -1,14 +1,17 @@
-import {useState} from 'react';
-import {Alert, Box, Stack} from '@mui/material';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { useState } from 'react';
+import { Alert, Box, Stack } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ConfirmationDialog from '../components/dialogs/ConfirmationDialog.tsx';
 import DocumentsSection from '../features/projects/components/DocumentsSection';
-import {operationApi} from '../features/operations/api/operationApi';
-import {useOperationDetails} from '../features/operations/hooks/useOperationDetails';
-import {useOperationDocuments} from '../features/operations/hooks/useOperationDocuments';
+import { operationApi } from '../features/operations/api/operationApi';
+import { useOperationDetails } from '../features/operations/hooks/useOperationDetails';
+import { useOperationDocuments } from '../features/operations/hooks/useOperationDocuments';
+import { useProjectOperations } from '../features/projects/hooks/useProjectOperations';
+import { useLocations } from '../features/projects/hooks/useLocations';
 import OperationDetailsPageHeader from '../features/operations/components/OperationDetailsPageHeader.tsx';
 import OperationSummaryCard from '../features/operations/components/OperationSummaryCard';
+import EditOperationDialogContainer from '../features/operations/containers/EditOperationDialogContainer.tsx';
 
 export default function OperationDetailsPage() {
     const { projectCode = '', operationCode = '' } = useParams<{
@@ -20,6 +23,8 @@ export default function OperationDetailsPage() {
 
     const operation = useOperationDetails(projectCode, operationCode);
     const documents = useOperationDocuments(projectCode, operationCode);
+    const locations = useLocations();
+    const operations = useProjectOperations(projectCode);
 
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
@@ -63,6 +68,24 @@ export default function OperationDetailsPage() {
                 <Stack spacing={3}>
                     <OperationDetailsPageHeader
                         onDelete={() => setOpenConfirmDialog(true)}
+                        editAction={
+                            operation.data ? (
+                                <EditOperationDialogContainer
+                                    operation={operation.data}
+                                    availableLocations={locations.rows}
+                                    locationsLoading={locations.loading}
+                                    locationsError={locations.error}
+                                    onCreateLocation={locations.createLocation}
+                                    locationCreateLoading={locations.createLoading}
+                                    locationCreateError={locations.createError}
+                                    onResetLocationCreateError={locations.resetCreateError}
+                                    onUpdateOperation={operations.updateOperation}
+                                    updateLoading={operations.updateLoading}
+                                    updateError={operations.updateError}
+                                    onResetUpdateError={operations.resetUpdateError}
+                                />
+                            ) : null
+                        }
                     />
 
                     {deleteError ? <Alert severity="error">{deleteError}</Alert> : null}

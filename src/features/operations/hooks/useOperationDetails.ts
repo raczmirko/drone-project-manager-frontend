@@ -47,7 +47,7 @@ export function useOperationDetails(projectCode: string, operationCode: string) 
             setUpdateError(null);
 
             try {
-                const updated = await operationApi.update(operationCode, payload);
+                const updated = await operationApi.update(projectCode, operationCode, payload);
                 setData(updated);
                 return true;
             } catch (err) {

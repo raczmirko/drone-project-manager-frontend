@@ -125,7 +125,7 @@ export default function OperationSummaryCard({
                             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                                 <ReadOnlyField
                                     label={t('operations.fields.location')}
-                                    value={operation.location.name}
+                                    value={operation.location.name ?? ''}
                                 />
                                 <ReadOnlyField
                                     label={t('operations.fields.latitude', 'Latitude')}
