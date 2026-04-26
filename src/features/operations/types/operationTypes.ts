@@ -1,3 +1,5 @@
+import type {OperationFlightAnalysisResponse} from "./operationImageMetadataTypes.ts";
+
 export type Location = {
     id: string;
     name: string;
@@ -55,4 +57,11 @@ export type OperationDocument = {
     filename: string;
     uploadDate: string | null;
     sizeBytes: number | null;
+};
+
+export type OperationFlightAnalysisCardProps = {
+    analysis: OperationFlightAnalysisResponse | null;
+    loading: boolean;
+    error: string | null;
+    onAnalyze: () => Promise<void>;
 };

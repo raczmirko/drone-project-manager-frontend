@@ -1,45 +1,8 @@
-import React from 'react';
-import dayjs, { type Dayjs } from 'dayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Stack,
-    TextField,
-} from '@mui/material';
-import { useTranslation } from 'react-i18next';
-
-export type CreateProjectRequest = {
-    code: string;
-    name: string;
-    status: string;
-    description: string;
-    objective: string;
-    startDate: string | null;
-    endDate: string | null;
-};
-
-type ProjectTextField = Exclude<
-    keyof CreateProjectRequest,
-    'startDate' | 'endDate'
->;
-
-type CreateProjectDialogProps = {
-    open: boolean;
-    formData: CreateProjectRequest;
-    createLoading: boolean;
-    onClose: () => void;
-    onSubmit: () => void;
-    onChange: (
-        field: ProjectTextField
-    ) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    onDateChange: (
-        field: 'startDate' | 'endDate'
-    ) => (value: Dayjs | null) => void;
-};
+import dayjs, {type Dayjs} from 'dayjs';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField,} from '@mui/material';
+import {useTranslation} from 'react-i18next';
+import type {CreateProjectDialogProps} from "../types/projectTypes.ts";
 
 function toDayjs(value: string | null | undefined): Dayjs | null {
     if (!value) {
@@ -50,6 +13,9 @@ function toDayjs(value: string | null | undefined): Dayjs | null {
     return parsed.isValid() ? parsed : null;
 }
 
+/**
+ * Create Project Dialog
+ */
 export default function CreateProjectDialog({
                                                 open,
                                                 formData,
@@ -64,7 +30,7 @@ export default function CreateProjectDialog({
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
             <DialogTitle sx={{ color: 'text.primary' }}>
-                {t('projects.create.title')}
+                {t('projects.crud.create')}
             </DialogTitle>
 
             <DialogContent>

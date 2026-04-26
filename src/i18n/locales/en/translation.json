@@ -138,7 +138,6 @@
       "takeoffTime": "Takeoff time",
       "landingTime": "Landing time",
       "location": "Location",
-      "flightLength": "Flight length",
       "flightDuration": "Flight duration",
       "description": "Description",
       "type": "Type",
@@ -147,6 +146,31 @@
     },
     "validations": {
       "kpIndexRange": "Value must be between 0 and 9"
+    },
+    "imageAnalysis": {
+      "title": "Flight and aerial imagery analysis",
+      "fileUploadTitle": "Image upload for analysis and dashboard generation",
+      "fileUploadInfo": "Upload JPG, PNG, TIFF, or WEBP files. Only metadata is processed and stored. 500 MB max per upload.",
+      "flightDuration": "Flight duration",
+      "avgRecordingAltitude": "Average recording altitude",
+      "recordingLength": "Distance traveled whilst recording",
+      "recordingStart": "Recording start time",
+      "recordingEnd": "Recording end time",
+      "numberOfRecordings": "Number of recordings",
+      "noAnalysis": "No generated analysis yet.",
+      "generatingDashboard": "Generating dashboard...",
+      "generatedDashboard": "Generated flight dashboard",
+      "updateDashboard": "Update operation from metadata"
+    },
+    "metadata": {
+      "filename": "Filename",
+      "capturedAt": "Captured at",
+      "size": "Size",
+      "dimensions": "Dimensions",
+      "gps": "GPS",
+      "altitude": "Altitude",
+      "camera": "Camera",
+      "status": "Status"
     }
   },
   "documents": {

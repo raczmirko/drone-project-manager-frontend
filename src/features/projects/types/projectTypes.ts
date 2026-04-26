@@ -1,3 +1,6 @@
+import React from "react";
+import type {Dayjs} from "dayjs";
+
 export type Project = {
     id: string;
     code: string;
@@ -42,4 +45,23 @@ export type CreateProjectFormValues = {
     objective: string;
     startDate: string;
     endDate: string;
+};
+
+export type ProjectTextField = Exclude<
+    keyof CreateProjectRequest,
+    'startDate' | 'endDate'
+>;
+
+export type CreateProjectDialogProps = {
+    open: boolean;
+    formData: CreateProjectRequest;
+    createLoading: boolean;
+    onClose: () => void;
+    onSubmit: () => void;
+    onChange: (
+        field: ProjectTextField
+    ) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onDateChange: (
+        field: 'startDate' | 'endDate'
+    ) => (value: Dayjs | null) => void;
 };

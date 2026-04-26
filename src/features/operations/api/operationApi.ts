@@ -5,6 +5,11 @@ import type {
     DroneOperation,
     UpdateDroneOperationRequest
 } from "../types/operationTypes.ts";
+import type {
+    OperationFlightAnalysisResponse,
+    OperationImageMetadataExtractionResponse,
+    OperationImageMetadataPageResponse,
+} from '../types/operationImageMetadataTypes.ts';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -130,6 +135,36 @@ export const operationApi = {
         return apiFetchBlob(`/operation-files/${documentId}`, {
             method: 'DELETE',
         });
+    },
+
+    // -------------- OPERATION IMAGE METADATA -----------------
+
+    getImageMetadata(operationCode: string, page: number, size: number) {
+        return apiFetch<OperationImageMetadataPageResponse>(
+            `/operations/${operationCode}/image-metadata?page=${page}&size=${size}`,
+        );
+    },
+
+    extractImageMetadata(operationCode: string, files: File[]) {
+        const formData = new FormData();
+        files.forEach((file) => formData.append('files', file));
+
+        return apiFetch<OperationImageMetadataExtractionResponse>(
+            `/operations/${operationCode}/image-metadata/extract`,
+            {
+                method: 'POST',
+                body: formData,
+            },
+        );
+    },
+
+    analyzeImageMetadata(operationCode: string) {
+        return apiFetch<OperationFlightAnalysisResponse>(
+            `/operations/${operationCode}/image-metadata/analyze`,
+            {
+                method: 'POST',
+            },
+        );
     },
 
     // -------------- LOCATIONS -----------------

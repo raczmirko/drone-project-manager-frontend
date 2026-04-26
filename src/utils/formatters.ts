@@ -53,8 +53,37 @@ export function formatFileSize(bytes: number | null | undefined): string {
 
     const value = bytes / 1024 ** index;
 
-    return `${new Intl.NumberFormat(undefined, {
-        maximumFractionDigits: value < 10 && index > 0 ? 1 : 0,
-    }).format(value)} ${units[index]}`;
+    const fractionDigits =
+        index === 0 ? 0 :
+            index === 1 ? 1 :
+                2;
+
+    return `${value.toFixed(fractionDigits)} ${units[index]}`;
+}
+
+export function formatDistance(value: number | null): string {
+    if (value == null) {
+        return '';
+    }
+
+    if (value >= 1000) {
+        return `${(value / 1000).toFixed(2)} km`;
+    }
+
+    return `${value.toFixed(2)} m`;
+}
+
+export function formatDurationSeconds(value: number | null): string {
+    if (value == null) {
+        return '';
+    }
+
+    const hours = Math.floor(value / 3600);
+    const minutes = Math.floor((value % 3600) / 60);
+    const seconds = value % 60;
+
+    return [hours, minutes, seconds]
+        .map((part) => String(part).padStart(2, '0'))
+        .join(':');
 }
 
