@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import SectionCard from '../../projects/components/SectionCard.tsx';
 import ReadOnlyField from '../../../components/ReadOnlyField.tsx';
-import { formatDate } from '../../../utils/formatters.ts';
+import {formatDate, formatDateTime} from '../../../utils/formatters.ts';
 import LocationMapPreview from '../../projects/components/LocationMapPreview.tsx';
 import type { DroneOperation } from '../types/operationTypes.ts';
 
@@ -83,11 +83,11 @@ export default function OperationSummaryCard({
                             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                                 <ReadOnlyField
                                     label={t('operations.fields.takeoffTime')}
-                                    value={operation.takeoffTime}
+                                    value={formatDateTime(operation.takeoffTime)}
                                 />
                                 <ReadOnlyField
                                     label={t('operations.fields.landingTime')}
-                                    value={operation.landingTime}
+                                    value={formatDateTime(operation.landingTime)}
                                 />
                             </Stack>
 

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export function displayValue(value: string | null | undefined): string {
     return value && value.trim().length > 0 ? value : '-';
 }
@@ -18,6 +20,20 @@ export function formatDate(value: string | null | undefined): string {
         month: 'short',
         day: '2-digit',
     }).format(date);
+}
+
+export function formatDateTime(value?: string | null): string {
+    if (!value) {
+        return '';
+    }
+
+    const parsed = dayjs(value);
+
+    if (!parsed.isValid()) {
+        return value;
+    }
+
+    return parsed.format('YYYY.MM.DD HH:mm');
 }
 
 export function formatFileSize(bytes: number | null | undefined): string {

@@ -1,4 +1,6 @@
 import React from 'react';
+import dayjs, { type Dayjs } from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {
     Button,
     Dialog,
@@ -20,6 +22,11 @@ export type CreateProjectRequest = {
     endDate: string | null;
 };
 
+type ProjectTextField = Exclude<
+    keyof CreateProjectRequest,
+    'startDate' | 'endDate'
+>;
+
 type CreateProjectDialogProps = {
     open: boolean;
     formData: CreateProjectRequest;
@@ -27,25 +34,41 @@ type CreateProjectDialogProps = {
     onClose: () => void;
     onSubmit: () => void;
     onChange: (
-        field: keyof CreateProjectRequest
+        field: ProjectTextField
     ) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onDateChange: (
+        field: 'startDate' | 'endDate'
+    ) => (value: Dayjs | null) => void;
 };
 
+function toDayjs(value: string | null | undefined): Dayjs | null {
+    if (!value) {
+        return null;
+    }
+
+    const parsed = dayjs(value);
+    return parsed.isValid() ? parsed : null;
+}
+
 export default function CreateProjectDialog({
-                                               open,
-                                               formData,
-                                               createLoading,
-                                               onClose,
-                                               onSubmit,
-                                               onChange,
-                                           }: CreateProjectDialogProps) {
+                                                open,
+                                                formData,
+                                                createLoading,
+                                                onClose,
+                                                onSubmit,
+                                                onChange,
+                                                onDateChange,
+                                            }: CreateProjectDialogProps) {
     const { t } = useTranslation();
+
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
-            <DialogTitle sx={{color: 'text.primary'}}>{t('projects.create.title')}</DialogTitle>
+            <DialogTitle sx={{ color: 'text.primary' }}>
+                {t('projects.create.title')}
+            </DialogTitle>
 
             <DialogContent>
-                <Stack spacing={2} sx={{mt: 1}}>
+                <Stack spacing={2} sx={{ mt: 1 }}>
                     <TextField
                         label={t('projects.fields.code')}
                         value={formData.code}
@@ -88,25 +111,27 @@ export default function CreateProjectDialog({
                     />
 
                     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                        <TextField
+                        <DatePicker
                             label={t('projects.fields.startDate')}
-                            type="date"
-                            value={formData.startDate ?? ''}
-                            onChange={onChange('startDate')}
-                            fullWidth
+                            value={toDayjs(formData.startDate)}
+                            onChange={onDateChange('startDate')}
+                            format="YYYY-MM-DD"
                             slotProps={{
-                                inputLabel: { shrink: true },
+                                textField: {
+                                    fullWidth: true,
+                                },
                             }}
                         />
 
-                        <TextField
+                        <DatePicker
                             label={t('projects.fields.endDate')}
-                            type="date"
-                            value={formData.endDate ?? ''}
-                            onChange={onChange('endDate')}
-                            fullWidth
+                            value={toDayjs(formData.endDate)}
+                            onChange={onDateChange('endDate')}
+                            format="YYYY-MM-DD"
                             slotProps={{
-                                inputLabel: { shrink: true },
+                                textField: {
+                                    fullWidth: true,
+                                },
                             }}
                         />
                     </Stack>

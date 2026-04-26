@@ -29,6 +29,26 @@ import {
     type LocationOption,
 } from '../types/operationWizardTypes.ts';
 import NumberField from "../../../components/NumberField.tsx";
+import dayjs, { type Dayjs } from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
+function toDayjs(value: string | null | undefined): Dayjs | null {
+    if (!value) {
+        return null;
+    }
+
+    const parsed = dayjs(value);
+    return parsed.isValid() ? parsed : null;
+}
+
+function toLocalDateString(value: Dayjs | null): string {
+    return value ? value.format('YYYY-MM-DD') : '';
+}
+
+function toLocalDateTimeString(value: Dayjs | null): string {
+    return value ? value.format('YYYY-MM-DDTHH:mm:ss') : '';
+}
 
 type CreateOperationStepperDialogProps = {
     open: boolean;
@@ -419,14 +439,22 @@ export default function CreateOperationStepperDialog({
                                             required
                                         />
 
-                                        <TextField
+                                        <DatePicker
                                             label={t('operations.fields.date')}
-                                            type="date"
-                                            value={operation.date}
-                                            onChange={handleOperationChange('date')}
-                                            fullWidth
-                                            required
-                                            slotProps={{ inputLabel: { shrink: true } }}
+                                            value={toDayjs(operation.date)}
+                                            onChange={(value) => {
+                                                setOperation((previous) => ({
+                                                    ...previous,
+                                                    date: toLocalDateString(value),
+                                                }));
+                                            }}
+                                            format="YYYY-MM-DD"
+                                            slotProps={{
+                                                textField: {
+                                                    fullWidth: true,
+                                                    required: true,
+                                                },
+                                            }}
                                         />
 
                                         <TextField
@@ -467,22 +495,42 @@ export default function CreateOperationStepperDialog({
                                             fullWidth
                                         />
 
-                                        <TextField
+                                        <DateTimePicker
                                             label={t('operations.fields.takeoffTime')}
-                                            type="datetime-local"
-                                            value={operation.takeoffTime}
-                                            onChange={handleOperationChange('takeoffTime')}
-                                            fullWidth
-                                            slotProps={{ inputLabel: { shrink: true } }}
+                                            value={toDayjs(operation.takeoffTime)}
+                                            onChange={(value) => {
+                                                setOperation((previous) => ({
+                                                    ...previous,
+                                                    takeoffTime: toLocalDateTimeString(value),
+                                                }));
+                                            }}
+                                            ampm={false}
+                                            format="YYYY-MM-DD HH:mm"
+                                            timeSteps={{ minutes: 5 }}
+                                            slotProps={{
+                                                textField: {
+                                                    fullWidth: true,
+                                                },
+                                            }}
                                         />
 
-                                        <TextField
+                                        <DateTimePicker
                                             label={t('operations.fields.landingTime')}
-                                            type="datetime-local"
-                                            value={operation.landingTime}
-                                            onChange={handleOperationChange('landingTime')}
-                                            fullWidth
-                                            slotProps={{ inputLabel: { shrink: true } }}
+                                            value={toDayjs(operation.landingTime)}
+                                            onChange={(value) => {
+                                                setOperation((previous) => ({
+                                                    ...previous,
+                                                    landingTime: toLocalDateTimeString(value),
+                                                }));
+                                            }}
+                                            ampm={false}
+                                            format="YYYY-MM-DD HH:mm"
+                                            timeSteps={{ minutes: 5 }}
+                                            slotProps={{
+                                                textField: {
+                                                    fullWidth: true,
+                                                },
+                                            }}
                                         />
 
                                         <TextField

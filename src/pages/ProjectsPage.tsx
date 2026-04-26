@@ -8,6 +8,7 @@ import CreateProjectDialog from '../features/projects/components/CreateProjectDi
 import {EMPTY_PROJECT_FORM, useProjects} from '../features/projects/hooks/useProjects';
 import type {CreateProjectFormValues, Project} from '../features/projects/types/projectTypes';
 import ProjectsPageHeader from "../features/projects/components/ProjectsPageHeader.tsx";
+import { type Dayjs } from 'dayjs';
 
 export default function ProjectsPage() {
     const navigate = useNavigate();
@@ -105,6 +106,15 @@ export default function ProjectsPage() {
         }
     };
 
+    const handleProjectDateChange =
+        (field: 'startDate' | 'endDate') =>
+            (value: Dayjs | null) => {
+                setFormData((previous) => ({
+                    ...previous,
+                    [field]: value ? value.format('YYYY-MM-DD') : null,
+                }));
+    };
+
     return (
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', py: 4 }}>
             <Box sx={{ width: '100%', maxWidth: 1200, px: { xs: 2, md: 0 } }}>
@@ -151,6 +161,7 @@ export default function ProjectsPage() {
                     onClose={handleCloseCreateDialog}
                     onSubmit={handleSubmitCreate}
                     onChange={handleChange}
+                    onDateChange={handleProjectDateChange}
                 />
             </Box>
         </Box>
