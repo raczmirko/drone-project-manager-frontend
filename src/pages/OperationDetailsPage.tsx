@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import { Alert, Box, Stack } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useCallback, useState} from 'react';
+import {Alert, Box, Stack} from '@mui/material';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import ConfirmationDialog from '../components/dialogs/ConfirmationDialog.tsx';
 import DocumentsSection from '../features/projects/components/DocumentsSection';
-import { operationApi } from '../features/operations/api/operationApi';
-import { useOperationDetails } from '../features/operations/hooks/useOperationDetails';
-import { useOperationDocuments } from '../features/operations/hooks/useOperationDocuments';
-import { useProjectOperations } from '../features/projects/hooks/useProjectOperations';
-import { useLocations } from '../features/projects/hooks/useLocations';
+import {operationApi} from '../features/operations/api/operationApi';
+import {useOperationDetails} from '../features/operations/hooks/useOperationDetails';
+import {useOperationDocuments} from '../features/operations/hooks/useOperationDocuments';
+import {useProjectOperations} from '../features/projects/hooks/useProjectOperations';
+import {useLocations} from '../features/projects/hooks/useLocations';
 import OperationDetailsPageHeader from '../features/operations/components/OperationDetailsPageHeader.tsx';
 import OperationSummaryCard from '../features/operations/components/OperationSummaryCard';
 import EditOperationDialogContainer from '../features/operations/containers/EditOperationDialogContainer.tsx';
+import type {UpdateDroneOperationRequest} from "../features/operations/types/operationTypes.ts";
 
 export default function OperationDetailsPage() {
     const { projectCode = '', operationCode = '' } = useParams<{
@@ -49,6 +50,19 @@ export default function OperationDetailsPage() {
         }
     };
 
+    const handleUpdateOperation = useCallback(
+        async (opCode: string, payload: UpdateDroneOperationRequest) => {
+            const success = await operations.updateOperation(opCode, payload);
+
+            if (success) {
+                await operation.refetch();
+            }
+
+            return success;
+        },
+        [operations, operation],
+    );
+
     return (
         <Box
             sx={{
@@ -79,7 +93,7 @@ export default function OperationDetailsPage() {
                                     locationCreateLoading={locations.createLoading}
                                     locationCreateError={locations.createError}
                                     onResetLocationCreateError={locations.resetCreateError}
-                                    onUpdateOperation={operations.updateOperation}
+                                    onUpdateOperation={handleUpdateOperation}
                                     updateLoading={operations.updateLoading}
                                     updateError={operations.updateError}
                                     onResetUpdateError={operations.resetUpdateError}
