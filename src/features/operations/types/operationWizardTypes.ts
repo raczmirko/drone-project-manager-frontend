@@ -14,17 +14,15 @@ export type CreateLocationFormValues = {
 export type DroneOperationFormValues = {
     code: string;
     name: string;
-    objective: string;
     date: string;
-    description: string;
     drone: string;
+    objective: string;
+    description: string;
     flightMode: string;
     weatherDescription: string;
     kpIndex: string;
     takeoffTime: string;
     landingTime: string;
-    flightLength: string;
-    flightDurationSeconds: string;
 };
 
 export type CreateOperationWizardInitialValues = {
@@ -47,15 +45,13 @@ export const EMPTY_LOCATION_FORM: CreateLocationFormValues = {
 export const EMPTY_OPERATION_DETAILS_FORM: DroneOperationFormValues = {
     code: '',
     name: '',
-    objective: '',
     date: '',
-    description: '',
     drone: '',
+    objective: '',
+    description: '',
     flightMode: '',
     weatherDescription: '',
     kpIndex: '',
     takeoffTime: '',
     landingTime: '',
-    flightLength: '',
-    flightDurationSeconds: '',
 };

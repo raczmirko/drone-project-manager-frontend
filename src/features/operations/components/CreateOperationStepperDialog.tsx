@@ -58,8 +58,10 @@ function trimmedText(value: unknown): string {
 
 function isOperationStepValid(operation: DroneOperationFormValues): boolean {
     return (
-        trimmedText(operation.code).length > 0 &&
-        trimmedText(operation.name).length > 0
+        operation.code.trim().length > 0 &&
+        operation.name.trim().length > 0 &&
+        operation.date.trim().length > 0 &&
+        operation.drone.trim().length > 0
     );
 }
 
@@ -379,128 +381,139 @@ export default function CreateOperationStepperDialog({
                     ) : null}
 
                     {activeStep === 2 ? (
-                        <Stack spacing={2}>
+                        <Stack spacing={3}>
                             {selectedLocation ? (
                                 <Alert severity="info">
                                     {t('general.actions.selected')}: {selectedLocation.name}
                                 </Alert>
                             ) : null}
 
-                            <Box
-                                sx={{
-                                    display: 'grid',
-                                    gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-                                    gap: 2,
-                                }}
-                            >
-                                <TextField
-                                    label={t('operations.fields.code')}
-                                    value={operation.code}
-                                    onChange={handleOperationChange('code')}
-                                    fullWidth
-                                    required
-                                    disabled={codeReadOnly}
-                                />
+                            <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6">
+                                        {t('operations.details.mandatorySectionTitle', 'Mandatory data')}
+                                    </Typography>
 
-                                <TextField
-                                    label={t('operations.fields.name')}
-                                    value={operation.name}
-                                    onChange={handleOperationChange('name')}
-                                    fullWidth
-                                    required
-                                />
+                                    <Box
+                                        sx={{
+                                            display: 'grid',
+                                            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                                            gap: 2,
+                                        }}
+                                    >
+                                        <TextField
+                                            label={t('operations.fields.code')}
+                                            value={operation.code}
+                                            onChange={handleOperationChange('code')}
+                                            fullWidth
+                                            required
+                                            disabled={codeReadOnly}
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.objective')}
-                                    value={operation.objective}
-                                    onChange={handleOperationChange('objective')}
-                                    fullWidth
-                                />
+                                        <TextField
+                                            label={t('operations.fields.name')}
+                                            value={operation.name}
+                                            onChange={handleOperationChange('name')}
+                                            fullWidth
+                                            required
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.date')}
-                                    type="date"
-                                    value={operation.date}
-                                    onChange={handleOperationChange('date')}
-                                    fullWidth
-                                    slotProps={{ inputLabel: { shrink: true } }}
-                                />
+                                        <TextField
+                                            label={t('operations.fields.date')}
+                                            type="date"
+                                            value={operation.date}
+                                            onChange={handleOperationChange('date')}
+                                            fullWidth
+                                            required
+                                            slotProps={{ inputLabel: { shrink: true } }}
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.drone')}
-                                    value={operation.drone}
-                                    onChange={handleOperationChange('drone')}
-                                    fullWidth
-                                />
+                                        <TextField
+                                            label={t('operations.fields.drone')}
+                                            value={operation.drone}
+                                            onChange={handleOperationChange('drone')}
+                                            fullWidth
+                                            required
+                                        />
+                                    </Box>
+                                </Stack>
+                            </Paper>
 
-                                <TextField
-                                    label={t('operations.fields.flightMode')}
-                                    value={operation.flightMode}
-                                    onChange={handleOperationChange('flightMode')}
-                                    fullWidth
-                                />
+                            <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
+                                <Stack spacing={2}>
+                                    <Typography variant="h6">
+                                        {t('operations.details.descriptiveSectionTitle', 'Descriptive data')}
+                                    </Typography>
 
-                                <TextField
-                                    label={t('operations.fields.weatherDescription')}
-                                    value={operation.weatherDescription}
-                                    onChange={handleOperationChange('weatherDescription')}
-                                    fullWidth
-                                />
+                                    <Box
+                                        sx={{
+                                            display: 'grid',
+                                            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                                            gap: 2,
+                                        }}
+                                    >
+                                        <TextField
+                                            label={t('operations.fields.objective')}
+                                            value={operation.objective}
+                                            onChange={handleOperationChange('objective')}
+                                            fullWidth
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.kpIndex')}
-                                    type="number"
-                                    value={operation.kpIndex}
-                                    onChange={handleOperationChange('kpIndex')}
-                                    fullWidth
-                                    slotProps={{ htmlInput: { min: 0, step: '0.1' } }}
-                                />
+                                        <TextField
+                                            label={t('operations.fields.flightMode')}
+                                            value={operation.flightMode}
+                                            onChange={handleOperationChange('flightMode')}
+                                            fullWidth
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.takeoffTime')}
-                                    type="datetime-local"
-                                    value={operation.takeoffTime}
-                                    onChange={handleOperationChange('takeoffTime')}
-                                    fullWidth
-                                    slotProps={{ inputLabel: { shrink: true } }}
-                                />
+                                        <TextField
+                                            label={t('operations.fields.takeoffTime')}
+                                            type="datetime-local"
+                                            value={operation.takeoffTime}
+                                            onChange={handleOperationChange('takeoffTime')}
+                                            fullWidth
+                                            slotProps={{ inputLabel: { shrink: true } }}
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.landingTime')}
-                                    type="datetime-local"
-                                    value={operation.landingTime}
-                                    onChange={handleOperationChange('landingTime')}
-                                    fullWidth
-                                    slotProps={{ inputLabel: { shrink: true } }}
-                                />
+                                        <TextField
+                                            label={t('operations.fields.landingTime')}
+                                            type="datetime-local"
+                                            value={operation.landingTime}
+                                            onChange={handleOperationChange('landingTime')}
+                                            fullWidth
+                                            slotProps={{ inputLabel: { shrink: true } }}
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.flightLength')}
-                                    type="number"
-                                    value={operation.flightLength}
-                                    onChange={handleOperationChange('flightLength')}
-                                    fullWidth
-                                    slotProps={{ htmlInput: { min: 0, step: '0.1' } }}
-                                />
+                                        <TextField
+                                            label={t('operations.fields.weatherDescription')}
+                                            value={operation.weatherDescription}
+                                            onChange={handleOperationChange('weatherDescription')}
+                                            fullWidth
+                                            multiline
+                                            minRows={3}
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.flightDuration')}
-                                    value={operation.flightDurationSeconds}
-                                    onChange={handleOperationChange('flightDurationSeconds')}
-                                    fullWidth
-                                    placeholder="PT35M"
-                                />
+                                        <TextField
+                                            label={t('operations.fields.kpIndex')}
+                                            type="number"
+                                            value={operation.kpIndex}
+                                            onChange={handleOperationChange('kpIndex')}
+                                            fullWidth
+                                            slotProps={{ htmlInput: { min: 0, step: '0.1' } }}
+                                        />
 
-                                <TextField
-                                    label={t('operations.fields.description')}
-                                    value={operation.description}
-                                    onChange={handleOperationChange('description')}
-                                    fullWidth
-                                    multiline
-                                    minRows={4}
-                                    sx={{ gridColumn: { xs: 'span 1', md: 'span 2' } }}
-                                />
-                            </Box>
+                                        <TextField
+                                            label={t('operations.fields.description')}
+                                            value={operation.description}
+                                            onChange={handleOperationChange('description')}
+                                            fullWidth
+                                            multiline
+                                            minRows={4}
+                                            sx={{ gridColumn: { xs: 'span 1', md: 'span 2' } }}
+                                        />
+                                    </Box>
+                                </Stack>
+                            </Paper>
                         </Stack>
                     ) : null}
                 </Stack>

@@ -31,6 +31,7 @@ function numberOrNull(value: unknown): number | null {
     }
 
     const trimmed = value.trim();
+
     if (trimmed.length === 0) {
         return null;
     }
@@ -44,18 +45,16 @@ function toOperationBaseRequest(
 ): Omit<CreateDroneOperationRequest, 'code'> {
     return {
         name: values.operation.name.trim(),
-        objective: trimOrNull(values.operation.objective),
-        date: trimOrNull(values.operation.date),
-        description: trimOrNull(values.operation.description),
+        date: values.operation.date,
         locationId: values.locationId,
-        drone: trimOrNull(values.operation.drone),
+        drone: values.operation.drone.trim(),
+        objective: trimOrNull(values.operation.objective),
+        description: trimOrNull(values.operation.description),
         flightMode: trimOrNull(values.operation.flightMode),
         weatherDescription: trimOrNull(values.operation.weatherDescription),
         kpIndex: numberOrNull(values.operation.kpIndex),
         takeoffTime: trimOrNull(values.operation.takeoffTime),
         landingTime: trimOrNull(values.operation.landingTime),
-        flightLength: numberOrNull(values.operation.flightLength),
-        flightDurationSeconds: trimOrNull(values.operation.flightDurationSeconds),
     };
 }
 
@@ -79,7 +78,6 @@ export function toUpdateDroneOperationRequest(
 export function toOperationWizardInitialValues(
     operation: DroneOperation,
 ): CreateOperationWizardInitialValues {
-
     const locationId = operation.location?.id ?? '';
     const locationName = operation.location?.name ?? '';
     const latitude = operation.location?.latitude ?? '';
@@ -95,20 +93,15 @@ export function toOperationWizardInitialValues(
         operation: {
             code: operation.code ?? '',
             name: operation.name ?? '',
-            objective: operation.objective ?? '',
             date: operation.date ?? '',
-            description: operation.description ?? '',
             drone: operation.drone ?? '',
+            objective: operation.objective ?? '',
+            description: operation.description ?? '',
             flightMode: operation.flightMode ?? '',
             weatherDescription: operation.weatherDescription ?? '',
             kpIndex: operation.kpIndex != null ? String(operation.kpIndex) : '',
             takeoffTime: operation.takeoffTime ?? '',
             landingTime: operation.landingTime ?? '',
-            flightLength: operation.flightLength != null ? String(operation.flightLength) : '',
-            flightDurationSeconds:
-                operation.flightDurationSeconds != null
-                    ? String(operation.flightDurationSeconds)
-                    : '',
         },
     };
 }

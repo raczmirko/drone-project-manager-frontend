@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Alert, Box, Divider, Stack, Typography } from '@mui/material';
+import { Alert, Box, Divider, Paper, Stack, Typography } from '@mui/material';
 import SectionCard from '../../projects/components/SectionCard.tsx';
 import ReadOnlyField from '../../../components/ReadOnlyField.tsx';
 import { formatDate } from '../../../utils/formatters.ts';
@@ -33,89 +33,89 @@ export default function OperationSummaryCard({
                 </Typography>
             ) : (
                 <Stack spacing={3}>
-                    <Stack spacing={2}>
-                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                    <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
+                        <Stack spacing={2}>
+                            <Typography variant="h6">
+                                {t('operations.details.mandatorySectionTitle', 'Mandatory data')}
+                            </Typography>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                                <ReadOnlyField
+                                    label={t('operations.fields.code')}
+                                    value={operation.code}
+                                />
+                                <ReadOnlyField
+                                    label={t('operations.fields.name')}
+                                    value={operation.name}
+                                />
+                            </Stack>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                                <ReadOnlyField
+                                    label={t('operations.fields.date')}
+                                    value={formatDate(operation.date)}
+                                />
+                                <ReadOnlyField
+                                    label={t('operations.fields.drone')}
+                                    value={operation.drone}
+                                />
+                            </Stack>
+                        </Stack>
+                    </Paper>
+
+                    <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
+                        <Stack spacing={2}>
+                            <Typography variant="h6">
+                                {t('operations.details.descriptiveSectionTitle', 'Descriptive data')}
+                            </Typography>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                                <ReadOnlyField
+                                    label={t('operations.fields.flightMode')}
+                                    value={operation.flightMode}
+                                />
+                                <ReadOnlyField
+                                    label={t('operations.fields.kpIndex')}
+                                    value={operation.kpIndex?.toString() ?? ''}
+                                />
+                            </Stack>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                                <ReadOnlyField
+                                    label={t('operations.fields.takeoffTime')}
+                                    value={operation.takeoffTime}
+                                />
+                                <ReadOnlyField
+                                    label={t('operations.fields.landingTime')}
+                                    value={operation.landingTime}
+                                />
+                            </Stack>
+
                             <ReadOnlyField
-                                label={t('operations.fields.code')}
-                                value={operation.code}
+                                label={t('operations.fields.weatherDescription')}
+                                value={operation.weatherDescription}
+                                multiline
+                                minRows={2}
                             />
+
                             <ReadOnlyField
-                                label={t('operations.fields.name')}
-                                value={operation.name}
+                                label={t('operations.fields.objective')}
+                                value={operation.objective}
+                                multiline
+                                minRows={3}
                             />
+
                             <ReadOnlyField
-                                label={t('operations.fields.date')}
-                                value={formatDate(operation.date)}
+                                label={t('operations.fields.description')}
+                                value={operation.description}
+                                multiline
+                                minRows={3}
                             />
                         </Stack>
-
-                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                            <ReadOnlyField
-                                label={t('operations.fields.drone')}
-                                value={operation.drone}
-                            />
-                            <ReadOnlyField
-                                label={t('operations.fields.flightMode')}
-                                value={operation.flightMode}
-                            />
-                            <ReadOnlyField
-                                label={t('operations.fields.kpIndex')}
-                                value={operation.kpIndex?.toString() ?? ''}
-                            />
-                        </Stack>
-
-                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                            <ReadOnlyField
-                                label={t('operations.fields.takeoffTime')}
-                                value={operation.takeoffTime}
-                            />
-                            <ReadOnlyField
-                                label={t('operations.fields.landingTime')}
-                                value={operation.landingTime}
-                            />
-                            <ReadOnlyField
-                                label={t('operations.fields.flightDuration')}
-                                value={operation.flightDurationSeconds}
-                            />
-                        </Stack>
-
-                        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                            <ReadOnlyField
-                                label={t('operations.fields.flightLength')}
-                                value={
-                                    operation.flightLength !== null &&
-                                    operation.flightLength !== undefined
-                                        ? String(operation.flightLength)
-                                        : ''
-                                }
-                            />
-                        </Stack>
-
-                        <ReadOnlyField
-                            label={t('operations.fields.weatherDescription')}
-                            value={operation.weatherDescription}
-                            multiline
-                            minRows={2}
-                        />
-
-                        <ReadOnlyField
-                            label={t('operations.fields.description')}
-                            value={operation.description}
-                            multiline
-                            minRows={3}
-                        />
-
-                        <ReadOnlyField
-                            label={t('operations.fields.objective')}
-                            value={operation.objective}
-                            multiline
-                            minRows={3}
-                        />
-                    </Stack>
+                    </Paper>
 
                     <Divider />
 
-                    {/*SEPARATE LOCATION BLOCK*/}
                     <Box>
                         <Typography variant="h6" sx={{ mb: 2 }}>
                             {t('operations.fields.location')}
@@ -125,21 +125,21 @@ export default function OperationSummaryCard({
                             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                                 <ReadOnlyField
                                     label={t('operations.fields.location')}
-                                    value={operation.location.name ?? ''}
+                                    value={operation.location?.name ?? ''}
                                 />
                                 <ReadOnlyField
                                     label={t('operations.fields.latitude', 'Latitude')}
-                                    value={operation.location.latitude ?? ''}
+                                    value={operation.location?.latitude ?? ''}
                                 />
                                 <ReadOnlyField
                                     label={t('operations.fields.longitude', 'Longitude')}
-                                    value={operation.location.longitude ?? ''}
+                                    value={operation.location?.longitude ?? ''}
                                 />
                             </Stack>
 
                             <LocationMapPreview
-                                latitude={operation.location.latitude}
-                                longitude={operation.location.longitude}
+                                latitude={operation.location?.latitude ?? ''}
+                                longitude={operation.location?.longitude ?? ''}
                                 label={t('operations.fields.locationPreview', 'Location preview')}
                             />
                         </Stack>

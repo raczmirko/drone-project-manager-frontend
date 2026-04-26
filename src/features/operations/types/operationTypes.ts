@@ -19,8 +19,6 @@ export type DroneOperation = {
     kpIndex: number | null;
     takeoffTime: string | null;
     landingTime: string | null;
-    flightLength: number | null;
-    flightDurationSeconds: string | null;
 };
 
 export type CreateDroneOperationRequest = {
@@ -36,8 +34,6 @@ export type CreateDroneOperationRequest = {
     kpIndex: number | null;
     takeoffTime: string | null;
     landingTime: string | null;
-    flightLength: number | null;
-    flightDurationSeconds: string | null;
 };
 
 export type UpdateDroneOperationRequest = {
@@ -52,8 +48,6 @@ export type UpdateDroneOperationRequest = {
     kpIndex: number | null;
     takeoffTime: string | null;
     landingTime: string | null;
-    flightLength: number | null;
-    flightDurationSeconds: string | null;
 };
 
 export type OperationDocument = {
