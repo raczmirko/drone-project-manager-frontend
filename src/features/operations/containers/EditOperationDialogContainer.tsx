@@ -13,7 +13,6 @@ import type {
     UpdateDroneOperationRequest,
 } from '../types/operationTypes.ts';
 import {
-    resolveOperationLocationId,
     toOperationWizardInitialValues,
     toUpdateDroneOperationRequest,
 } from '../utils/operationPayloadMappers.ts';
@@ -68,12 +67,7 @@ export default function EditOperationDialogContainer({
     ): Promise<boolean> => {
         handleResetErrors();
 
-        const locationId = await resolveOperationLocationId(values, onCreateLocation);
-        if (!locationId) {
-            return false;
-        }
-
-        const payload = toUpdateDroneOperationRequest(values, locationId);
+        const payload = toUpdateDroneOperationRequest(values);
         return onUpdateOperation(operation.code, payload);
     };
 

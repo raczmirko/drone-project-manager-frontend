@@ -2,7 +2,11 @@ import { useMemo, useState } from 'react';
 import { Alert, Box, Button, IconButton, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import { DataGrid, type GridColDef, type GridPaginationModel } from '@mui/x-data-grid';
+import {
+    DataGrid,
+    type GridColDef,
+    type GridPaginationModel,
+} from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import SectionCard from './SectionCard';
@@ -13,8 +17,11 @@ import type {
     LocationOption,
 } from '../../operations/types/operationWizardTypes.ts';
 import { formatDate } from '../../../utils/formatters.ts';
-import type { CreateDroneOperationRequest, DroneOperation } from '../../operations/types/operationTypes.ts';
-import {resolveOperationLocationId, toCreateDroneOperationRequest} from "../../operations/utils/operationPayloadMappers.ts";
+import type {
+    CreateDroneOperationRequest,
+    DroneOperation,
+} from '../../operations/types/operationTypes.ts';
+import { toCreateDroneOperationRequest } from '../../operations/utils/operationPayloadMappers.ts';
 
 type OperationsSectionProps = {
     projectCode: string;
@@ -31,7 +38,9 @@ type OperationsSectionProps = {
     availableLocations: LocationOption[];
     locationsLoading: boolean;
     locationsError: string | null;
-    onCreateLocation: (values: CreateLocationFormValues) => Promise<LocationOption | null>;
+    onCreateLocation: (
+        values: CreateLocationFormValues,
+    ) => Promise<LocationOption | null>;
     locationCreateLoading: boolean;
     locationCreateError: string | null;
     onResetLocationCreateError: () => void;
@@ -109,7 +118,7 @@ export default function OperationsSection({
         [navigate, projectCode, t],
     );
 
-    const dialogError = createError ?? locationCreateError ?? locationsError ?? null;
+    const dialogError = createError ?? null;
     const dialogLoading = createLoading || locationCreateLoading;
 
     const handleResetDialogErrors = () => {
@@ -122,12 +131,7 @@ export default function OperationsSection({
     ): Promise<boolean> => {
         handleResetDialogErrors();
 
-        const locationId = await resolveOperationLocationId(values, onCreateLocation);
-        if (!locationId) {
-            return false;
-        }
-
-        const payload = toCreateDroneOperationRequest(values, locationId);
+        const payload = toCreateDroneOperationRequest(values);
         return onCreateOperation(payload);
     };
 

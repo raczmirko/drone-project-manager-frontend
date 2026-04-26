@@ -21,7 +21,9 @@
       "seeDetails": "See details",
       "save": "Save",
       "reset": "Reset",
-      "edit": "Edit"
+      "edit": "Edit",
+      "skip": "Skip",
+      "createAndUse": "Create and use"
     },
     "feedback": {
       "copiedToClipboard": "Successfully copied to clipboard.",
@@ -164,6 +166,7 @@
     "mapPreview": "Google Maps preview",
     "noOptions": "No existing locations found",
     "search": "Search location by name",
+    "createStepOptional": "Optional: You can create a new location by entering the coordinates below.",
     "crud": {
       "add": "Add location",
       "edit": "Edit location",
