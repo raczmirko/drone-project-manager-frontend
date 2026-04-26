@@ -27,9 +27,15 @@ export type DroneOperationFormValues = {
     flightDurationSeconds: string;
 };
 
-export type CreateOperationWizardSubmitValues = {
-    locationMode: 'existing' | 'new';
-    location: LocationOption | CreateLocationFormValues;
+export type CreateOperationWizardSubmitValues =
+    | {
+    locationMode: 'existing';
+    location: LocationOption;
+    operation: DroneOperationFormValues;
+}
+    | {
+    locationMode: 'new';
+    location: CreateLocationFormValues;
     operation: DroneOperationFormValues;
 };
 

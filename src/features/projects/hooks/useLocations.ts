@@ -35,8 +35,8 @@ export function useLocations() {
         try {
             const created = await operationApi.createLocation({
                 name: values.name.trim(),
-                latitude: values.latitude.trim(),
-                longitude: values.longitude.trim(),
+                latitude: values.latitude,
+                longitude: values.longitude,
             });
 
             setRows((previous) => {

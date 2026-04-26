@@ -182,6 +182,10 @@ export default function OperationsSection({
                 onClose={() => setDialogOpen(false)}
                 onSubmit={handleCreateFromWizard}
                 onResetError={handleResetDialogErrors}
+                onCreateLocation={onCreateLocation}
+                locationCreateLoading={locationCreateLoading}
+                locationCreateError={locationCreateError}
+                onResetLocationCreateError={onResetLocationCreateError}
             />
         </>
     );

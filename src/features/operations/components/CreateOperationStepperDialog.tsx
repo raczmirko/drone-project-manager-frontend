@@ -44,7 +44,22 @@ type CreateOperationStepperDialogProps = {
     onClose: () => void;
     onSubmit: (values: CreateOperationWizardSubmitValues) => Promise<boolean>;
     onResetError: () => void;
+    onCreateLocation?: (values: CreateLocationFormValues) => Promise<LocationOption | null>;
+    locationCreateLoading?: boolean;
+    locationCreateError?: string | null;
+    onResetLocationCreateError?: () => void;
 };
+
+type ExistingWizardValues = Extract<
+    CreateOperationWizardSubmitValues,
+    { locationMode: 'existing' }
+>;
+
+function isExistingWizardValues(
+    values: CreateOperationWizardSubmitValues,
+): values is ExistingWizardValues {
+    return values.locationMode === 'existing';
+}
 
 function isStepOneValid(
     mode: 'existing' | 'new',
@@ -52,13 +67,13 @@ function isStepOneValid(
     newLocation: CreateLocationFormValues,
 ) {
     if (mode === 'existing') {
-        return selectedLocation != null;
+        return selectedLocation !== null;
     }
 
     return (
         newLocation.name.trim().length > 0 &&
-        newLocation.latitude.trim().length > 0 &&
-        newLocation.longitude.trim().length > 0
+        newLocation.latitude.length > 0 &&
+        newLocation.longitude.length > 0
     );
 }
 
@@ -79,13 +94,19 @@ export default function CreateOperationStepperDialog({
                                                          onClose,
                                                          onSubmit,
                                                          onResetError,
+                                                         onCreateLocation,
+                                                         locationCreateLoading = false,
+                                                         locationCreateError = null,
+                                                         onResetLocationCreateError,
                                                      }: CreateOperationStepperDialogProps) {
     const { t } = useTranslation();
+
     const [activeStep, setActiveStep] = useState(0);
     const [locationMode, setLocationMode] = useState<'existing' | 'new'>('existing');
     const [selectedLocation, setSelectedLocation] = useState<LocationOption | null>(null);
     const [newLocation, setNewLocation] = useState<CreateLocationFormValues>(EMPTY_LOCATION_FORM);
     const [operation, setOperation] = useState<DroneOperationFormValues>(EMPTY_OPERATION_DETAILS_FORM);
+
     const steps = [t('locations.singular'), t('operations.details.title')];
 
     useEffect(() => {
@@ -94,30 +115,73 @@ export default function CreateOperationStepperDialog({
         }
 
         setActiveStep(0);
+        onResetError();
+        onResetLocationCreateError?.();
 
-        if (initialValues) {
-            setLocationMode(initialValues.locationMode);
-            setOperation(initialValues.operation);
-
-            if (initialValues.locationMode === 'existing' && 'id' in initialValues.location) {
-                setSelectedLocation(initialValues.location);
-                setNewLocation(EMPTY_LOCATION_FORM);
-            } else {
-                setSelectedLocation(null);
-                setNewLocation(initialValues.location as CreateLocationFormValues);
-            }
-        } else {
+        if (!initialValues) {
             setLocationMode(availableLocations.length > 0 ? 'existing' : 'new');
             setSelectedLocation(null);
             setNewLocation(EMPTY_LOCATION_FORM);
             setOperation(EMPTY_OPERATION_DETAILS_FORM);
+            return;
         }
 
-        onResetError();
-    }, [open, initialValues, availableLocations.length, onResetError]);
+        setOperation(initialValues.operation);
 
-    const currentLatitude = locationMode === 'existing' ? selectedLocation?.latitude : newLocation.latitude;
-    const currentLongitude = locationMode === 'existing' ? selectedLocation?.longitude : newLocation.longitude;
+        if (isExistingWizardValues(initialValues)) {
+            setLocationMode('existing');
+
+            const matchedLocation =
+                availableLocations.find(
+                    (location) => location.id === initialValues.location.id,
+                ) ?? initialValues.location;
+
+            setSelectedLocation(matchedLocation);
+            setNewLocation(EMPTY_LOCATION_FORM);
+            return;
+        }
+
+        setLocationMode('new');
+        setSelectedLocation(null);
+        setNewLocation(initialValues.location);
+    }, [
+        open,
+        initialValues,
+        availableLocations,
+        onResetError,
+        onResetLocationCreateError,
+    ]);
+
+    useEffect(() => {
+        if (!open || locationMode !== 'existing' || selectedLocation == null) {
+            return;
+        }
+
+        const matchedLocation = availableLocations.find(
+            (location) => location.id === selectedLocation.id,
+        );
+
+        if (
+            matchedLocation &&
+            (
+                matchedLocation.name !== selectedLocation.name ||
+                matchedLocation.latitude !== selectedLocation.latitude ||
+                matchedLocation.longitude !== selectedLocation.longitude
+            )
+        ) {
+            setSelectedLocation(matchedLocation);
+        }
+    }, [open, locationMode, selectedLocation, availableLocations]);
+
+    const currentLatitude =
+        locationMode === 'existing'
+            ? selectedLocation?.latitude ?? ''
+            : newLocation.latitude;
+
+    const currentLongitude =
+        locationMode === 'existing'
+            ? selectedLocation?.longitude ?? ''
+            : newLocation.longitude;
 
     const canContinueFromStepOne = useMemo(
         () => isStepOneValid(locationMode, selectedLocation, newLocation),
@@ -129,13 +193,31 @@ export default function CreateOperationStepperDialog({
         [canContinueFromStepOne, operation],
     );
 
+    const canCreateLocation =
+        Boolean(onCreateLocation) &&
+        newLocation.name.trim().length > 0 &&
+        newLocation.latitude.length > 0 &&
+        newLocation.longitude.length > 0;
+
     const handleLocationModeChange = (
         _event: React.MouseEvent<HTMLElement>,
         value: 'existing' | 'new' | null,
     ) => {
-        if (value) {
-            setLocationMode(value);
-            onResetError();
+        if (!value) {
+            return;
+        }
+
+        setLocationMode(value);
+        onResetError();
+        onResetLocationCreateError?.();
+
+        if (value === 'new') {
+            setSelectedLocation(null);
+            return;
+        }
+
+        if (selectedLocation == null && availableLocations.length > 0) {
+            setSelectedLocation(availableLocations[0]);
         }
     };
 
@@ -167,16 +249,56 @@ export default function CreateOperationStepperDialog({
         setActiveStep((previous) => Math.max(previous - 1, 0));
     };
 
+    const handleCreateAndUseLocation = async () => {
+        if (!onCreateLocation || !canCreateLocation) {
+            return;
+        }
+
+        onResetLocationCreateError?.();
+
+        const createdLocation = await onCreateLocation({
+            name: newLocation.name.trim(),
+            latitude: newLocation.latitude,
+            longitude: newLocation.longitude,
+        });
+
+        if (!createdLocation) {
+            return;
+        }
+
+        setSelectedLocation(createdLocation);
+        setLocationMode('existing');
+        setNewLocation({
+            name: createdLocation.name ?? '',
+            latitude: createdLocation.latitude ?? '',
+            longitude: createdLocation.longitude ?? '',
+        });
+    };
+
     const handleSubmit = async () => {
         if (!canSubmit) {
             return;
         }
 
-        const payload: CreateOperationWizardSubmitValues = {
-            locationMode,
-            location: locationMode === 'existing' && selectedLocation ? selectedLocation : newLocation,
-            operation,
-        };
+        let payload: CreateOperationWizardSubmitValues;
+
+        if (locationMode === 'existing') {
+            if (!selectedLocation) {
+                return;
+            }
+
+            payload = {
+                locationMode: 'existing',
+                location: selectedLocation,
+                operation,
+            };
+        } else {
+            payload = {
+                locationMode: 'new',
+                location: newLocation,
+                operation,
+            };
+        }
 
         const success = await onSubmit(payload);
 
@@ -188,13 +310,15 @@ export default function CreateOperationStepperDialog({
     return (
         <Dialog
             open={open}
-            onClose={loading ? undefined : onClose}
+            onClose={loading || locationCreateLoading ? undefined : onClose}
             fullWidth
             maxWidth="lg"
             scroll="paper"
         >
             <DialogTitle>
-                {mode === 'edit' ? t('operations.crud.edit') : t('operations.crud.create')}
+                {mode === 'edit'
+                    ? t('operations.crud.edit')
+                    : t('operations.crud.create')}
             </DialogTitle>
 
             <DialogContent dividers>
@@ -209,6 +333,9 @@ export default function CreateOperationStepperDialog({
 
                     {error ? <Alert severity="error">{error}</Alert> : null}
                     {locationsError ? <Alert severity="warning">{locationsError}</Alert> : null}
+                    {locationCreateError ? (
+                        <Alert severity="error">{locationCreateError}</Alert>
+                    ) : null}
 
                     {activeStep === 0 ? (
                         <Box
@@ -228,6 +355,7 @@ export default function CreateOperationStepperDialog({
                                         <Typography variant="h6" sx={{ mb: 1 }}>
                                             {t('operations.location.chooseSource')}
                                         </Typography>
+
                                         <ToggleButtonGroup
                                             value={locationMode}
                                             exclusive
@@ -240,6 +368,7 @@ export default function CreateOperationStepperDialog({
                                             >
                                                 {t('operations.location.existing')}
                                             </ToggleButton>
+
                                             <ToggleButton value="new">
                                                 {t('locations.crud.create')}
                                             </ToggleButton>
@@ -255,9 +384,16 @@ export default function CreateOperationStepperDialog({
                                             </Typography>
 
                                             {locationsLoading ? (
-                                                <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={1}
+                                                    sx={{ alignItems: 'center' }}
+                                                >
                                                     <CircularProgress size={18} />
-                                                    <Typography variant="body2" color="text.secondary">
+                                                    <Typography
+                                                        variant="body2"
+                                                        color="text.secondary"
+                                                    >
                                                         {t('general.loading')}
                                                     </Typography>
                                                 </Stack>
@@ -268,13 +404,20 @@ export default function CreateOperationStepperDialog({
                                                 value={selectedLocation}
                                                 onChange={(_event, value) => setSelectedLocation(value)}
                                                 getOptionLabel={(option) => option.name}
-                                                isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                noOptionsText={t('location.noOptions')}
+                                                isOptionEqualToValue={(option, value) =>
+                                                    option.id === value.id
+                                                }
+                                                noOptionsText={t('locations.noOptions')}
                                                 renderOption={(props, option) => (
                                                     <Box component="li" {...props} key={option.id}>
                                                         <Stack spacing={0.25}>
-                                                            <Typography variant="body2">{option.name}</Typography>
-                                                            <Typography variant="caption" color="text.secondary">
+                                                            <Typography variant="body2">
+                                                                {option.name}
+                                                            </Typography>
+                                                            <Typography
+                                                                variant="caption"
+                                                                color="text.secondary"
+                                                            >
                                                                 {option.latitude}, {option.longitude}
                                                             </Typography>
                                                         </Stack>
@@ -301,6 +444,7 @@ export default function CreateOperationStepperDialog({
                                             <Typography variant="subtitle1">
                                                 {t('locations.create')}
                                             </Typography>
+
                                             <TextField
                                                 label={t('locations.fields.name')}
                                                 value={newLocation.name}
@@ -308,6 +452,7 @@ export default function CreateOperationStepperDialog({
                                                 fullWidth
                                                 required
                                             />
+
                                             <TextField
                                                 label={t('locations.fields.longitude')}
                                                 value={newLocation.longitude}
@@ -316,6 +461,7 @@ export default function CreateOperationStepperDialog({
                                                 required
                                                 placeholder="17.2048"
                                             />
+
                                             <TextField
                                                 label={t('locations.fields.latitude')}
                                                 value={newLocation.latitude}
@@ -324,6 +470,32 @@ export default function CreateOperationStepperDialog({
                                                 required
                                                 placeholder="46.6248"
                                             />
+
+                                            <Stack
+                                                direction={{ xs: 'column', sm: 'row' }}
+                                                spacing={1.5}
+                                            >
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={handleCreateAndUseLocation}
+                                                    disabled={!canCreateLocation || locationCreateLoading}
+                                                >
+                                                    {locationCreateLoading
+                                                        ? t('general.actions.creating')
+                                                        : t('locations.crud.createAndUse')}
+                                                </Button>
+
+                                                <Button
+                                                    variant="text"
+                                                    onClick={() => {
+                                                        setLocationMode('existing');
+                                                        onResetLocationCreateError?.();
+                                                    }}
+                                                    disabled={locationCreateLoading}
+                                                >
+                                                    {t('general.actions.cancel')}
+                                                </Button>
+                                            </Stack>
                                         </Stack>
                                     )}
                                 </Stack>
@@ -351,6 +523,7 @@ export default function CreateOperationStepperDialog({
                                 required
                                 disabled={codeReadOnly}
                             />
+
                             <TextField
                                 label={t('operations.fields.name')}
                                 value={operation.name}
@@ -358,38 +531,44 @@ export default function CreateOperationStepperDialog({
                                 fullWidth
                                 required
                             />
+
                             <TextField
                                 label={t('operations.fields.objective')}
                                 value={operation.objective}
                                 onChange={handleOperationChange('objective')}
                                 fullWidth
                             />
+
                             <TextField
                                 label={t('operations.fields.date')}
                                 type="date"
-                                value={operation.date}
+                                value={operation.date ?? ''}
                                 onChange={handleOperationChange('date')}
                                 fullWidth
                                 slotProps={{ inputLabel: { shrink: true } }}
                             />
+
                             <TextField
                                 label={t('operations.fields.drone')}
                                 value={operation.drone}
                                 onChange={handleOperationChange('drone')}
                                 fullWidth
                             />
+
                             <TextField
                                 label={t('operations.fields.flightMode')}
                                 value={operation.flightMode}
                                 onChange={handleOperationChange('flightMode')}
                                 fullWidth
                             />
+
                             <TextField
                                 label={t('operations.fields.weatherDescription')}
                                 value={operation.weatherDescription}
                                 onChange={handleOperationChange('weatherDescription')}
                                 fullWidth
                             />
+
                             <TextField
                                 label={t('operations.fields.kpIndex')}
                                 type="number"
@@ -398,22 +577,25 @@ export default function CreateOperationStepperDialog({
                                 fullWidth
                                 slotProps={{ htmlInput: { min: 0, step: '0.1' } }}
                             />
+
                             <TextField
                                 label={t('operations.fields.takeoffTime')}
                                 type="datetime-local"
-                                value={operation.takeoffTime}
+                                value={operation.takeoffTime ?? ''}
                                 onChange={handleOperationChange('takeoffTime')}
                                 fullWidth
                                 slotProps={{ inputLabel: { shrink: true } }}
                             />
+
                             <TextField
                                 label={t('operations.fields.landingTime')}
                                 type="datetime-local"
-                                value={operation.landingTime}
+                                value={operation.landingTime ?? ''}
                                 onChange={handleOperationChange('landingTime')}
                                 fullWidth
                                 slotProps={{ inputLabel: { shrink: true } }}
                             />
+
                             <TextField
                                 label={t('operations.fields.flightLength')}
                                 type="number"
@@ -422,6 +604,7 @@ export default function CreateOperationStepperDialog({
                                 fullWidth
                                 slotProps={{ htmlInput: { min: 0, step: '0.1' } }}
                             />
+
                             <TextField
                                 label={t('operations.fields.flightDuration')}
                                 value={operation.flightDurationSeconds}
@@ -429,6 +612,7 @@ export default function CreateOperationStepperDialog({
                                 fullWidth
                                 placeholder="PT35M"
                             />
+
                             <TextField
                                 label={t('operations.fields.description')}
                                 value={operation.description}
@@ -444,22 +628,30 @@ export default function CreateOperationStepperDialog({
             </DialogContent>
 
             <DialogActions sx={{ px: 3, py: 2 }}>
-                <Button onClick={onClose} disabled={loading}>
+                <Button onClick={onClose} disabled={loading || locationCreateLoading}>
                     {t('general.actions.cancel')}
                 </Button>
 
                 {activeStep > 0 ? (
-                    <Button onClick={handleBack} disabled={loading}>
+                    <Button onClick={handleBack} disabled={loading || locationCreateLoading}>
                         {t('general.actions.back')}
                     </Button>
                 ) : null}
 
                 {activeStep === 0 ? (
-                    <Button onClick={handleNext} variant="contained" disabled={!canContinueFromStepOne}>
+                    <Button
+                        onClick={handleNext}
+                        variant="contained"
+                        disabled={!canContinueFromStepOne || locationCreateLoading}
+                    >
                         {t('general.actions.continue')}
                     </Button>
                 ) : (
-                    <Button onClick={handleSubmit} variant="contained" disabled={loading || !canSubmit}>
+                    <Button
+                        onClick={handleSubmit}
+                        variant="contained"
+                        disabled={loading || locationCreateLoading || !canSubmit}
+                    >
                         {loading
                             ? mode === 'edit'
                                 ? t('general.actions.saving')

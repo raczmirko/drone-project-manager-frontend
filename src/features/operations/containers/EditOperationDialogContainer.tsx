@@ -8,12 +8,15 @@ import type {
     CreateOperationWizardSubmitValues,
     LocationOption,
 } from '../types/operationWizardTypes.ts';
-import type { DroneOperation, UpdateDroneOperationRequest } from '../types/operationTypes.ts';
+import type {
+    DroneOperation,
+    UpdateDroneOperationRequest,
+} from '../types/operationTypes.ts';
 import {
     resolveOperationLocationId,
-    toOperationWizardInitialValues, toUpdateDroneOperationRequest
-} from "../utils/operationPayloadMappers.ts";
-
+    toOperationWizardInitialValues,
+    toUpdateDroneOperationRequest,
+} from '../utils/operationPayloadMappers.ts';
 
 type EditOperationDialogContainerProps = {
     operation: DroneOperation;
@@ -24,15 +27,15 @@ type EditOperationDialogContainerProps = {
     locationCreateLoading: boolean;
     locationCreateError: string | null;
     onResetLocationCreateError: () => void;
-    onUpdateOperation: (operationCode: string, payload: UpdateDroneOperationRequest) => Promise<boolean>;
+    onUpdateOperation: (
+        operationCode: string,
+        payload: UpdateDroneOperationRequest,
+    ) => Promise<boolean>;
     updateLoading: boolean;
     updateError: string | null;
     onResetUpdateError: () => void;
 };
 
-/**
- * Renders a dialog for editing an operation.
- */
 export default function EditOperationDialogContainer({
                                                          operation,
                                                          availableLocations,
@@ -54,9 +57,6 @@ export default function EditOperationDialogContainer({
         () => toOperationWizardInitialValues(operation),
         [operation],
     );
-
-    const dialogError = updateError ?? locationCreateError ?? locationsError ?? null;
-    const dialogLoading = updateLoading || locationCreateLoading;
 
     const handleResetErrors = () => {
         onResetUpdateError();
@@ -92,14 +92,18 @@ export default function EditOperationDialogContainer({
                 mode="edit"
                 initialValues={initialValues}
                 codeReadOnly
-                loading={dialogLoading}
-                error={dialogError}
+                loading={updateLoading}
+                error={updateError}
                 availableLocations={availableLocations}
                 locationsLoading={locationsLoading}
                 locationsError={locationsError}
+                onCreateLocation={onCreateLocation}
+                locationCreateLoading={locationCreateLoading}
+                locationCreateError={locationCreateError}
+                onResetLocationCreateError={onResetLocationCreateError}
                 onClose={() => setOpen(false)}
                 onSubmit={handleSubmit}
-                onResetError={handleResetErrors}
+                onResetError={onResetUpdateError}
             />
         </>
     );
