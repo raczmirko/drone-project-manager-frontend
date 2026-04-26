@@ -28,6 +28,7 @@ import {
     type DroneOperationFormValues,
     type LocationOption,
 } from '../types/operationWizardTypes.ts';
+import NumberField from "../../../components/NumberField.tsx";
 
 type CreateOperationStepperDialogProps = {
     open: boolean;
@@ -493,13 +494,20 @@ export default function CreateOperationStepperDialog({
                                             minRows={3}
                                         />
 
-                                        <TextField
+                                        <NumberField
                                             label={t('operations.fields.kpIndex')}
-                                            type="number"
-                                            value={operation.kpIndex}
-                                            onChange={handleOperationChange('kpIndex')}
+                                            value={operation.kpIndex === '' ? null : Number(operation.kpIndex)}
+                                            onValueChange={(value) => {
+                                                setOperation((previous) => ({
+                                                    ...previous,
+                                                    kpIndex: value == null ? '' : String(value),
+                                                }));
+                                            }}
+                                            min={0}
+                                            max={9}
+                                            step="any"
                                             fullWidth
-                                            slotProps={{ htmlInput: { min: 0, step: '0.1' } }}
+                                            helperText={t('operations.validations.kpIndexRange')}
                                         />
 
                                         <TextField

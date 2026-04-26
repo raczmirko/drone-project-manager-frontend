@@ -144,6 +144,9 @@
       "type": "Type",
       "status": "Status",
       "date": "Date"
+    },
+    "validations": {
+      "kpIndexRange": "Value must be between 0 and 9"
     }
   },
   "documents": {
