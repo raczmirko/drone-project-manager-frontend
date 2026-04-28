@@ -149,7 +149,7 @@ const SignIn = ({ onLogin, isLoggedIn }: SignInProps) => {
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: "secondary.main", mx: "auto" }}>
-                        <LockOutlinedIcon />
+                        <LockOutlinedIcon sx={{color: "white", }} />
                     </Avatar>
                     <Typography component="h1" variant="h5" sx={{ mb: 3, color: "black" }}>
                         {t("signIn.title")}
