@@ -200,7 +200,7 @@ export default function OperationImageMetadataGrid({
                 pagination
                 paginationMode="server"
                 rowCount={rowCount}
-                pageSizeOptions={[10, 25, 50, 100, 1000]}
+                pageSizeOptions={[10, 25, 50, 100]}
                 paginationModel={paginationModel}
                 onPaginationModelChange={onPaginationModelChange}
                 disableRowSelectionOnClick
