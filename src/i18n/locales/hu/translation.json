@@ -162,7 +162,9 @@
       "generatedDashboard": "Generált repülési áttekintő",
       "updateDashboard": "Művelet frissítése metaadatok alapján",
       "browseImages": "Képek tallózása",
-      "extract": "Metaadatok kinyerése"
+      "extract": "Metaadatok kinyerése",
+      "noFlightPath": "Nem található repülési útvonal.",
+      "flightPathMap": "Felvételezési útvonal"
     },
     "metadata": {
       "filename": "Fájlnév",

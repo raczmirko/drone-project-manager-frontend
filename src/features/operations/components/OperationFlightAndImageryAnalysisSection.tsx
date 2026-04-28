@@ -1,34 +1,11 @@
-import { Stack } from '@mui/material';
-import { type GridPaginationModel } from '@mui/x-data-grid';
+import {Stack} from '@mui/material';
 import SectionCard from '../../projects/components/SectionCard.tsx';
 import OperationImageMetadataUploadCard from './OperationImageMetadataUploadCard.tsx';
 import OperationImageMetadataGrid from './OperationImageMetadataGrid.tsx';
 import OperationFlightAnalysisCard from './OperationFlightAnalysisCard.tsx';
-import type {
-    OperationFlightAnalysisResponse,
-    OperationImageMetadataExtractionResponse,
-    OperationImageMetadataRow,
-} from '../types/operationImageMetadataTypes.ts';
 import {useTranslation} from "react-i18next";
-
-type OperationFlightAndImageryAnalysisSectionProps = {
-    uploadLoading: boolean;
-    uploadError: string | null;
-    uploadResult: OperationImageMetadataExtractionResponse | null;
-    onUpload: (files: File[]) => Promise<void>;
-
-    analysis: OperationFlightAnalysisResponse | null;
-    analysisLoading: boolean;
-    analysisError: string | null;
-    onAnalyze: () => Promise<void>;
-
-    rows: OperationImageMetadataRow[];
-    gridLoading: boolean;
-    gridError: string | null;
-    rowCount: number;
-    paginationModel: GridPaginationModel;
-    onPaginationModelChange: (model: GridPaginationModel) => void;
-};
+import OperationFlightPathMap from "./OperationFlightPathMap.tsx";
+import type {OperationFlightAndImageryAnalysisSectionProps} from "../types/operationAnalysisTypes.ts";
 
 /**
  * Section for uploading images and analyzing flight data.
@@ -42,6 +19,9 @@ export default function OperationFlightAndImageryAnalysisSection({
                                                                      analysisLoading,
                                                                      analysisError,
                                                                      onAnalyze,
+                                                                     flightPathRows,
+                                                                     flightPathLoading,
+                                                                     flightPathError,
                                                                      rows,
                                                                      gridLoading,
                                                                      gridError,
@@ -50,10 +30,10 @@ export default function OperationFlightAndImageryAnalysisSection({
                                                                      onPaginationModelChange,
                                                                  }: OperationFlightAndImageryAnalysisSectionProps) {
     const { t } = useTranslation();
-    return (
-        <SectionCard title={t("operations.imageAnalysis.title")}>
-            <Stack spacing={3}>
 
+    return (
+        <SectionCard title={t('operations.imageAnalysis.title')}>
+            <Stack spacing={3}>
                 <OperationImageMetadataUploadCard
                     loading={uploadLoading}
                     error={uploadError}
@@ -66,6 +46,12 @@ export default function OperationFlightAndImageryAnalysisSection({
                     loading={analysisLoading}
                     error={analysisError}
                     onAnalyze={onAnalyze}
+                />
+
+                <OperationFlightPathMap
+                    rows={flightPathRows}
+                    loading={flightPathLoading}
+                    error={flightPathError}
                 />
 
                 <OperationImageMetadataGrid

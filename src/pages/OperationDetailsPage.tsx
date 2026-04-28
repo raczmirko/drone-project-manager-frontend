@@ -21,12 +21,15 @@ import type {
 import type {GridPaginationModel} from "@mui/x-data-grid";
 import OperationFlightAndImageryAnalysisSection
     from "../features/operations/components/OperationFlightAndImageryAnalysisSection.tsx";
+import type {OperationFlightPathPoint} from "../features/operations/types/operationAnalysisTypes.ts";
 
+/**
+ * Displays the details page for a specific operation within a project.
+ * This page includes metadata management, flight path visualization, and operation summary.
+ */
 export default function OperationDetailsPage() {
-    const { projectCode = '', operationCode = '' } = useParams<{
-        projectCode: string;
-        operationCode: string;
-    }>();
+
+    const { projectCode = '', operationCode = '' } = useParams<{ projectCode: string; operationCode: string; }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
 
@@ -51,10 +54,34 @@ export default function OperationDetailsPage() {
     const [gridError, setGridError] = useState<string | null>(null);
     const [rows, setRows] = useState<OperationImageMetadataRow[]>([]);
     const [rowCount, setRowCount] = useState(0);
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-        page: 0,
-        pageSize: 25,
-    });
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({page: 0, pageSize: 25});
+
+    const [flightPathLoading, setFlightPathLoading] = useState(false);
+    const [flightPathError, setFlightPathError] = useState<string | null>(null);
+    const [flightPathRows, setFlightPathRows] = useState<OperationFlightPathPoint[]>([]);
+
+    /**
+     * Loads the flight path for the current operation.
+     */
+    const loadFlightPath = useCallback(async () => {
+        if (!operationCode) {
+            return;
+        }
+
+        setFlightPathLoading(true);
+        setFlightPathError(null);
+
+        try {
+            const data = await operationApi.getFlightPath(operationCode);
+            setFlightPathRows(data);
+        } catch (error) {
+            setFlightPathError(
+                error instanceof Error ? error.message : t('general.errors.unknown'),
+            );
+        } finally {
+            setFlightPathLoading(false);
+        }
+    }, [operationCode, t]);
 
     /**
      * Loads the metadata page for the given pagination model.
@@ -179,6 +206,10 @@ export default function OperationDetailsPage() {
         void loadMetadataPage(paginationModel);
     }, [loadMetadataPage, paginationModel]);
 
+    useEffect(() => {
+        void loadFlightPath();
+    }, [loadFlightPath]);
+
     return (
         <Box
             sx={{
@@ -235,6 +266,9 @@ export default function OperationDetailsPage() {
                         analysisLoading={analysisLoading}
                         analysisError={analysisError}
                         onAnalyze={handleAnalyze}
+                        flightPathRows={flightPathRows}
+                        flightPathLoading={flightPathLoading}
+                        flightPathError={flightPathError}
                         rows={rows}
                         gridLoading={gridLoading}
                         gridError={gridError}

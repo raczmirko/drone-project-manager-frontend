@@ -162,7 +162,9 @@
       "generatedDashboard": "Generated flight dashboard",
       "updateDashboard": "Update operation from metadata",
       "browseImages": "Browse images",
-      "extract": "Extract metadata"
+      "extract": "Extract metadata",
+      "noFlightPath": "No GPS coordinates are available for the map.",
+      "flightPathMap": "Aerial recording path map"
     },
     "metadata": {
       "filename": "Filename",
