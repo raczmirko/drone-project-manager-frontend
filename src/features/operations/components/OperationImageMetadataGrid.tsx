@@ -25,42 +25,86 @@ export default function OperationImageMetadataGrid({
                                                        paginationModel,
                                                        onPaginationModelChange,
                                                    }: OperationImageMetadataGridProps) {
+
     const { t } = useTranslation();
+
     const columns = useMemo<GridColDef<OperationImageMetadataRow>[]>(
         () => [
             {
                 field: 'originalFilename',
-                headerName: t("operations.metadata.filename"),
+                headerName: t('operations.metadata.filename'),
                 flex: 1.6,
                 minWidth: 240,
             },
             {
-                field: 'capturedAt',
-                headerName: t("operations.metadata.capturedAt"),
-                flex: 1.1,
-                minWidth: 180,
-                valueGetter: (_value, row) => formatDateTime(row.capturedAt),
+                field: 'mimeType',
+                headerName: t('operations.metadata.mimeType'),
+                flex: 1,
+                minWidth: 160,
             },
             {
                 field: 'fileSizeBytes',
-                headerName: t("operations.metadata.size"),
+                headerName: t('operations.metadata.size'),
                 flex: 0.8,
                 minWidth: 120,
                 valueGetter: (_value, row) => formatFileSize(row.fileSizeBytes),
             },
             {
+                field: 'imageWidth',
+                headerName: t('operations.metadata.imageWidth'),
+                flex: 0.7,
+                minWidth: 120,
+                valueGetter: (_value, row) => row.imageWidth ?? '',
+            },
+            {
+                field: 'imageHeight',
+                headerName: t('operations.metadata.imageHeight'),
+                flex: 0.7,
+                minWidth: 120,
+                valueGetter: (_value, row) => row.imageHeight ?? '',
+            },
+            {
                 field: 'dimensions',
-                headerName: t("operations.metadata.size"),
+                headerName: t('operations.metadata.dimensions'),
+                flex: 0.9,
+                minWidth: 140,
+                sortable: false,
+                filterable: false,
+                valueGetter: (_value, row) =>
+                    row.imageWidth != null && row.imageHeight != null
+                        ? `${row.imageWidth} × ${row.imageHeight}`
+                        : '',
+            },
+            {
+                field: 'capturedAt',
+                headerName: t('operations.metadata.capturedAt'),
+                flex: 1.1,
+                minWidth: 180,
+                valueGetter: (_value, row) => formatDateTime(row.capturedAt),
+            },
+            {
+                field: 'gpsLatitude',
+                headerName: t('operations.metadata.gpsLatitude'),
                 flex: 0.9,
                 minWidth: 140,
                 valueGetter: (_value, row) =>
-                    row.imageWidth && row.imageHeight ? `${row.imageWidth} × ${row.imageHeight}` : '',
+                    row.gpsLatitude != null ? row.gpsLatitude.toFixed(6) : '',
+            },
+            {
+                field: 'gpsLongitude',
+                headerName: t('operations.metadata.gpsLongitude'),
+                flex: 0.9,
+                minWidth: 140,
+                valueGetter: (_value, row) =>
+                    row.gpsLongitude != null ? row.gpsLongitude.toFixed(6) : '',
             },
             {
                 field: 'gps',
-                headerName: t("operations.metadata.gps"),
+                headerName: t('operations.metadata.gps'),
                 flex: 1.2,
                 minWidth: 220,
+                sortable: false,
+                filterable: false,
                 valueGetter: (_value, row) =>
                     row.gpsLatitude != null && row.gpsLongitude != null
                         ? `${row.gpsLatitude.toFixed(6)}, ${row.gpsLongitude.toFixed(6)}`
@@ -68,28 +112,79 @@ export default function OperationImageMetadataGrid({
             },
             {
                 field: 'gpsAltitude',
-                headerName: t("operations.metadata.altitude"),
+                headerName: t('operations.metadata.altitude'),
                 flex: 0.8,
                 minWidth: 120,
                 valueGetter: (_value, row) =>
                     row.gpsAltitude != null ? `${row.gpsAltitude.toFixed(2)} m` : '',
             },
             {
+                field: 'cameraMake',
+                headerName: t('operations.metadata.cameraMake'),
+                flex: 1,
+                minWidth: 160,
+            },
+            {
+                field: 'cameraModel',
+                headerName: t('operations.metadata.cameraModel'),
+                flex: 1,
+                minWidth: 160,
+            },
+            {
                 field: 'camera',
-                headerName: t("operations.metadata.camera"),
+                headerName: t('operations.metadata.camera'),
                 flex: 1.1,
                 minWidth: 180,
+                sortable: false,
+                filterable: false,
                 valueGetter: (_value, row) =>
                     [row.cameraMake, row.cameraModel].filter(Boolean).join(' '),
             },
             {
-                field: 'metadataStatus',
-                headerName: t("operations.status.size"),
+                field: 'orientation',
+                headerName: t('operations.metadata.orientation'),
+                flex: 0.7,
+                minWidth: 120,
+                valueGetter: (_value, row) => row.orientation ?? '',
+            },
+            {
+                field: 'focalLength',
+                headerName: t('operations.metadata.focalLength'),
+                flex: 0.8,
+                minWidth: 130,
+                valueGetter: (_value, row) =>
+                    row.focalLength != null ? `${row.focalLength.toFixed(2)} mm` : '',
+            },
+            {
+                field: 'isoValue',
+                headerName: t('operations.metadata.isoValue'),
+                flex: 0.7,
+                minWidth: 100,
+                valueGetter: (_value, row) => row.isoValue ?? '',
+            },
+            {
+                field: 'aperture',
+                headerName: t('operations.metadata.aperture'),
                 flex: 0.8,
                 minWidth: 120,
+                valueGetter: (_value, row) =>
+                    row.aperture != null ? `f/${row.aperture.toFixed(1)}` : '',
+            },
+            {
+                field: 'exposureTime',
+                headerName: t('operations.metadata.exposureTime'),
+                flex: 0.9,
+                minWidth: 130,
+            },
+            {
+                field: 'createdAt',
+                headerName: t('operations.metadata.createdAt'),
+                flex: 1,
+                minWidth: 180,
+                valueGetter: (_value, row) => formatDateTime(row.createdAt),
             },
         ],
-        [],
+        [t],
     );
 
     return (
@@ -105,10 +200,33 @@ export default function OperationImageMetadataGrid({
                 pagination
                 paginationMode="server"
                 rowCount={rowCount}
-                pageSizeOptions={[10, 25, 50, 100]}
+                pageSizeOptions={[10, 25, 50, 100, 1000]}
                 paginationModel={paginationModel}
                 onPaginationModelChange={onPaginationModelChange}
                 disableRowSelectionOnClick
+                showToolbar
+                initialState={{
+                    columns: {
+                        columnVisibilityModel: {
+                            mimeType: false,
+                            cameraMake: false,
+                            cameraModel: false,
+                            gpsLatitude: false,
+                            gpsLongitude: false,
+                            metadataError: false,
+                            createdAt: false,
+                        },
+                    },
+                }}
+                slotProps={{
+                    toolbar: {
+                        csvOptions: {
+                            fileName: 'operation-image-metadata',
+                            utf8WithBom: true,
+                            allColumns: true,
+                        },
+                    },
+                }}
                 sx={{
                     border: 0,
                     '& .MuiDataGrid-columnHeaders': {

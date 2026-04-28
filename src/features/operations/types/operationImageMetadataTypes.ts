@@ -16,6 +16,11 @@ export type OperationImageMetadataRow = {
     metadataStatus: OperationImageMetadataStatus;
     metadataError: string | null;
     createdAt: string;
+    orientation?: number | null;
+    focalLength?: number | null;
+    isoValue?: number | null;
+    aperture?: number | null;
+    exposureTime?: string | null;
 };
 
 export type OperationImageMetadataPageResponse = {
