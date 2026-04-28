@@ -60,6 +60,8 @@ export default function OperationDetailsPage() {
     const [flightPathError, setFlightPathError] = useState<string | null>(null);
     const [flightPathRows, setFlightPathRows] = useState<OperationFlightPathPoint[]>([]);
 
+    // const { refetch: refetchOperation } = operation;
+
     /**
      * Loads the flight path for the current operation.
      */
@@ -114,6 +116,27 @@ export default function OperationDetailsPage() {
     );
 
     /**
+     * Handles the analysis of flight data.
+     */
+    const loadAnalysis = useCallback(async () => {
+        if (!operationCode) {
+            return;
+        }
+
+        setAnalysisLoading(true);
+        setAnalysisError(null);
+
+        try {
+            const data = await operationApi.analyzeImageMetadata(operationCode);
+            setAnalysis(data);
+        } catch (error) {
+            setAnalysisError(error instanceof Error ? error.message : t('general.errors.unknown'));
+        } finally {
+            setAnalysisLoading(false);
+        }
+    }, [operationCode, t]);
+
+    /**
      * Handles the upload of images to the server.
      */
     const handleUpload = async (files: File[]) => {
@@ -134,33 +157,17 @@ export default function OperationDetailsPage() {
             };
 
             setPaginationModel(firstPageModel);
-            await loadMetadataPage(firstPageModel);
+
+            await Promise.all([
+                loadMetadataPage(firstPageModel),
+                loadFlightPath(),
+                loadAnalysis(),
+            ]);
+
         } catch (error) {
             setUploadError(error instanceof Error ? error.message : t('general.errors.unknown'));
         } finally {
             setUploadLoading(false);
-        }
-    };
-
-    /**
-     * Handles the analysis of flight data.
-     */
-    const handleAnalyze = async () => {
-        if (!operationCode) {
-            return;
-        }
-
-        setAnalysisLoading(true);
-        setAnalysisError(null);
-
-        try {
-            const data = await operationApi.analyzeImageMetadata(operationCode);
-            setAnalysis(data);
-            await operation.refetch();
-        } catch (error) {
-            setAnalysisError(error instanceof Error ? error.message : t('general.errors.unknown'));
-        } finally {
-            setAnalysisLoading(false);
         }
     };
 
@@ -202,6 +209,10 @@ export default function OperationDetailsPage() {
         [operations, operation],
     );
 
+    const handleAnalyze = useCallback(async () => {
+        await loadAnalysis();
+    }, [loadAnalysis]);
+
     useEffect(() => {
         void loadMetadataPage(paginationModel);
     }, [loadMetadataPage, paginationModel]);
@@ -209,6 +220,48 @@ export default function OperationDetailsPage() {
     useEffect(() => {
         void loadFlightPath();
     }, [loadFlightPath]);
+
+    useEffect(() => {
+        if (!operationCode) {
+            return;
+        }
+
+        let cancelled = false;
+
+        const runInitialAnalysis = async () => {
+            setAnalysisLoading(true);
+            setAnalysisError(null);
+
+            try {
+                const data = await operationApi.analyzeImageMetadata(operationCode);
+
+                if (cancelled) {
+                    return;
+                }
+
+                setAnalysis(data);
+                await operation.refetch();
+            } catch (error) {
+                if (cancelled) {
+                    return;
+                }
+
+                setAnalysisError(
+                    error instanceof Error ? error.message : t('general.errors.unknown'),
+                );
+            } finally {
+                if (!cancelled) {
+                    setAnalysisLoading(false);
+                }
+            }
+        };
+
+        void runInitialAnalysis();
+
+        return () => {
+            cancelled = true;
+        };
+    }, [operationCode, t]);
 
     return (
         <Box
