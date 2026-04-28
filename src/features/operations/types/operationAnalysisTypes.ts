@@ -42,4 +42,6 @@ export type OperationFlightAndImageryAnalysisSectionProps = {
     rowCount: number;
     paginationModel: GridPaginationModel;
     onPaginationModelChange: (model: GridPaginationModel) => void;
+
+    metadataInitialized: boolean;
 };

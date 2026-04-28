@@ -164,7 +164,13 @@
       "browseImages": "Képek tallózása",
       "extract": "Metaadatok kinyerése",
       "noFlightPath": "Nem található repülési útvonal.",
-      "flightPathMap": "Felvételezési útvonal"
+      "flightPathMap": "Felvételezési útvonal",
+      "tabs": {
+        "upload": "Képfeltöltés",
+        "flightAnalysis": "Képelemzés",
+        "dashboard": "Kimutatások",
+        "metadata": "Metaadatok"
+      }
     },
     "metadata": {
       "filename": "Fájlnév",

@@ -164,7 +164,13 @@
       "browseImages": "Browse images",
       "extract": "Extract metadata",
       "noFlightPath": "No GPS coordinates are available for the map.",
-      "flightPathMap": "Aerial recording path map"
+      "flightPathMap": "Aerial recording path map",
+      "tabs": {
+        "upload": "Data upload",
+        "flightAnalysis": "Flight analysis",
+        "dashboard": "Dashboard",
+        "metadata": "Metadata"
+      }
     },
     "metadata": {
       "filename": "Filename",

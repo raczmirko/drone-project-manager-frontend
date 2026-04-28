@@ -60,7 +60,8 @@ export default function OperationDetailsPage() {
     const [flightPathError, setFlightPathError] = useState<string | null>(null);
     const [flightPathRows, setFlightPathRows] = useState<OperationFlightPathPoint[]>([]);
 
-    // const { refetch: refetchOperation } = operation;
+    // Keep track of whether the metadata grid has been initialized to auto-switch tabs if there are images, otherwise stay on first tab
+    const [metadataInitialized, setMetadataInitialized] = useState(false);
 
     /**
      * Loads the flight path for the current operation.
@@ -110,6 +111,7 @@ export default function OperationDetailsPage() {
                 setGridError(error instanceof Error ? error.message : t('general.errors.unknown'));
             } finally {
                 setGridLoading(false);
+                setMetadataInitialized(true);
             }
         },
         [operationCode, t],
@@ -328,6 +330,7 @@ export default function OperationDetailsPage() {
                         rowCount={rowCount}
                         paginationModel={paginationModel}
                         onPaginationModelChange={setPaginationModel}
+                        metadataInitialized={metadataInitialized}
                     />
 
                     <DocumentsSection
