@@ -1,6 +1,7 @@
 {
   "general": {
     "actions": {
+      "title": "Műveletek",
       "create": "Létrehozás",
       "update": "Frissítés",
       "delete": "Törlés",
@@ -8,24 +9,34 @@
       "download": "Letöltés",
       "cancel": "Mégse",
       "confirm": "Megerősítés",
+      "continue": "Tovább",
+      "back": "Vissza",
       "open": "Megnyitás",
       "add": "Hozzáadás",
       "upload": "Feltöltés",
       "submitting": "Küldés...",
-      "deleting": "Törlés..."
+      "deleting": "Törlés...",
+      "loading": "Betöltés...",
+      "selected": "Kiválasztva",
+      "seeDetails": "Részletek megtekintése",
+      "save": "Mentés",
+      "reset": "Visszaállítás",
+      "edit": "Szerkesztés",
+      "skip": "Kihagyás",
+      "createAndUse": "Létrehozás és használat"
     },
     "feedback": {
-      "copiedToClipboard": "Sikeresen másolva a vágólapra.",
+      "copiedToClipboard": "Sikeresen a vágólapra másolva.",
       "loading": "Betöltés..."
     },
     "errors": {
-      "unexpected": "Váratlan hiba történt. Kérjük, próbálja meg később újra.",
+      "unexpected": "Váratlan hiba történt. Kérjük, próbáld újra később.",
       "notFound": "Az erőforrás nem található.",
-      "unauthorized": "Nincs jogosultsága a művelet végrehajtásához.",
+      "unauthorized": "Nincs jogosultságod a művelet végrehajtásához.",
       "invalidRequest": "Érvénytelen kérés.",
-      "conflict": "Ütközés történt. Kérjük, próbálja meg újra.",
-      "notImplemented": "Ez a funkció még nincs megvalósítva.",
-      "serviceUnavailable": "A szolgáltatás jelenleg nem elérhető. Kérjük, próbálja meg később újra.",
+      "conflict": "Ütközés történt. Kérjük, próbáld újra.",
+      "notImplemented": "Ez a funkció még nem érhető el.",
+      "serviceUnavailable": "A szolgáltatás jelenleg nem elérhető. Kérjük, próbáld újra később.",
       "unknown": "Ismeretlen hiba"
     }
   },
@@ -37,101 +48,165 @@
     "passwordPlaceholder": "••••••••",
     "rememberMe": "Emlékezz rám",
     "submit": "Bejelentkezés",
-    "noAccount": "Nincs még fiókja? Regisztráljon",
-    "successLogin": "Sikeresen bejelentkezett.",
-    "networkError": "Hálózati hiba. Lehet, hogy a szerver nem elérhető.",
+    "noAccount": "Nincs még fiókod? Regisztrálj",
+    "successLogin": "Sikeresen bejelentkeztél.",
+    "networkError": "Hálózati hiba. Lehetséges, hogy a szerver nem érhető el.",
     "loginFailed": "Sikertelen bejelentkezés",
     "errors": {
       "invalidCredentials": "Érvénytelen felhasználónév vagy jelszó.",
-      "forbidden": "Nincs jogosultsága az erőforrás eléréséhez.",
-      "notFound": "Hitelesítési szolgáltatás nem található.",
-      "unexpected": "Váratlan hiba történt. Kérjük, próbálja újra később."
+      "forbidden": "Nincs jogosultságod az erőforrás eléréséhez.",
+      "notFound": "A hitelesítési szolgáltatás nem található.",
+      "unexpected": "Váratlan hiba történt. Kérjük, próbáld újra később."
     }
   },
   "signUp": {
     "title": "Regisztráció",
     "accountNumber": "Fiókazonosító",
-    "accountNumberInfo": "A fiókazonosító az ön egyedi azonosítója a belépéshez. Biztonsági és adatvédelmi okokból belépés után nem mutatjuk az azonosítót.",
-    "accountNumberInfoHeader": "Fiókazonosító információ",
+    "accountNumberInfo": "A szolgáltatás használatához csak erre a fiókazonosítóra lesz szükséged. Biztonsági és adatvédelmi okokból bejelentkezés után ezt már nem tudjuk újra megjeleníteni.",
+    "accountNumberInfoHeader": "Információ a fiókazonosítóról",
     "generateAccountNumber": "Fiókazonosító generálása",
-    "accountNumberGenerationError": "Hiba történt a fiókazonosító generálása közben. Kérjük próbálja újra később!",
+    "accountNumberGenerationError": "Hiba történt a fiókazonosító generálása közben. Kérjük, próbáld újra.",
     "password": "Jelszó",
     "confirmPassword": "Jelszó megerősítése",
     "submit": "Regisztráció",
-    "submitting": "Regisztráció...",
-    "alreadyHaveAccount": "Már van fiókja? Jelentkezzen be",
+    "submitting": "Küldés...",
+    "alreadyHaveAccount": "Van már fiókod? Jelentkezz be",
     "passwordsDoNotMatch": "A jelszavak nem egyeznek",
-    "accountNumberRequired": "Fiókazonosító megadása kötelező",
+    "accountNumberRequired": "A fiókazonosító megadása kötelező",
     "success": "Sikeres regisztráció!",
-    "error": "Sikertelen regisztráció. Kérjük, próbálja újra.",
+    "error": "A regisztráció nem sikerült. Kérjük, próbáld újra.",
     "dialog": {
       "title": "Regisztráció megerősítése",
-      "content": "Kérjük, győződjön meg róla, hogy elmentette a fiókazonosítóját, mert a regisztrációt követően az azonosító többet nem megjeleníthető.",
+      "content": "Kérjük, győződj meg róla, hogy elmentetted a fiókazonosítódat, mert ezt később már nem fogjuk újra megjeleníteni. Ha elveszíted, többé nem fogsz tudni hozzáférni a fiókodhoz.",
       "cancel": "Mégse",
       "confirm": "Megerősítés"
     }
   },
   "projects": {
-    "list": {
-      "title": "Projektek",
-      "addProject": "Projekt hozzáadása",
-      "openProject": "Projekt megnyitása"
+    "title": "Projektek",
+    "crud": {
+      "add": "Projekt hozzáadása",
+      "edit": "Projekt szerkesztése",
+      "delete": "Projekt törlése",
+      "open": "Projekt megnyitása",
+      "create": "Új projekt létrehozása"
     },
     "details": {
       "title": "Projekt részletei",
       "loading": "Projekt betöltése...",
-      "notFound": "Projekt nem található.",
-      "deleteTitle": "Projekt törlése",
-      "deleteMessage": "Biztosan törölni szeretné ezt a projektet? Ez a művelet nem vonható vissza."
-    },
-    "create": {
-      "title": "Új projekt hozzáadása"
+      "notFound": "A projekt nem található.",
+      "deleteMessage": "Biztosan törölni szeretnéd ezt a projektet? Ez a művelet nem vonható vissza."
     },
     "fields": {
       "code": "Kód",
       "name": "Név",
-      "status": "Státusz",
+      "status": "Állapot",
       "description": "Leírás",
-      "objective": "Célkitűzés",
+      "objective": "Cél",
       "startDate": "Kezdési dátum",
       "endDate": "Befejezési dátum"
     }
   },
   "operations": {
-    "title": "Drón műveletek",
-    "addOperation": "Művelet hozzáadása",
-    "openOperation": "Művelet megnyitása",
-    "create": {
-      "title": "Új művelet hozzáadása"
+    "title": "Drónműveletek",
+    "details": {
+      "title": "Művelet részletei",
+      "loading": "Művelet betöltése...",
+      "notFound": "A művelet nem található.",
+      "deleteMessage": "Biztosan törölni szeretnéd ezt a műveletet? Ez a művelet nem vonható vissza."
+    },
+    "location": {
+      "chooseSource": "Helyszínforrás kiválasztása",
+      "existing": "Meglévő helyszín",
+      "select": "Meglévő helyszín kiválasztása"
+    },
+    "crud": {
+      "add": "Művelet hozzáadása",
+      "edit": "Művelet szerkesztése",
+      "delete": "Művelet törlése",
+      "open": "Művelet megnyitása",
+      "create": "Új művelet létrehozása"
     },
     "fields": {
       "name": "Név",
+      "code": "Kód",
+      "objective": "Cél",
+      "drone": "Drón",
+      "flightMode": "Repülési mód",
+      "weatherDescription": "Időjárás leírása",
+      "kpIndex": "KP-index",
+      "takeoffTime": "Felszállás ideje",
+      "landingTime": "Leszállás ideje",
+      "location": "Helyszín",
+      "flightDuration": "Repülés időtartama",
+      "description": "Leírás",
       "type": "Típus",
-      "status": "Státusz",
+      "status": "Állapot",
       "date": "Dátum"
+    },
+    "validations": {
+      "kpIndexRange": "Az értéknek 0 és 9 között kell lennie"
+    },
+    "imageAnalysis": {
+      "title": "Repülési és légi felvétel elemzés",
+      "fileUploadTitle": "Képfeltöltés elemzéshez és áttekintő generálásához",
+      "fileUploadInfo": "JPG, PNG, TIFF vagy WEBP fájlokat tölthetsz fel. Csak a metaadatok kerülnek feldolgozásra és tárolásra. Feltöltésenként legfeljebb 500 MB engedélyezett.",
+      "flightDuration": "Repülés időtartama",
+      "avgRecordingAltitude": "Átlagos rögzítési magasság",
+      "recordingLength": "Rögzítés közben megtett távolság",
+      "recordingStart": "Rögzítés kezdete",
+      "recordingEnd": "Rögzítés vége",
+      "numberOfRecordings": "Felvételek száma",
+      "noAnalysis": "Még nincs elérhető elemzés.",
+      "generatingDashboard": "Áttekintő generálása...",
+      "generatedDashboard": "Generált repülési áttekintő",
+      "updateDashboard": "Művelet frissítése metaadatok alapján",
+      "browseImages": "Képek tallózása",
+      "extract": "Metaadatok kinyerése"
+    },
+    "metadata": {
+      "filename": "Fájlnév",
+      "capturedAt": "Készítés ideje",
+      "size": "Méret",
+      "dimensions": "Méretek",
+      "gps": "GPS",
+      "altitude": "Magasság",
+      "camera": "Kamera",
+      "status": "Állapot"
     }
   },
   "documents": {
-    "title": "Projekt dokumentumok",
+    "title": "Dokumentumok",
     "uploadFile": "Fájl feltöltése",
     "downloadFile": "Fájl letöltése",
+    "deleteFile": "Fájl törlése",
+    "confirmDelete": "Biztosan törölni szeretnéd ezt a fájlt? Ez a művelet nem vonható vissza.",
+    "selectedFiles": "Kiválasztott fájlok",
+    "totalSize": "Összméret",
     "fields": {
       "fileName": "Fájlnév",
       "type": "Típus",
-      "uploadedAt": "Feltöltve",
+      "uploadedAt": "Feltöltés ideje",
       "size": "Méret"
     }
   },
   "locations": {
     "plural": "Helyszínek",
     "singular": "Helyszín",
-    "addLocation": "Helyszín hozzáadása",
-    "openLocation": "Helyszín megnyitása",
-    "create": {
-      "title": "Új helyszín hozzáadása"
+    "preview": "Helyszín előnézete",
+    "mapPreview": "Google Térkép előnézet",
+    "noOptions": "Nem található meglévő helyszín",
+    "search": "Helyszín keresése név alapján",
+    "createStepOptional": "Opcionális: Új helyszínt is létrehozhatsz az alábbi koordináták megadásával.",
+    "crud": {
+      "add": "Helyszín hozzáadása",
+      "edit": "Helyszín szerkesztése",
+      "delete": "Helyszín törlése",
+      "open": "Helyszín megnyitása",
+      "create": "Új helyszín létrehozása"
     },
     "fields": {
-      "name": "Név",
+      "name": "Helyszín neve",
       "latitude": "Szélesség",
       "longitude": "Hosszúság"
     }

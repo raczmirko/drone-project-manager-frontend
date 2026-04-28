@@ -76,7 +76,7 @@ export default function OperationImageMetadataUploadCard({
                         startIcon={<UploadFileOutlinedIcon />}
                         disabled={loading}
                     >
-                        Browse images
+                        {t("operations.imageAnalysis.browseImages")}
                     </Button>
 
                     <Button
@@ -84,12 +84,12 @@ export default function OperationImageMetadataUploadCard({
                         onClick={handleUpload}
                         disabled={loading || selectedFiles.length === 0}
                     >
-                        Extract metadata
+                        {t("operations.imageAnalysis.extract")}
                     </Button>
                 </Stack>
 
                 <Typography variant="body2" color="text.secondary">
-                    Selected files: {selectedFiles.length} | Total size: {(totalSizeBytes / 1024 / 1024).toFixed(2)} MB
+                    {t("documents.selectedFiles")}: {selectedFiles.length} | {t("documents.totalSize")}: {(totalSizeBytes / 1024 / 1024).toFixed(2)} MB
                 </Typography>
 
                 {loading ? <LinearProgress /> : null}
