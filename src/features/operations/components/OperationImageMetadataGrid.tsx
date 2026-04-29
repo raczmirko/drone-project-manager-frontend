@@ -188,52 +188,55 @@ export default function OperationImageMetadataGrid({
     );
 
     return (
-        <Box>
+        <Box sx={{ width: '100%', boxSizing: 'border-box' }}>
             {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
-
-            <DataGrid
-                autoHeight
-                rows={rows}
-                columns={columns}
-                getRowId={(row) => row.id}
-                loading={loading}
-                pagination
-                paginationMode="server"
-                rowCount={rowCount}
-                pageSizeOptions={[10, 25, 50, 100]}
-                paginationModel={paginationModel}
-                onPaginationModelChange={onPaginationModelChange}
-                disableRowSelectionOnClick
-                showToolbar
-                initialState={{
-                    columns: {
-                        columnVisibilityModel: {
-                            mimeType: false,
-                            cameraMake: false,
-                            cameraModel: false,
-                            gpsLatitude: false,
-                            gpsLongitude: false,
-                            metadataError: false,
-                            createdAt: false,
-                        },
-                    },
-                }}
-                slotProps={{
-                    toolbar: {
-                        csvOptions: {
-                            fileName: 'operation-image-metadata',
-                            utf8WithBom: true,
-                            allColumns: true,
-                        },
-                    },
-                }}
-                sx={{
-                    border: 0,
-                    '& .MuiDataGrid-columnHeaders': {
-                        backgroundColor: 'grey.100',
-                    },
-                }}
-            />
+            <Box sx={{ width: '100%', overflowX: 'auto', boxSizing: 'border-box' }}>
+                <Box sx={{ minWidth: { xs: '1200px', md: 'auto' }, boxSizing: 'border-box' }}>
+                    <DataGrid
+                        autoHeight
+                        rows={rows}
+                        columns={columns}
+                        getRowId={(row) => row.id}
+                        loading={loading}
+                        pagination
+                        paginationMode="server"
+                        rowCount={rowCount}
+                        pageSizeOptions={[10, 25, 50, 100]}
+                        paginationModel={paginationModel}
+                        onPaginationModelChange={onPaginationModelChange}
+                        disableRowSelectionOnClick
+                        showToolbar
+                        initialState={{
+                            columns: {
+                                columnVisibilityModel: {
+                                    mimeType: false,
+                                    cameraMake: false,
+                                    cameraModel: false,
+                                    gpsLatitude: false,
+                                    gpsLongitude: false,
+                                    metadataError: false,
+                                    createdAt: false,
+                                },
+                            },
+                        }}
+                        slotProps={{
+                            toolbar: {
+                                csvOptions: {
+                                    fileName: 'operation-image-metadata',
+                                    utf8WithBom: true,
+                                    allColumns: true,
+                                },
+                            },
+                        }}
+                        sx={{
+                            border: 0,
+                            '& .MuiDataGrid-columnHeaders': {
+                                backgroundColor: 'grey.100',
+                            },
+                        }}
+                    />
+                </Box>
+            </Box>
         </Box>
     );
 }

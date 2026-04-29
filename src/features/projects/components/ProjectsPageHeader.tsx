@@ -13,7 +13,14 @@ export default function ProjectsPageHeader({ onAdd }: ProjectHeaderProps) {
             direction="row"
             sx={{ mb: 2, alignItems: 'center', justifyContent: 'space-between' }}
         >
-            <Typography variant="h4" component="h1" sx={{ color: 'white' }}>
+            <Typography
+                variant="h4"
+                component="h1"
+                sx={{
+                    color: 'white',
+                    fontSize: { xs: '1.75rem', sm: '2.125rem' }
+                }}
+            >
                 {t('projects.title')}
             </Typography>
 
@@ -21,7 +28,11 @@ export default function ProjectsPageHeader({ onAdd }: ProjectHeaderProps) {
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={onAdd}
-                sx={{ ml: 'auto' }}
+                sx={{
+                    ml: 'auto',
+                    whiteSpace: 'nowrap',
+                    minWidth: { xs: 'auto', sm: '120px' }
+                }}
             >
                 {t('projects.crud.add')}
             </Button>

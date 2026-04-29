@@ -116,8 +116,8 @@ export default function ProjectsPage() {
     };
 
     return (
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', py: 4 }}>
-            <Box sx={{ width: '100%', maxWidth: 1200, px: { xs: 2, md: 0 } }}>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', py: 4, boxSizing: 'border-box' }}>
+            <Box sx={{ width: '100%', maxWidth: 1200, px: { xs: 1, sm: 2, md: 0 }, boxSizing: 'border-box' }}>
                 <ProjectsPageHeader onAdd={() => handleOpenCreateDialog()} />
 
                 {projects.error ? (
@@ -132,26 +132,30 @@ export default function ProjectsPage() {
                     </Alert>
                 ) : null}
 
-                <Paper elevation={0} sx={{ height: 650, width: '100%', borderRadius: 3, overflow: 'hidden' }}>
-                    <DataGrid
-                        rows={projects.rows}
-                        columns={columns}
-                        getRowId={(row) => row.id}
-                        loading={projects.loading}
-                        pagination
-                        paginationMode="server"
-                        rowCount={projects.rowCount}
-                        pageSizeOptions={[5, 10, 20, 50]}
-                        paginationModel={projects.paginationModel}
-                        onPaginationModelChange={projects.setPaginationModel}
-                        disableRowSelectionOnClick
-                        sx={{
-                            border: 0,
-                            '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: 'grey.100',
-                            },
-                        }}
-                    />
+                <Paper elevation={0} sx={{ height: 650, width: '100%', borderRadius: 3, overflow: 'hidden', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+                    <Box sx={{ height: '100%', width: '100%', overflowX: 'auto', boxSizing: 'border-box' }}>
+                        <Box sx={{ height: '100%', minWidth: { xs: '800px', md: 'auto' }, boxSizing: 'border-box' }}>
+                            <DataGrid
+                                rows={projects.rows}
+                                columns={columns}
+                                getRowId={(row) => row.id}
+                                loading={projects.loading}
+                                pagination
+                                paginationMode="server"
+                                rowCount={projects.rowCount}
+                                pageSizeOptions={[5, 10, 20, 50]}
+                                paginationModel={projects.paginationModel}
+                                onPaginationModelChange={projects.setPaginationModel}
+                                disableRowSelectionOnClick
+                                sx={{
+                                    border: 0,
+                                    '& .MuiDataGrid-columnHeaders': {
+                                        backgroundColor: 'grey.100',
+                                    },
+                                }}
+                            />
+                        </Box>
+                    </Box>
                 </Paper>
 
                 <CreateProjectDialog

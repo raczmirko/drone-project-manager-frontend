@@ -53,13 +53,15 @@ export default function ProjectDetailsPage() {
                 display: 'flex',
                 justifyContent: 'center',
                 py: 4,
+                boxSizing: 'border-box'
             }}
         >
             <Box
                 sx={{
                     width: '100%',
                     maxWidth: 1200,
-                    px: { xs: 2, md: 0 },
+                    px: { xs: 1, sm: 2, md: 0 },
+                    boxSizing: 'border-box'
                 }}
             >
                 <Stack spacing={3}>

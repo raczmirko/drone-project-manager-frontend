@@ -1,4 +1,5 @@
 import React from 'react';
+import {Box} from '@mui/material';
 import {Outlet} from 'react-router-dom';
 import {NotificationProvider} from '../providers/NotificationProvider.tsx';
 import PageHeader from "../components/PageHeader.tsx";
@@ -24,11 +25,13 @@ const ProtectedLayout: React.FC<LayoutProps> = ({ logOut, expiryTime }) => {
             {/* PageHeader with Logout */}
             <PageHeader onLogout={logOut} expiryTime={expiryTime}/>
             {/* Main content */}
-            <div style={{ display: 'flex' }}>
-                <main style={{ flexGrow: 1, padding: '64px 20px 20px 20px' }}>
-                    <Outlet />
+            <Box sx={{ display: 'flex', width: '100%' }}>
+                <main style={{ flexGrow: 1, padding: '20px', width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+                    <Box sx={{ mt: 8, width: '100%', flexGrow: 1 }}>
+                        <Outlet />
+                    </Box>
                 </main>
-            </div>
+            </Box>
         </NotificationProvider>
     );
 };

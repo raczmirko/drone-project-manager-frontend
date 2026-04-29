@@ -77,6 +77,9 @@ export default function EditOperationDialogContainer({
                 variant="outlined"
                 startIcon={<EditOutlinedIcon />}
                 onClick={() => setOpen(true)}
+                sx={{
+                    width: { xs: '100%', sm: 'auto' },
+                }}
             >
                 {t('general.actions.edit')}
             </Button>

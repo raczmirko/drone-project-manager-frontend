@@ -152,26 +152,28 @@ export default function OperationsSection({
             >
                 {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
 
-                <Box sx={{ height: 420, width: '100%' }}>
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        getRowId={(row) => row.id}
-                        loading={loading}
-                        pagination
-                        paginationMode="server"
-                        rowCount={rowCount}
-                        pageSizeOptions={[5, 10, 20]}
-                        paginationModel={paginationModel}
-                        onPaginationModelChange={onPaginationModelChange}
-                        disableRowSelectionOnClick
-                        sx={{
-                            border: 0,
-                            '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: 'grey.100',
-                            },
-                        }}
-                    />
+                <Box sx={{ height: 420, width: '100%', overflowX: 'auto', boxSizing: 'border-box' }}>
+                    <Box sx={{ height: '100%', minWidth: { xs: '800px', md: 'auto' }, boxSizing: 'border-box' }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            getRowId={(row) => row.id}
+                            loading={loading}
+                            pagination
+                            paginationMode="server"
+                            rowCount={rowCount}
+                            pageSizeOptions={[5, 10, 20]}
+                            paginationModel={paginationModel}
+                            onPaginationModelChange={onPaginationModelChange}
+                            disableRowSelectionOnClick
+                            sx={{
+                                border: 0,
+                                '& .MuiDataGrid-columnHeaders': {
+                                    backgroundColor: 'grey.100',
+                                },
+                            }}
+                        />
+                    </Box>
                 </Box>
             </SectionCard>
 

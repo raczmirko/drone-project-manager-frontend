@@ -4,15 +4,20 @@ import {
     Box,
     Breadcrumbs,
     Button,
+    IconButton,
     Link,
     Menu,
     MenuItem,
     Toolbar,
     Typography,
+    useMediaQuery,
+    useTheme,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LanguageIcon from "@mui/icons-material/Language";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -24,9 +29,12 @@ interface PageHeaderProps {
 const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
     const { t, i18n } = useTranslation();
     const location = useLocation();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
     const [timeLeft, setTimeLeft] = useState<number>(0);
     const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
+    const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState<null | HTMLElement>(null);
 
     useEffect(() => {
         const getTimeLeft = () => {
@@ -94,6 +102,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
         setLanguageAnchorEl(null);
     };
 
+    const handleOpenMobileMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setMobileMenuAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMobileMenu = () => {
+        setMobileMenuAnchorEl(null);
+    };
+
     const handleChangeLanguage = (lng: "hu" | "en") => {
         void i18n.changeLanguage(lng);
         handleCloseLanguageMenu();
@@ -113,7 +129,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
                     minHeight: 64,
                     display: "flex",
                     alignItems: "center",
-                    gap: 2,
+                    gap: { xs: 1, md: 2 },
+                    px: { xs: 1, sm: 2 },
                 }}
             >
                 {/* Left: session timer */}
@@ -121,7 +138,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
                     sx={{
                         display: "flex",
                         alignItems: "center",
-                        minWidth: 140,
+                        minWidth: { xs: 'auto', md: 140 },
                         gap: 1,
                         flexShrink: 0,
                     }}
@@ -138,75 +155,118 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
                     component="div"
                     sx={{
                         flexGrow: 1,
-                        textAlign: "center",
+                        textAlign: { xs: "left", md: "center" },
                         fontWeight: 700,
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
+                        fontSize: { xs: "1rem", sm: "1.25rem" },
                     }}
                 >
                     Drone Project Manager
                 </Typography>
 
                 {/* Right: language + logout */}
-                <Box
-                    sx={{
-                        minWidth: 220,
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        gap: 1,
-                        flexShrink: 0,
-                    }}
-                >
-                    <Button
-                        color="inherit"
-                        onClick={handleOpenLanguageMenu}
-                        startIcon={<LanguageIcon />}
-                        endIcon={<ArrowDropDownIcon />}
+                {!isMobile ? (
+                    <Box
                         sx={{
-                            textTransform: "none",
-                            minWidth: "auto",
-                            px: 1.5,
-                            borderColor: "rgba(255,255,255,0.28)",
+                            minWidth: 220,
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            alignItems: "center",
+                            gap: 1,
+                            flexShrink: 0,
                         }}
-                        variant="outlined"
                     >
-                        {currentLanguageLabel}
-                    </Button>
+                        <Button
+                            color="inherit"
+                            onClick={handleOpenLanguageMenu}
+                            startIcon={<LanguageIcon />}
+                            endIcon={<ArrowDropDownIcon />}
+                            sx={{
+                                textTransform: "none",
+                                minWidth: "auto",
+                                px: 1.5,
+                                borderColor: "rgba(255,255,255,0.28)",
+                            }}
+                            variant="outlined"
+                        >
+                            {currentLanguageLabel}
+                        </Button>
 
-                    <Menu
-                        anchorEl={languageAnchorEl}
-                        open={languageMenuOpen}
-                        onClose={handleCloseLanguageMenu}
-                        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                        transformOrigin={{ vertical: "top", horizontal: "right" }}
-                    >
-                        <MenuItem onClick={() => handleChangeLanguage("hu")}>
-                            🇭🇺 Magyar
-                        </MenuItem>
-                        <MenuItem onClick={() => handleChangeLanguage("en")}>
-                            🇬🇧 English
-                        </MenuItem>
-                    </Menu>
+                        <Menu
+                            anchorEl={languageAnchorEl}
+                            open={languageMenuOpen}
+                            onClose={handleCloseLanguageMenu}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                            transformOrigin={{ vertical: "top", horizontal: "right" }}
+                        >
+                            <MenuItem onClick={() => handleChangeLanguage("hu")}>
+                                🇭🇺 Magyar
+                            </MenuItem>
+                            <MenuItem onClick={() => handleChangeLanguage("en")}>
+                                🇬🇧 English
+                            </MenuItem>
+                        </Menu>
 
-                    <Button
-                        color="inherit"
-                        onClick={onLogout}
-                        sx={{ textTransform: "none" }}
-                    >
-                        {t("auth.logout")}
-                    </Button>
-                </Box>
+                        <Button
+                            color="inherit"
+                            onClick={onLogout}
+                            sx={{ textTransform: "none" }}
+                        >
+                            {t("auth.logout")}
+                        </Button>
+                    </Box>
+                ) : (
+                    <>
+                        <IconButton color="inherit" onClick={handleOpenMobileMenu}>
+                            <MenuIcon />
+                        </IconButton>
+                        <Menu
+                            anchorEl={mobileMenuAnchorEl}
+                            open={Boolean(mobileMenuAnchorEl)}
+                            onClose={handleCloseMobileMenu}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                            transformOrigin={{ vertical: "top", horizontal: "right" }}
+                        >
+                            <MenuItem onClick={handleOpenLanguageMenu}>
+                                <LanguageIcon sx={{ mr: 1 }} fontSize="small" />
+                                {currentLanguageLabel}
+                            </MenuItem>
+                            <MenuItem onClick={onLogout}>
+                                <LogoutIcon sx={{ mr: 1 }} fontSize="small" />
+                                {t("auth.logout")}
+                            </MenuItem>
+                        </Menu>
+                        <Menu
+                            anchorEl={languageAnchorEl}
+                            open={languageMenuOpen}
+                            onClose={handleCloseLanguageMenu}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                            transformOrigin={{ vertical: "top", horizontal: "right" }}
+                        >
+                            <MenuItem onClick={() => handleChangeLanguage("hu")}>
+                                🇭🇺 Magyar
+                            </MenuItem>
+                            <MenuItem onClick={() => handleChangeLanguage("en")}>
+                                🇬🇧 English
+                            </MenuItem>
+                        </Menu>
+                    </>
+                )}
             </Toolbar>
 
             {/* Bottom row: breadcrumbs */}
             <Box
                 sx={{
-                    px: 3,
+                    px: { xs: 1, sm: 2, md: 3 },
                     py: 0.75,
                     borderTop: "1px solid rgba(255,255,255,0.14)",
                     backgroundColor: "rgba(0,0,0,0.08)",
+                    overflowX: 'auto',
+                    '&::-webkit-scrollbar': { display: 'none' },
+                    msOverflowStyle: 'none',
+                    scrollbarWidth: 'none',
                 }}
             >
                 <Breadcrumbs
