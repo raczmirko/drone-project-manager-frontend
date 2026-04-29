@@ -1,4 +1,10 @@
-import type {CreateProjectRequest, PageResponse, Project, ProjectDocument,} from '../types/projectTypes';
+import type {
+    CreateProjectRequest,
+    PageResponse,
+    Project,
+    ProjectDocument,
+    UpdateProjectRequest,
+} from '../types/projectTypes';
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -68,6 +74,13 @@ export const projectApi = {
     createProject(payload: CreateProjectRequest) {
         return apiFetch<void>('/projects', {
             method: 'POST',
+            body: JSON.stringify(payload),
+        });
+    },
+
+    updateProject(code: string, payload: UpdateProjectRequest) {
+        return apiFetch<void>(`/projects/${code}`, {
+            method: 'PUT',
             body: JSON.stringify(payload),
         });
     },

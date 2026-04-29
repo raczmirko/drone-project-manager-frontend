@@ -65,3 +65,31 @@ export type CreateProjectDialogProps = {
         field: 'startDate' | 'endDate'
     ) => (value: Dayjs | null) => void;
 };
+
+export type ProjectFormData = {
+    code: string;
+    name: string;
+    status: string;
+    description: string;
+    objective: string;
+    startDate: string | null;
+    endDate: string | null;
+};
+
+export type UpdateProjectRequest = Omit<ProjectFormData, 'code'>;
+
+export type ProjectDialogProps = {
+    open: boolean;
+    mode: 'create' | 'edit';
+    formData: ProjectFormData;
+    loading: boolean;
+    codeReadOnly?: boolean;
+    onClose: () => void;
+    onSubmit: () => void;
+    onChange: (
+        field: ProjectTextField
+    ) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onDateChange: (
+        field: 'startDate' | 'endDate'
+    ) => (value: Dayjs | null) => void;
+};

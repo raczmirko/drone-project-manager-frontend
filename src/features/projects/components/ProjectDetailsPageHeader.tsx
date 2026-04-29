@@ -1,13 +1,19 @@
 import { Button, Stack, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useTranslation } from 'react-i18next';
+import React from "react";
 
 type ProjectHeaderProps = {
     onDelete: () => void;
+    editAction?: React.ReactNode;
 };
 
-export default function ProjectDetailsPageHeader({ onDelete }: ProjectHeaderProps) {
+export default function ProjectDetailsPageHeader({
+                                                     onDelete,
+                                                     editAction,
+                                                 }: ProjectHeaderProps) {
     const { t } = useTranslation();
+
     return (
         <Stack
             direction="row"
@@ -21,15 +27,18 @@ export default function ProjectDetailsPageHeader({ onDelete }: ProjectHeaderProp
                 {t('projects.details.title')}
             </Typography>
 
-            <Button
-                variant="contained"
-                color="error"
-                startIcon={<DeleteIcon />}
-                onClick={onDelete}
-                sx={{ ml: 'auto' }}
-            >
-                {t('general.actions.delete')}
-            </Button>
+            <Stack direction="row" spacing={1}>
+                {editAction}
+
+                <Button
+                    variant="contained"
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    onClick={onDelete}
+                >
+                    {t('general.actions.delete')}
+                </Button>
+            </Stack>
         </Stack>
     );
 }

@@ -1,17 +1,19 @@
-import { useState } from 'react';
-import { Alert, Box, Stack } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useCallback, useState} from 'react';
+import {Alert, Box, Stack} from '@mui/material';
+import {useNavigate, useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import ConfirmationDialog from '../components/dialogs/ConfirmationDialog.tsx';
-import { projectApi } from '../features/projects/api/projectApi';
+import {projectApi} from '../features/projects/api/projectApi';
 import DocumentsSection from '../features/projects/components/DocumentsSection';
 import OperationsSection from '../features/projects/components/OperationsSection';
 import ProjectDetailsPageHeader from '../features/projects/components/ProjectDetailsPageHeader.tsx';
 import ProjectSummaryCard from '../features/projects/components/ProjectSummaryCard';
-import { useProjectDetails } from '../features/projects/hooks/useProjectDetails';
-import { useProjectDocuments } from '../features/projects/hooks/useProjectDocuments';
-import { useLocations } from '../features/projects/hooks/useLocations';
-import { useProjectOperations } from '../features/projects/hooks/useProjectOperations';
+import {useProjectDetails} from '../features/projects/hooks/useProjectDetails';
+import {useProjectDocuments} from '../features/projects/hooks/useProjectDocuments';
+import {useLocations} from '../features/projects/hooks/useLocations';
+import {useProjectOperations} from '../features/projects/hooks/useProjectOperations';
+import EditProjectDialogContainer from '../features/projects/components/EditProjectDialogContainer.tsx';
+import type {UpdateProjectRequest} from "../features/projects/types/projectTypes.ts";
 
 export default function ProjectDetailsPage() {
     const { id: code = '' } = useParams<{ id: string }>();
@@ -26,6 +28,9 @@ export default function ProjectDetailsPage() {
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [deleteError, setDeleteError] = useState<string | null>(null);
+
+    const [updateLoading, setUpdateLoading] = useState(false);
+    const [updateError, setUpdateError] = useState<string | null>(null);
 
     const handleDeleteProject = async () => {
         if (!code) {
@@ -46,6 +51,25 @@ export default function ProjectDetailsPage() {
         }
     };
 
+    const handleUpdateProject = useCallback(
+        async (projectCode: string, payload: UpdateProjectRequest) => {
+            setUpdateLoading(true);
+            setUpdateError(null);
+
+            try {
+                await projectApi.updateProject(projectCode, payload);
+                await project.refetch();
+                return true;
+            } catch (err) {
+                setUpdateError(err instanceof Error ? err.message : t('general.errors.unknown'));
+                return false;
+            } finally {
+                setUpdateLoading(false);
+            }
+        },
+        [project, t],
+    );
+
     return (
         <Box
             sx={{
@@ -53,7 +77,7 @@ export default function ProjectDetailsPage() {
                 display: 'flex',
                 justifyContent: 'center',
                 py: 4,
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
             }}
         >
             <Box
@@ -61,13 +85,26 @@ export default function ProjectDetailsPage() {
                     width: '100%',
                     maxWidth: 1200,
                     px: { xs: 1, sm: 2, md: 0 },
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
                 }}
             >
                 <Stack spacing={3}>
-                    <ProjectDetailsPageHeader onDelete={() => setOpenConfirmDialog(true)} />
+                    <ProjectDetailsPageHeader
+                        onDelete={() => setOpenConfirmDialog(true)}
+                        editAction={
+                            project.data ? (
+                                <EditProjectDialogContainer
+                                    project={project.data}
+                                    updateLoading={updateLoading}
+                                    updateError={updateError}
+                                    onUpdateProject={handleUpdateProject}
+                                />
+                            ) : null
+                        }
+                    />
 
                     {deleteError ? <Alert severity="error">{deleteError}</Alert> : null}
+                    {updateError ? <Alert severity="error">{updateError}</Alert> : null}
 
                     <ProjectSummaryCard
                         project={project.data}
