@@ -44,4 +44,39 @@ export type OperationFlightAndImageryAnalysisSectionProps = {
     onPaginationModelChange: (model: GridPaginationModel) => void;
 
     metadataInitialized: boolean;
+
+    dashboardData: OperationImageMetadataDashboardResponse | null;
+    dashboardLoading: boolean;
+    dashboardError: string | null;
+};
+
+export type AltitudeProfilePoint = {
+    sequence: number;
+    capturedAt: string | null;
+    altitude: number;
+};
+
+export type AltitudeDistributionBucket = {
+    bucketLabel: string;
+    count: number;
+};
+
+export type DistanceAltitudePoint = {
+    distanceMeters: number;
+    altitude: number;
+};
+
+export type GroundTrackPoint = {
+    sequence: number;
+    capturedAt: string | null;
+    latitude: number;
+    longitude: number;
+    altitude: number | null;
+};
+
+export type OperationImageMetadataDashboardResponse = {
+    altitudeProfile: AltitudeProfilePoint[];
+    altitudeDistribution: AltitudeDistributionBucket[];
+    distanceAltitudeProfile: DistanceAltitudePoint[];
+    groundTrack: GroundTrackPoint[];
 };

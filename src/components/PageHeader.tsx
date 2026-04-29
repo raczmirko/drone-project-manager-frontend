@@ -60,7 +60,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
             const operationCode = matchOperationDetails[2];
 
             return [
-                { label: t('breadcrumbs.projects', 'Projects'), to: '/projects' },
+                { label: t('breadcrumbs.projects'), to: '/projects' },
                 { label: projectCode, to: `/projects/${projectCode}` },
                 { label: operationCode, to: `/projects/${projectCode}/operations/${operationCode}` },
             ];
@@ -195,7 +195,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ onLogout, expiryTime }) => {
                         onClick={onLogout}
                         sx={{ textTransform: "none" }}
                     >
-                        {t("auth.logout", "Logout")}
+                        {t("auth.logout")}
                     </Button>
                 </Box>
             </Toolbar>

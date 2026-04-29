@@ -36,7 +36,7 @@ export default function OperationSummaryCard({
                     <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6">
-                                {t('operations.details.mandatorySectionTitle', 'Mandatory data')}
+                                {t('operations.details.mandatorySectionTitle')}
                             </Typography>
 
                             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
@@ -66,7 +66,7 @@ export default function OperationSummaryCard({
                     <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
                         <Stack spacing={2}>
                             <Typography variant="h6">
-                                {t('operations.details.descriptiveSectionTitle', 'Descriptive data')}
+                                {t('operations.details.descriptiveSectionTitle')}
                             </Typography>
 
                             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
@@ -128,11 +128,11 @@ export default function OperationSummaryCard({
                                     value={operation.location?.name ?? ''}
                                 />
                                 <ReadOnlyField
-                                    label={t('operations.fields.latitude', 'Latitude')}
+                                    label={t('operations.fields.latitude')}
                                     value={operation.location?.latitude ?? ''}
                                 />
                                 <ReadOnlyField
-                                    label={t('operations.fields.longitude', 'Longitude')}
+                                    label={t('operations.fields.longitude')}
                                     value={operation.location?.longitude ?? ''}
                                 />
                             </Stack>
@@ -140,7 +140,7 @@ export default function OperationSummaryCard({
                             <LocationMapPreview
                                 latitude={operation.location?.latitude ?? ''}
                                 longitude={operation.location?.longitude ?? ''}
-                                label={t('operations.fields.locationPreview', 'Location preview')}
+                                label={t('operations.fields.locationPreview')}
                             />
                         </Stack>
                     </Box>

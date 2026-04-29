@@ -21,7 +21,10 @@ import type {
 import type {GridPaginationModel} from "@mui/x-data-grid";
 import OperationFlightAndImageryAnalysisSection
     from "../features/operations/components/OperationFlightAndImageryAnalysisSection.tsx";
-import type {OperationFlightPathPoint} from "../features/operations/types/operationAnalysisTypes.ts";
+import type {
+    OperationFlightPathPoint,
+    OperationImageMetadataDashboardResponse
+} from "../features/operations/types/operationAnalysisTypes.ts";
 
 /**
  * Displays the details page for a specific operation within a project.
@@ -62,6 +65,31 @@ export default function OperationDetailsPage() {
 
     // Keep track of whether the metadata grid has been initialized to auto-switch tabs if there are images, otherwise stay on first tab
     const [metadataInitialized, setMetadataInitialized] = useState(false);
+
+    const [dashboardLoading, setDashboardLoading] = useState(false);
+    const [dashboardError, setDashboardError] = useState<string | null>(null);
+    const [dashboardData, setDashboardData] = useState<OperationImageMetadataDashboardResponse | null>(null);
+
+    /**
+     * Loads the dashboard data for the current operation.
+     */
+    const loadDashboard = useCallback(async () => {
+        if (!operationCode) {
+            return;
+        }
+
+        setDashboardLoading(true);
+        setDashboardError(null);
+
+        try {
+            const data = await operationApi.getImageMetadataDashboard(operationCode);
+            setDashboardData(data);
+        } catch (error) {
+            setDashboardError(error instanceof Error ? error.message : t('general.errors.unknown'));
+        } finally {
+            setDashboardLoading(false);
+        }
+    }, [operationCode, t]);
 
     /**
      * Loads the flight path for the current operation.
@@ -164,6 +192,7 @@ export default function OperationDetailsPage() {
                 loadMetadataPage(firstPageModel),
                 loadFlightPath(),
                 loadAnalysis(),
+                loadDashboard(),
             ]);
 
         } catch (error) {
@@ -222,6 +251,10 @@ export default function OperationDetailsPage() {
     useEffect(() => {
         void loadFlightPath();
     }, [loadFlightPath]);
+
+    useEffect(() => {
+        void loadDashboard();
+    }, [loadDashboard]);
 
     useEffect(() => {
         if (!operationCode) {
@@ -331,6 +364,9 @@ export default function OperationDetailsPage() {
                         paginationModel={paginationModel}
                         onPaginationModelChange={setPaginationModel}
                         metadataInitialized={metadataInitialized}
+                        dashboardData={dashboardData}
+                        dashboardLoading={dashboardLoading}
+                        dashboardError={dashboardError}
                     />
 
                     <DocumentsSection

@@ -7,6 +7,7 @@ import OperationImageMetadataGrid from './OperationImageMetadataGrid.tsx';
 import OperationFlightAnalysisCard from './OperationFlightAnalysisCard.tsx';
 import OperationFlightPathMap from './OperationFlightPathMap.tsx';
 import type { OperationFlightAndImageryAnalysisSectionProps } from '../types/operationAnalysisTypes.ts';
+import OperationImageMetadataDashboard from "./OperationImageMetadataDashboard.tsx";
 
 type TabPanelProps = {
     children?: React.ReactNode;
@@ -56,6 +57,9 @@ export default function OperationFlightAndImageryAnalysisSection({
                                                                      paginationModel,
                                                                      onPaginationModelChange,
                                                                      metadataInitialized,
+                                                                     dashboardData,
+                                                                     dashboardLoading,
+                                                                     dashboardError,
                                                                  }: OperationFlightAndImageryAnalysisSectionProps) {
     const { t } = useTranslation();
     const [tabValue, setTabValue] = useState(0);
@@ -130,9 +134,11 @@ export default function OperationFlightAndImageryAnalysisSection({
             </TabPanel>
 
             <TabPanel value={tabValue} index={2}>
-                <Box>
-                    Dashboard content goes here.
-                </Box>
+                <OperationImageMetadataDashboard
+                    data={dashboardData}
+                    loading={dashboardLoading}
+                    error={dashboardError}
+                />
             </TabPanel>
 
             <TabPanel value={tabValue} index={3}>

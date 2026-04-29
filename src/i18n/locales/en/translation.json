@@ -40,6 +40,12 @@
       "unknown": "Unknown error"
     }
   },
+  "auth": {
+    "logout": "Logout"
+  },
+  "breadcrumbs": {
+    "projects": "Projects"
+  },
   "signIn": {
     "title": "Sign In",
     "username": "Username",
@@ -113,7 +119,9 @@
       "title": "Operation details",
       "loading": "Loading operation...",
       "notFound": "Operation not found.",
-      "deleteMessage": "Are you sure you want to delete this operation? This action cannot be undone."
+      "deleteMessage": "Are you sure you want to delete this operation? This action cannot be undone.",
+      "mandatorySectionTitle": "Mandatory data",
+      "descriptiveSectionTitle": "Descriptive data"
     },
     "location": {
       "chooseSource": "Choose location source",
@@ -142,7 +150,10 @@
       "description": "Description",
       "type": "Type",
       "status": "Status",
-      "date": "Date"
+      "date": "Date",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "locationPreview": "Location preview"
     },
     "validations": {
       "kpIndexRange": "Value must be between 0 and 9"
@@ -170,6 +181,18 @@
         "flightAnalysis": "Flight analysis",
         "dashboard": "Dashboard",
         "metadata": "Metadata"
+      },
+      "dashboard": {
+        "noData": "No dashboard data is available yet.",
+        "altitudeProfile": "Altitude profile over capture order",
+        "captureOrder": "Capture order",
+        "altitudeMeters": "Altitude (m)",
+        "altitudeDistribution": "Altitude distribution histogram",
+        "imageCount": "Image count",
+        "distanceAltitude": "Distance along flight path vs altitude",
+        "distanceMeters": "Distance (m)",
+        "groundTrack": "Ground track scatter",
+        "groundTrackPoints": "Ground track points"
       }
     },
     "metadata": {
@@ -179,6 +202,8 @@
       "dimensions": "Dimensions",
       "gps": "GPS",
       "altitude": "Altitude",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
       "camera": "Camera",
       "mimeType": "MIME type",
       "imageWidth": "Image width",

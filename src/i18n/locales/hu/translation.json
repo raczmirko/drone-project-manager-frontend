@@ -40,6 +40,12 @@
       "unknown": "Ismeretlen hiba"
     }
   },
+  "auth": {
+    "logout": "Kijelentkezés"
+  },
+  "breadcrumbs": {
+    "projects": "Projektek"
+  },
   "signIn": {
     "title": "Bejelentkezés",
     "username": "Felhasználónév",
@@ -113,7 +119,9 @@
       "title": "Művelet részletei",
       "loading": "Művelet betöltése...",
       "notFound": "A művelet nem található.",
-      "deleteMessage": "Biztosan törölni szeretnéd ezt a műveletet? Ez a művelet nem vonható vissza."
+      "deleteMessage": "Biztosan törölni szeretnéd ezt a műveletet? Ez a művelet nem vonható vissza.",
+      "mandatorySectionTitle": "Kötelező adatok",
+      "descriptiveSectionTitle": "Leíró adatok"
     },
     "location": {
       "chooseSource": "Helyszínforrás kiválasztása",
@@ -142,7 +150,10 @@
       "description": "Leírás",
       "type": "Típus",
       "status": "Állapot",
-      "date": "Dátum"
+      "date": "Dátum",
+      "latitude": "Szélesség",
+      "longitude": "Hosszúság",
+      "locationPreview": "Helyszín előnézete"
     },
     "validations": {
       "kpIndexRange": "Az értéknek 0 és 9 között kell lennie"
@@ -170,6 +181,18 @@
         "flightAnalysis": "Képelemzés",
         "dashboard": "Kimutatások",
         "metadata": "Metaadatok"
+      },
+      "dashboard": {
+        "noData": "Még nem állnak rendelkezésre adatok a kimutatáshoz.",
+        "altitudeProfile": "Magassági profil a felvételi sorrend függvényében",
+        "captureOrder": "Felvételi sorrend",
+        "altitudeMeters": "Magasság (m)",
+        "altitudeDistribution": "Magassági eloszlás hisztogram",
+        "imageCount": "Képek száma",
+        "distanceAltitude": "Megtett távolság vs magasság",
+        "distanceMeters": "Távolság (m)",
+        "groundTrack": "Vízszintes vetület szórásdiagram",
+        "groundTrackPoints": "Útvonalpontok"
       }
     },
     "metadata": {
@@ -179,6 +202,8 @@
       "dimensions": "Méretek",
       "gps": "GPS",
       "altitude": "Magasság",
+      "latitude": "Szélesség",
+      "longitude": "Hosszúság",
       "camera": "Kamera",
       "mimeType": "MIME típus",
       "imageWidth": "Képszélesség",

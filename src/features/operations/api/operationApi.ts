@@ -10,7 +10,10 @@ import type {
     OperationImageMetadataExtractionResponse,
     OperationImageMetadataPageResponse,
 } from '../types/operationImageMetadataTypes.ts';
-import type {OperationFlightPathPoint} from "../types/operationAnalysisTypes.ts";
+import type {
+    OperationFlightPathPoint,
+    OperationImageMetadataDashboardResponse
+} from "../types/operationAnalysisTypes.ts";
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -171,6 +174,12 @@ export const operationApi = {
     getFlightPath(operationCode: string) {
         return apiFetch<OperationFlightPathPoint[]>(
             `/operations/${operationCode}/image-metadata/flight-path`,
+        );
+    },
+
+    getImageMetadataDashboard(operationCode: string) {
+        return apiFetch<OperationImageMetadataDashboardResponse>(
+            `/operations/${operationCode}/image-metadata/dashboard`,
         );
     },
 

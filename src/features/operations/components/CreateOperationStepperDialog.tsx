@@ -412,7 +412,7 @@ export default function CreateOperationStepperDialog({
                             <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
                                 <Stack spacing={2}>
                                     <Typography variant="h6">
-                                        {t('operations.details.mandatorySectionTitle', 'Mandatory data')}
+                                        {t('operations.details.mandatorySectionTitle')}
                                     </Typography>
 
                                     <Box
@@ -471,7 +471,7 @@ export default function CreateOperationStepperDialog({
                             <Paper variant="outlined" sx={{ p: 3, borderRadius: 3 }}>
                                 <Stack spacing={2}>
                                     <Typography variant="h6">
-                                        {t('operations.details.descriptiveSectionTitle', 'Descriptive data')}
+                                        {t('operations.details.descriptiveSectionTitle')}
                                     </Typography>
 
                                     <Box
