@@ -176,6 +176,8 @@
       "extract": "Metaadatok kinyerése",
       "noFlightPath": "Nem található repülési útvonal.",
       "flightPathMap": "Felvételezési útvonal",
+      "purgeMetadata": "Minden metaadat törlése",
+      "noMetadata": "Nincs elérhető metaadat ehhez a művelethez.",
       "tabs": {
         "upload": "Képfeltöltés",
         "flightAnalysis": "Képelemzés",

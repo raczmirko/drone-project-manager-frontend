@@ -25,6 +25,7 @@ import type {
     OperationFlightPathPoint,
     OperationImageMetadataDashboardResponse
 } from "../features/operations/types/operationAnalysisTypes.ts";
+import {useNotification} from "../hooks/useNotification";
 
 /**
  * Displays the details page for a specific operation within a project.
@@ -35,6 +36,7 @@ export default function OperationDetailsPage() {
     const { projectCode = '', operationCode = '' } = useParams<{ projectCode: string; operationCode: string; }>();
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const { showNotification } = useNotification();
 
     const operation = useOperationDetails(projectCode, operationCode);
     const documents = useOperationDocuments(projectCode, operationCode);
@@ -298,6 +300,21 @@ export default function OperationDetailsPage() {
         };
     }, [operationCode, t]);
 
+
+
+    const handlePurgeMetadata = async () => {
+        if (!operationCode) {
+            return;
+        }
+
+        try {
+            await operationApi.purgeImageMetadata(operationCode);
+            await operation.refetch();
+        } catch {
+            showNotification("error", t("general.errors.unexpected"));
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -356,6 +373,7 @@ export default function OperationDetailsPage() {
                         analysisLoading={analysisLoading}
                         analysisError={analysisError}
                         onAnalyze={handleAnalyze}
+                        onPurgeMetadata={handlePurgeMetadata}
                         flightPathRows={flightPathRows}
                         flightPathLoading={flightPathLoading}
                         flightPathError={flightPathError}

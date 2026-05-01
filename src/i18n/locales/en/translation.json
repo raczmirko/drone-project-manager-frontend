@@ -176,6 +176,8 @@
       "extract": "Extract metadata",
       "noFlightPath": "No GPS coordinates are available for the map.",
       "flightPathMap": "Aerial recording path map",
+      "purgeMetadata": "Purge metadata",
+      "noMetadata": "There is no available metadata for this operation.",
       "tabs": {
         "upload": "Data upload",
         "flightAnalysis": "Flight analysis",

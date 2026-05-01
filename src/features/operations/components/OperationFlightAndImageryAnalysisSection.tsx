@@ -47,6 +47,7 @@ export default function OperationFlightAndImageryAnalysisSection({
                                                                      analysisLoading,
                                                                      analysisError,
                                                                      onAnalyze,
+                                                                     onPurgeMetadata,
                                                                      flightPathRows,
                                                                      flightPathLoading,
                                                                      flightPathError,
@@ -123,6 +124,7 @@ export default function OperationFlightAndImageryAnalysisSection({
                         loading={analysisLoading}
                         error={analysisError}
                         onAnalyze={onAnalyze}
+                        onPurgeMetadata={onPurgeMetadata}
                     />
 
                     <OperationFlightPathMap

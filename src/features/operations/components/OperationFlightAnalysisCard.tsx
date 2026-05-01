@@ -12,6 +12,7 @@ export default function OperationFlightAnalysisCard({
                                                         loading,
                                                         error,
                                                         onAnalyze,
+                                                        onPurgeMetadata,
                                                     }: OperationFlightAnalysisCardProps) {
     const { t } = useTranslation();
     return (
@@ -23,16 +24,26 @@ export default function OperationFlightAnalysisCard({
                     sx={{ justifyContent: 'space-between', alignItems: { sm: 'center' } }}
                 >
                     <Typography variant="h6">
-                        {t("operations.imageAnalysis.generatedDashboard")}
+                        {t('operations.imageAnalysis.generatedDashboard')}
                     </Typography>
 
-                    <Button
-                        variant="contained"
-                        onClick={onAnalyze}
-                        disabled={loading}
-                    >
-                        {t("operations.imageAnalysis.updateDashboard")}
-                    </Button>
+                    <Stack direction="column" spacing={1}>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={onPurgeMetadata}
+                        >
+                            {t('operations.imageAnalysis.purgeMetadata')}
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            onClick={onAnalyze}
+                            disabled={loading}
+                        >
+                            {t('operations.imageAnalysis.updateDashboard')}
+                        </Button>
+                    </Stack>
                 </Stack>
 
                 {loading ? (

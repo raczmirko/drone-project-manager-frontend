@@ -183,6 +183,12 @@ export const operationApi = {
         );
     },
 
+    purgeImageMetadata(operationCode: string) {
+        return apiFetch<void>(`/operations/${operationCode}/image-metadata/purge`, {
+            method: 'DELETE',
+        });
+    },
+
     // -------------- LOCATIONS -----------------
 
     getLocations(page = 0, size = 50) {
