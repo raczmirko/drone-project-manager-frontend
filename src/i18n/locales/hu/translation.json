@@ -178,6 +178,8 @@
       "flightPathMap": "Felvételezési útvonal",
       "purgeMetadata": "Minden metaadat törlése",
       "noMetadata": "Nincs elérhető metaadat ehhez a művelethez.",
+      "purgeTitle": "Minden metaadat törlése",
+      "purgeInfo": "Ez a művelet minden kinyert metaadatot véglegesen törölni fog a drónművelet kapcsán.",
       "tabs": {
         "upload": "Képfeltöltés",
         "flightAnalysis": "Képelemzés",

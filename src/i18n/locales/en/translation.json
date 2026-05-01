@@ -178,6 +178,8 @@
       "flightPathMap": "Aerial recording path map",
       "purgeMetadata": "Purge metadata",
       "noMetadata": "There is no available metadata for this operation.",
+      "purgeTitle": "Delete all metadata",
+      "purgeInfo": "This action will delete all metadata associated with this operation. This cannot be undone.",
       "tabs": {
         "upload": "Data upload",
         "flightAnalysis": "Flight analysis",

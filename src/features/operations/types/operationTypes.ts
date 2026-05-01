@@ -64,5 +64,5 @@ export type OperationFlightAnalysisCardProps = {
     loading: boolean;
     error: string | null;
     onAnalyze: () => Promise<void>;
-    onPurgeMetadata: () => Promise<void>;
+    onPurgeMetadata: () => void;
 };

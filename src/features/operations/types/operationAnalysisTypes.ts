@@ -32,7 +32,7 @@ export type OperationFlightAndImageryAnalysisSectionProps = {
     analysisError: string | null;
     onAnalyze: () => Promise<void>;
 
-    onPurgeMetadata: () => Promise<void>;
+    onPurgeMetadata: () => void;
 
     flightPathRows: OperationFlightPathPoint[];
     flightPathLoading: boolean;

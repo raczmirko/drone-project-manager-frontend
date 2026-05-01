@@ -72,6 +72,10 @@ export default function OperationDetailsPage() {
     const [dashboardError, setDashboardError] = useState<string | null>(null);
     const [dashboardData, setDashboardData] = useState<OperationImageMetadataDashboardResponse | null>(null);
 
+    const [openPurgeConfirmDialog, setOpenPurgeConfirmDialog] = useState(false);
+    const [purgeLoading, setPurgeLoading] = useState(false);
+    const [purgeError, setPurgeError] = useState<string | null>(null);
+
     /**
      * Loads the dashboard data for the current operation.
      */
@@ -242,6 +246,49 @@ export default function OperationDetailsPage() {
         [operations, operation],
     );
 
+    /**
+     * Opens the confirmation dialog for purging metadata.
+     */
+    const handleOpenPurgeMetadataDialog = () => {
+        setPurgeError(null);
+        setOpenPurgeConfirmDialog(true);
+    };
+
+    /**
+     * Confirms the purging of metadata.
+     */
+    const handleConfirmPurgeMetadata = async () => {
+        if (!operationCode) {
+            return;
+        }
+
+        setPurgeLoading(true);
+        setPurgeError(null);
+
+        try {
+            await operationApi.purgeImageMetadata(operationCode);
+
+            setDashboardData(null);
+            setAnalysis(null);
+            setRows([]);
+            setRowCount(0);
+            setFlightPathRows([]);
+
+            await operation.refetch();
+
+            showNotification('success', t('operations.imageAnalysis.purgeSuccess'));
+        } catch (error) {
+            const message =
+                error instanceof Error ? error.message : t('general.errors.unexpected');
+
+            setPurgeError(message);
+            showNotification('error', message);
+        } finally {
+            setPurgeLoading(false);
+            setOpenPurgeConfirmDialog(false);
+        }
+    };
+
     const handleAnalyze = useCallback(async () => {
         await loadAnalysis();
     }, [loadAnalysis]);
@@ -300,21 +347,6 @@ export default function OperationDetailsPage() {
         };
     }, [operationCode, t]);
 
-
-
-    const handlePurgeMetadata = async () => {
-        if (!operationCode) {
-            return;
-        }
-
-        try {
-            await operationApi.purgeImageMetadata(operationCode);
-            await operation.refetch();
-        } catch {
-            showNotification("error", t("general.errors.unexpected"));
-        }
-    };
-
     return (
         <Box
             sx={{
@@ -357,6 +389,7 @@ export default function OperationDetailsPage() {
                     />
 
                     {deleteError ? <Alert severity="error">{deleteError}</Alert> : null}
+                    {purgeError ? <Alert severity="error">{purgeError}</Alert> : null}
 
                     <OperationSummaryCard
                         operation={operation.data}
@@ -373,7 +406,7 @@ export default function OperationDetailsPage() {
                         analysisLoading={analysisLoading}
                         analysisError={analysisError}
                         onAnalyze={handleAnalyze}
-                        onPurgeMetadata={handlePurgeMetadata}
+                        onPurgeMetadata={handleOpenPurgeMetadataDialog}
                         flightPathRows={flightPathRows}
                         flightPathLoading={flightPathLoading}
                         flightPathError={flightPathError}
@@ -414,6 +447,18 @@ export default function OperationDetailsPage() {
                     onCancel={() => setOpenConfirmDialog(false)}
                     confirmLabel={
                         deleteLoading ? t('general.actions.deleting') : t('general.actions.delete')
+                    }
+                    cancelLabel={t('general.actions.cancel')}
+                />
+
+                <ConfirmationDialog
+                    open={openPurgeConfirmDialog}
+                    title={t('operations.imageAnalysis.purgeTitle')}
+                    message={t('operations.imageAnalysis.purgeInfo')}
+                    onConfirm={handleConfirmPurgeMetadata}
+                    onCancel={() => setOpenPurgeConfirmDialog(false)}
+                    confirmLabel={
+                        purgeLoading ? t('general.actions.deleting') : t('general.actions.delete')
                     }
                     cancelLabel={t('general.actions.cancel')}
                 />
