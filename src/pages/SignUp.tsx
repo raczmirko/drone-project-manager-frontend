@@ -185,7 +185,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
                         textAlign: "center",
                     }}
                 >
-                    <Avatar sx={{ m: 1, bgcolor: "secondary.main", mx: "auto" }}>
+                    <Avatar sx={{ m: 1, bgcolor: "secondary.main", color: "white", mx: "auto" }}>
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5" sx={{ mb: 3, color: "black" }}>
