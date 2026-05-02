@@ -276,7 +276,7 @@ export default function OperationDetailsPage() {
 
             await operation.refetch();
 
-            showNotification('success', t('operations.imageAnalysis.purgeSuccess'));
+            showNotification('success', t('general.actions.successfulOperation'));
         } catch (error) {
             const message =
                 error instanceof Error ? error.message : t('general.errors.unexpected');

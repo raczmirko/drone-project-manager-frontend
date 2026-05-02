@@ -23,7 +23,8 @@
       "reset": "Visszaállítás",
       "edit": "Szerkesztés",
       "skip": "Kihagyás",
-      "createAndUse": "Létrehozás és használat"
+      "createAndUse": "Létrehozás és használat",
+      "successfulOperation": "Sikeres művelet."
     },
     "feedback": {
       "copiedToClipboard": "Sikeresen a vágólapra másolva.",

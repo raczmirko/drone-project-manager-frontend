@@ -23,7 +23,8 @@
       "reset": "Reset",
       "edit": "Edit",
       "skip": "Skip",
-      "createAndUse": "Create and use"
+      "createAndUse": "Create and use",
+      "successfulOperation": "Successful operation."
     },
     "feedback": {
       "copiedToClipboard": "Successfully copied to clipboard.",
