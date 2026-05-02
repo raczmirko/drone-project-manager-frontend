@@ -147,6 +147,7 @@ export default function ProjectsPage() {
                                 paginationModel={projects.paginationModel}
                                 onPaginationModelChange={projects.setPaginationModel}
                                 disableRowSelectionOnClick
+                                showToolbar
                                 sx={{
                                     border: 0,
                                     '& .MuiDataGrid-columnHeaders': {

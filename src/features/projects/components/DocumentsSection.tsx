@@ -207,6 +207,7 @@ export default function DocumentsSection({
                             paginationModel={paginationModel}
                             onPaginationModelChange={onPaginationModelChange}
                             disableRowSelectionOnClick
+                            showToolbar
                             sx={{
                                 border: 0,
                                 '& .MuiDataGrid-columnHeaders': {
