@@ -38,7 +38,9 @@
       "notImplemented": "This feature is not implemented yet.",
       "serviceUnavailable": "Service is currently unavailable. Please try again later.",
       "unknown": "Unknown error"
-    }
+    },
+    "createdAt": "Created on",
+    "updatedAt": "Last updated on"
   },
   "auth": {
     "logout": "Logout"

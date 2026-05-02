@@ -38,7 +38,9 @@
       "notImplemented": "Ez a funkció még nem érhető el.",
       "serviceUnavailable": "A szolgáltatás jelenleg nem elérhető. Kérjük, próbáld újra később.",
       "unknown": "Ismeretlen hiba"
-    }
+    },
+    "createdAt": "Létrehozás dátuma",
+    "updatedAt": "Utolsó frissítés dátuma"
   },
   "auth": {
     "logout": "Kijelentkezés"

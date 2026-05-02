@@ -1,9 +1,9 @@
-import { Alert, Stack, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import {Alert, Stack, Typography} from '@mui/material';
+import {useTranslation} from 'react-i18next';
 import ReadOnlyField from '../../../components/ReadOnlyField.tsx';
 import SectionCard from './SectionCard';
-import type { Project } from '../types/projectTypes';
-import { formatDate } from '../../../utils/formatters.ts';
+import type {Project} from '../types/projectTypes';
+import {formatDate, formatDateTime} from '../../../utils/formatters.ts';
 
 type ProjectSummaryCardProps = {
     project: Project | null;
@@ -36,6 +36,17 @@ export default function ProjectSummaryCard({
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                         <ReadOnlyField label={t('projects.fields.startDate')} value={formatDate(project.startDate)} />
                         <ReadOnlyField label={t('projects.fields.endDate')} value={formatDate(project.endDate)} />
+                    </Stack>
+
+                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                        <ReadOnlyField
+                            label={t('general.createdAt')}
+                            value={formatDateTime(project.createdAt)}
+                        />
+                        <ReadOnlyField
+                            label={t('general.updatedAt')}
+                            value={formatDateTime(project.updatedAt)}
+                        />
                     </Stack>
 
                     <ReadOnlyField

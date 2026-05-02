@@ -10,6 +10,8 @@ export type Project = {
     objective: string | null;
     startDate: string | null;
     endDate: string | null;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export type ProjectDocument = {
