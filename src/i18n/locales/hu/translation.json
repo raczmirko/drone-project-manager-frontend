@@ -122,7 +122,7 @@
       "loading": "Művelet betöltése...",
       "notFound": "A művelet nem található.",
       "deleteMessage": "Biztosan törölni szeretnéd ezt a műveletet? Ez a művelet nem vonható vissza.",
-      "mandatorySectionTitle": "Kötelező adatok",
+      "mandatorySectionTitle": "Törzsadatok",
       "descriptiveSectionTitle": "Leíró adatok"
     },
     "location": {
