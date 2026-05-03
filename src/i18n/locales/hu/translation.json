@@ -251,6 +251,7 @@
     "noOptions": "Nem található meglévő helyszín",
     "search": "Helyszín keresése név alapján",
     "createStepOptional": "Opcionális: Új helyszínt is létrehozhatsz az alábbi koordináták megadásával.",
+    "nothingToPreview": "Adj meg vagy válassz ki megfelelő koordinátákat a helyszín megjelenítéséhez.",
     "crud": {
       "add": "Helyszín hozzáadása",
       "edit": "Helyszín szerkesztése",

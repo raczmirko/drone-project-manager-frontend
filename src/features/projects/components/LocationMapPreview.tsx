@@ -39,7 +39,7 @@ export default function LocationMapPreview({
                 }}
             >
                 <Alert severity="info" sx={{ width: '100%' }}>
-                    Enter or select valid coordinates to preview the location on the map.
+                    {t("locations.nothingToPreview")}
                 </Alert>
             </Box>
         );

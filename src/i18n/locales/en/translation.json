@@ -251,6 +251,7 @@
     "noOptions": "No existing locations found",
     "search": "Search location by name",
     "createStepOptional": "Optional: You can create a new location by entering the coordinates below.",
+    "nothingToPreview": "Enter or select valid coordinates to preview the location on the map.",
     "crud": {
       "add": "Add location",
       "edit": "Edit location",
