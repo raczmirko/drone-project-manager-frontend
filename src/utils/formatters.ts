@@ -9,17 +9,12 @@ export function formatDate(value: string | null | undefined): string {
         return '-';
     }
 
-    const date = new Date(value);
-
-    if (Number.isNaN(date.getTime())) {
+    const parsed = dayjs(value);
+    if (!parsed.isValid()) {
         return value;
     }
 
-    return new Intl.DateTimeFormat(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-    }).format(date);
+    return parsed.format('YYYY.MM.DD'); // Updated format
 }
 
 export function formatDateTime(value?: string | null): string {
