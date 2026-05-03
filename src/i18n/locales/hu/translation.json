@@ -162,7 +162,7 @@
       "kpIndexRange": "Az értéknek 0 és 9 között kell lennie"
     },
     "imageAnalysis": {
-      "title": "Repülési és légi felvétel elemzés",
+      "title": "Légifelvételezés elemzése",
       "fileUploadTitle": "Képfeltöltés elemzéshez és áttekintő generálásához",
       "fileUploadInfo": "JPG, PNG, TIFF vagy WEBP fájlokat tölthetsz fel. Csak a metaadatok kerülnek feldolgozásra és tárolásra. Feltöltésenként legfeljebb 500 MB engedélyezett.",
       "flightDuration": "Repülés időtartama",
