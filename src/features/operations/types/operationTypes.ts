@@ -21,6 +21,8 @@ export type DroneOperation = {
     kpIndex: number | null;
     takeoffTime: string | null;
     landingTime: string | null;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export type CreateDroneOperationRequest = {

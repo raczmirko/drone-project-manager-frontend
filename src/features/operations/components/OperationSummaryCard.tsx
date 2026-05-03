@@ -60,6 +60,17 @@ export default function OperationSummaryCard({
                                     value={operation.drone}
                                 />
                             </Stack>
+
+                            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+                                <ReadOnlyField
+                                    label={t('general.createdAt')}
+                                    value={formatDateTime(operation.createdAt)}
+                                />
+                                <ReadOnlyField
+                                    label={t('general.updatedAt')}
+                                    value={formatDateTime(operation.updatedAt)}
+                                />
+                            </Stack>
                         </Stack>
                     </Paper>
 
