@@ -14,7 +14,7 @@ export function formatDate(value: string | null | undefined): string {
         return value;
     }
 
-    return parsed.format('YYYY.MM.DD'); // Updated format
+    return parsed.format('YYYY.MM.DD');
 }
 
 export function formatDateTime(value?: string | null): string {

@@ -36,7 +36,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
     const API_BASE_URL =
         (import.meta as unknown as { env: Record<string, string> }).env
             ?.VITE_API_BASE_URL || "http://localhost:8080";
-    const navigate = useNavigate(); // Initialize useNavigate hook
+    const navigate = useNavigate();
 
     const [accountNumber, setAccountNumber] = useState("");
     const [password, setPassword] = useState("");
@@ -45,7 +45,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const { showNotification } = useNotification();
 
-    const [isDialogOpen, setDialogOpen] = useState(false); // Add dialog state
+    const [isDialogOpen, setDialogOpen] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -197,7 +197,7 @@ const SignUp = ({ onRegister, isRegistered }: SignUpProps) => {
                         sx={{ display: "flex", flexDirection: "column", gap: 2 }}
                     >
                         <Alert
-                            severity="info" // Info-specific styling
+                            severity="info"
                             icon={<InfoOutlinedIcon />}
                             sx={{
                                 mb: 3,
