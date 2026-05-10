@@ -7,6 +7,7 @@ import DocumentsSection from '../features/projects/components/DocumentsSection';
 import {operationApi} from '../features/operations/api/operationApi';
 import {useOperationDetails} from '../features/operations/hooks/useOperationDetails';
 import {useOperationDocuments} from '../features/operations/hooks/useOperationDocuments';
+import {useOperationFileDownload} from '../features/operations/hooks/useOperationFileDownload';
 import {useProjectOperations} from '../features/projects/hooks/useProjectOperations';
 import {useLocations} from '../features/projects/hooks/useLocations';
 import OperationDetailsPageHeader from '../features/operations/components/OperationDetailsPageHeader.tsx';
@@ -40,6 +41,12 @@ export default function OperationDetailsPage() {
 
     const operation = useOperationDetails(projectCode, operationCode);
     const documents = useOperationDocuments(projectCode, operationCode);
+    const {
+        downloadFile,
+        downloadLoading,
+        downloadError,
+        resetDownloadError,
+    } = useOperationFileDownload();
     const locations = useLocations();
     const operations = useProjectOperations(projectCode);
 
@@ -423,7 +430,6 @@ export default function OperationDetailsPage() {
                     />
 
                     <DocumentsSection
-                        projectCode={projectCode}
                         rows={documents.rows}
                         loading={documents.loading}
                         error={documents.error}
@@ -436,6 +442,10 @@ export default function OperationDetailsPage() {
                         onResetUploadError={documents.resetUploadError}
                         onDeleteDocument={documents.deleteDocument}
                         deleteLoading={documents.deleteLoading}
+                        onDownloadDocument={(params) => downloadFile({ ...params, operationCode })}
+                        downloadLoading={downloadLoading}
+                        downloadError={downloadError}
+                        onResetDownloadError={resetDownloadError}
                     />
                 </Stack>
 

@@ -10,6 +10,7 @@ import ProjectDetailsPageHeader from '../features/projects/components/ProjectDet
 import ProjectSummaryCard from '../features/projects/components/ProjectSummaryCard';
 import {useProjectDetails} from '../features/projects/hooks/useProjectDetails';
 import {useProjectDocuments} from '../features/projects/hooks/useProjectDocuments';
+import {useProjectFileDownload} from '../features/projects/hooks/useProjectFileDownload';
 import {useLocations} from '../features/projects/hooks/useLocations';
 import {useProjectOperations} from '../features/projects/hooks/useProjectOperations';
 import EditProjectDialogContainer from '../features/projects/components/EditProjectDialogContainer.tsx';
@@ -24,6 +25,12 @@ export default function ProjectDetailsPage() {
     const operations = useProjectOperations(code);
     const documents = useProjectDocuments(code);
     const locations = useLocations();
+    const {
+        downloadFile,
+        downloadLoading,
+        downloadError,
+        resetDownloadError,
+    } = useProjectFileDownload();
 
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
@@ -134,7 +141,6 @@ export default function ProjectDetailsPage() {
                     />
 
                     <DocumentsSection
-                        projectCode={code}
                         rows={documents.rows}
                         loading={documents.loading}
                         error={documents.error}
@@ -147,6 +153,10 @@ export default function ProjectDetailsPage() {
                         onResetUploadError={documents.resetUploadError}
                         onDeleteDocument={documents.deleteDocument}
                         deleteLoading={documents.deleteLoading}
+                        onDownloadDocument={(params) => downloadFile({ ...params, projectCode: code })}
+                        downloadLoading={downloadLoading}
+                        downloadError={downloadError}
+                        onResetDownloadError={resetDownloadError}
                     />
                 </Stack>
 

@@ -8,11 +8,15 @@ import {useTranslation} from 'react-i18next';
 import SectionCard from './SectionCard';
 import type {ProjectDocument} from '../types/projectTypes';
 import {formatDate, formatFileSize} from '../../../utils/formatters.ts';
-import {useProjectFileDownload} from "../hooks/useProjectFileDownload.ts";
 import ConfirmationDialog from "../../../components/dialogs/ConfirmationDialog.tsx";
 
+export type DownloadFileParams = {
+    documentId: string;
+    fileName: string;
+};
+
 type DocumentsSectionProps = {
-    projectCode: string;
+    title?: string;
     rows: ProjectDocument[];
     loading: boolean;
     error: string | null;
@@ -25,10 +29,13 @@ type DocumentsSectionProps = {
     onResetUploadError: () => void;
     onDeleteDocument: (documentId: string) => Promise<boolean>;
     deleteLoading: boolean;
+    onDownloadDocument: (params: DownloadFileParams) => Promise<void>;
+    downloadLoading: boolean;
+    downloadError: string | null;
+    onResetDownloadError: () => void;
 };
 
 export default function DocumentsSection({
-                                             projectCode,
                                              rows,
                                              loading,
                                              error,
@@ -41,17 +48,14 @@ export default function DocumentsSection({
                                              onResetUploadError,
                                              onDeleteDocument,
                                              deleteLoading,
+                                             onDownloadDocument,
+                                             downloadLoading,
+                                             downloadError,
+                                             onResetDownloadError,
                                          }: DocumentsSectionProps) {
     const { t } = useTranslation();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [documentToDelete, setDocumentToDelete] = useState<ProjectDocument | null>(null);
-
-    const {
-        downloadFile,
-        downloadLoading,
-        downloadError,
-        resetDownloadError,
-    } = useProjectFileDownload();
 
     const handleDeleteDialogCancel = () => {
         setIsDeleteDialogOpen(false);
@@ -119,8 +123,7 @@ export default function DocumentsSection({
                                 disabled={deleteLoading || downloadLoading}
                                 onClick={(event) => {
                                     event.stopPropagation();
-                                    void downloadFile({
-                                        projectCode,
+                                    void onDownloadDocument({
                                         documentId: params.row.id,
                                         fileName: params.row.filename,
                                     });
@@ -149,7 +152,7 @@ export default function DocumentsSection({
                 ),
             }
         ],
-        [deleteLoading, downloadFile, downloadLoading, projectCode, t],
+        [deleteLoading, onDownloadDocument, downloadLoading, t],
     );
 
     const handleFileChange = async (
@@ -187,7 +190,7 @@ export default function DocumentsSection({
                 {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
                 {uploadError ? <Alert severity="error" sx={{ mb: 2 }}>{uploadError}</Alert> : null}
                 {downloadError ? (
-                    <Alert severity="error" sx={{ mb: 2 }} onClose={resetDownloadError}>
+                    <Alert severity="error" sx={{ mb: 2 }} onClose={onResetDownloadError}>
                         {downloadError}
                     </Alert>
                 ) : null}
