@@ -15,7 +15,7 @@ import type {
     OperationImageMetadataDashboardResponse
 } from "../types/operationAnalysisTypes.ts";
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8080';
 
 async function parseError(response: Response): Promise<string> {
     try {
